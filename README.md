@@ -48,7 +48,7 @@ new ReactiveNetwork().observeConnectivity(context)
     .subscribeOn(Schedulers.io())
     .subscribe(new Action1<ConnectivityStatus>() {
       @Override public void call(ConnectivityStatus connectivityStatus) {
-        // do something with connectivity status
+        // do something with connectivityStatus
       }
     });
 ```
@@ -62,7 +62,7 @@ new ReactiveNetwork().observeConnectivity(context)
     .filter(ConnectivityStatus.isEqualTo(ConnectivityStatus.WIFI_CONNECTED))
     .subscribe(new Action1<ConnectivityStatus>() {
       @Override public void call(ConnectivityStatus connectivityStatus) {
-        // do something with connectivity status, which will be WIFI_CONNECTED
+        // do something with connectivityStatus, which will be WIFI_CONNECTED
       }
     });
 ```
