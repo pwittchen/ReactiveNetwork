@@ -53,7 +53,7 @@ new ReactiveNetwork().observeConnectivity(context)
     });
 ```
 
-We can react on a concrete status or statuses with the `filter(...)` method from RxJava, `isEqualTo(final ConnectivityStatus... statuses)` and `isNotEqualTo(final ConnectivityStatus... statuses)` located in `ConnectivityStatus`.
+We can react on a concrete status or statuses with the `filter(...)` method from RxJava, `isEqualTo(final ConnectivityStatus... statuses)` and `isNotEqualTo(final ConnectivityStatus... statuses)` methods located in `ConnectivityStatus`.
 
 ```java
 new ReactiveNetwork().observeConnectivity(context)
