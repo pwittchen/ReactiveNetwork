@@ -33,9 +33,6 @@ dependencies {
   androidTestCompile('com.google.truth:truth:0.25') {
     exclude group: 'junit' // Android has JUnit built in
   }
-  androidTestCompile 'com.google.dexmaker:dexmaker:1.0' // required by Mockito
-  androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.0' // required by Mockito
-  androidTestCompile 'org.mockito:mockito-core:1.9.5'
 }
 
 task wrapper(type: Wrapper) {
