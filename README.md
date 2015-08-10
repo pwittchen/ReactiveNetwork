@@ -88,7 +88,7 @@ Library will be available in Maven Central Repository soon.
 Tests
 -----
 
-Tests are available in `network-events-library/src/androidTest/java/` directory and can be executed on emulator or Android device from Android Studio or CLI with the following command:
+Tests are available in `library/src/androidTest/java/` directory and can be executed on emulator or Android device from Android Studio or CLI with the following command:
 
 ```
 ./gradlew connectedCheck
