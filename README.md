@@ -6,7 +6,9 @@ ReactiveNetwork is an Android library listening network connection state and cha
 
 Library is compatible with RxJava 1.0.+ and RxAndroid 1.0.+ and uses them under the hood.
 
-min android sdk version = 9
+min sdk version = 9
+
+JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/
 
 Contents
 --------
