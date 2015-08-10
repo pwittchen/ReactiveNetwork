@@ -50,6 +50,7 @@ We can observe `ConnectivityStatus` with `observeConnectivity(context)` method i
 new ReactiveNetwork().observeConnectivity(context)
     .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
+    ... // anything else you can do with RxJava
     .subscribe(new Action1<ConnectivityStatus>() {
       @Override public void call(ConnectivityStatus connectivityStatus) {
         // do something with connectivityStatus
