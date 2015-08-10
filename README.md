@@ -80,6 +80,7 @@ We can observe WiFi Access Points with `observeWifiAccessPoints(context)` method
 new ReactiveNetwork().observeWifiAccessPoints(context)
     .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
+    ... // anything else you can do with RxJava
     .subscribe(new Action1<List<ScanResult>>() {
       @Override public void call(List<ScanResult> scanResults) {
         // do something with scanResults
