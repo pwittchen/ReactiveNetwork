@@ -20,6 +20,13 @@ Contents
 Usage
 -----
 
+Library has two RxJava Observables available in the public API:
+
+```java
+Observable<ConnectivityStatus> observeConnectivity(final Context context)
+Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)
+```
+
 ### Observing connectivity
 
 `ConnectivityStatus` can have one of the following values:
