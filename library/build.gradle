@@ -11,11 +11,17 @@ android {
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
+
   buildTypes {
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+  }
+
+  packagingOptions {
+    exclude 'LICENSE.txt'
+    exclude 'META-INF/LICENSE.txt'
   }
 }
 
@@ -31,3 +37,9 @@ dependencies {
   androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.0' // required by Mockito
   androidTestCompile 'org.mockito:mockito-core:1.9.5'
 }
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.2.1'
+}
+
+apply from: '../maven_push.gradle'
