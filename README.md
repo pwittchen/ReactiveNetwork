@@ -96,7 +96,23 @@ Exemplary application is located in `app` directory of this repository.
 Download
 --------
 
-Library will be available in Maven Central Repository soon.
+You can depend on the library through Maven:
+
+```xml
+<dependency>
+    <groupId>com.github.pwittchen</groupId>
+    <artifactId>reactivenetwork</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
+
+or through Gradle:
+
+```groovy
+dependencies {
+  compile 'com.github.pwittchen:reactivenetwork:0.0.1'
+}
+```
 
 Tests
 -----
