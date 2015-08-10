@@ -10,6 +10,8 @@ Contents
 --------
 
 - [Usage](#usage)
+  - [Observing connectivity](#observing-connectivity)
+  - [Observing WiFi Access Points](#observing-wifi-access-points)
 - [Examples](#examples)
 - [Download](#download)
 - [Tests](#tests)
@@ -18,7 +20,60 @@ Contents
 Usage
 -----
 
-Code samples will be available soon.
+### Observing connectivity
+
+`ConnectivityStatus` can have one of the following values:
+
+```java
+public enum ConnectivityStatus {
+  WIFI_CONNECTED("connected to WiFi"),
+  MOBILE_CONNECTED("connected to mobile network"),
+  OFFLINE("offline");
+  ...
+}  
+```
+
+We can observe `ConnectivityStatus` with `observeConnectivity(context)` method in the following way:
+
+```java
+new ReactiveNetwork().observeConnectivity(context)
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe(new Action1<ConnectivityStatus>() {
+      @Override public void call(ConnectivityStatus connectivityStatus) {
+        // do something with connectivity status
+      }
+    });
+```
+
+We can react on a concrete status or statuses with the `filter(...)` method from RxJava, `isEqualTo(final ConnectivityStatus... statuses)` and `isNotEqualTo(final ConnectivityStatus... statuses)` located in `ConnectivityStatus`.
+
+```java
+new ReactiveNetwork().observeConnectivity(context)
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .filter(ConnectivityStatus.isEqualTo(ConnectivityStatus.WIFI_CONNECTED))
+    .subscribe(new Action1<ConnectivityStatus>() {
+      @Override public void call(ConnectivityStatus connectivityStatus) {
+        // do something with connectivity status, which will be WIFI_CONNECTED
+      }
+    });
+```
+
+### Observing WiFi Access Points
+
+We can observe WiFi Access Points with `observeWifiAccessPoints(context)` method. Subscriber will be called everytime, when strength of the WiFi Access Points signal changes. We can do it in the following way:
+
+```java
+new ReactiveNetwork().observeWifiAccessPoints(context)
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe(new Action1<List<ScanResult>>() {
+      @Override public void call(List<ScanResult> scanResults) {
+        // do something with scanResults
+      }
+    });
+```
 
 Examples
 --------
