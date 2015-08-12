@@ -75,7 +75,7 @@ new ReactiveNetwork().observeConnectivity(context)
 
 ### Observing WiFi Access Points
 
-We can observe WiFi Access Points with `observeWifiAccessPoints(context)` method. Subscriber will be called everytime, when strength of the WiFi Access Points signal changes. We can do it in the following way:
+We can observe WiFi Access Points with `observeWifiAccessPoints(context)` method. Subscriber will be called everytime, when strength of the WiFi Access Points signal changes (it usually happens when user is moving around with a mobile device). We can do it in the following way:
 
 ```java
 new ReactiveNetwork().observeWifiAccessPoints(context)
