@@ -61,6 +61,8 @@ new ReactiveNetwork().observeConnectivity(context)
     });
 ```
 
+When `ConnectivityStatus` changes, subscriber will be notified.
+
 We can react on a concrete status or statuses with the `filter(...)` method from RxJava, `isEqualTo(final ConnectivityStatus... statuses)` and `isNotEqualTo(final ConnectivityStatus... statuses)` methods located in `ConnectivityStatus`.
 
 ```java
