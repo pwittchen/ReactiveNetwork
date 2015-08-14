@@ -98,10 +98,8 @@ public final class ReactiveNetwork {
    * @return RxJava Observable with list of WiFi scan results
    */
   public Observable<List<ScanResult>> observeWifiAccessPoints(final Context context) {
-    // start WiFi scan in order to refresh access point list
-    // if this won't be called WifiSignalStrengthChanged may never occur
-    WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-    wifiManager.startScan();
+    final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    wifiManager.startScan(); // without starting scan, we may never receive any scan results
 
     final IntentFilter filter = new IntentFilter(WifiManager.RSSI_CHANGED_ACTION);
 
@@ -111,7 +109,8 @@ public final class ReactiveNetwork {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
 
           @Override public void onReceive(Context context, Intent intent) {
-            subscriber.onNext(getWifiScanResults(context));
+            wifiManager.startScan(); // we need to start scan again to get fresh results ASAP
+            subscriber.onNext(wifiManager.getScanResults());
           }
         };
 
@@ -124,11 +123,6 @@ public final class ReactiveNetwork {
         }));
       }
     });
-  }
-
-  private List<ScanResult> getWifiScanResults(Context context) {
-    WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-    return wifiManager.getScanResults();
   }
 
   private Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
