@@ -18,6 +18,7 @@ package com.github.pwittchen.reactivenetwork.library;
 import rx.functions.Func1;
 
 public enum ConnectivityStatus {
+  UNDEFINED("undefined"),
   WIFI_CONNECTED("connected to WiFi"),
   MOBILE_CONNECTED("connected to mobile network"),
   OFFLINE("offline");

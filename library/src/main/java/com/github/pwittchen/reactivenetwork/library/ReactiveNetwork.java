@@ -40,6 +40,8 @@ import rx.subscriptions.Subscriptions;
  */
 public final class ReactiveNetwork {
 
+  private static ConnectivityStatus status = ConnectivityStatus.UNDEFINED;
+
   /**
    * Observes ConnectivityStatus,
    * which can be WIFI_CONNECTED, MOBILE_CONNECTED or OFFLINE
@@ -50,7 +52,6 @@ public final class ReactiveNetwork {
   public Observable<ConnectivityStatus> observeConnectivity(final Context context) {
     final IntentFilter filter = new IntentFilter();
     filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-    filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 
     return Observable.create(new Observable.OnSubscribe<ConnectivityStatus>() {
 
@@ -58,13 +59,20 @@ public final class ReactiveNetwork {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
 
           @Override public void onReceive(Context context, Intent intent) {
-            subscriber.onNext(getConnectivityStatus(context));
+
+            ConnectivityStatus newStatus = getConnectivityStatus(context);
+
+            // we need to perform check below,
+            // because after going off-line, onReceive() is called twice
+            if (newStatus != status) {
+              status = newStatus;
+              subscriber.onNext(newStatus);
+            }
           }
         };
 
         context.registerReceiver(receiver, filter);
         subscriber.add(unsubscribeInUiThread(new Action0() {
-
           @Override public void call() {
             context.unregisterReceiver(receiver);
           }
@@ -74,9 +82,9 @@ public final class ReactiveNetwork {
   }
 
   private ConnectivityStatus getConnectivityStatus(Context context) {
-    ConnectivityManager connectivityManager =
-        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+    String service = Context.CONNECTIVITY_SERVICE;
+    ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
+    NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
     if (networkInfo != null) {
       if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
