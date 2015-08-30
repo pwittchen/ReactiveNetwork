@@ -40,6 +40,7 @@ Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)
 
 ```java
 public enum ConnectivityStatus {
+  UNDEFINED("undefined"),
   WIFI_CONNECTED("connected to WiFi"),
   MOBILE_CONNECTED("connected to mobile network"),
   OFFLINE("offline");
