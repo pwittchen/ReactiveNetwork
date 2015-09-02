@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2015 Piotr Wittchen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.github.pwittchen.reactivenetwork.app;
 
 import android.net.wifi.ScanResult;
@@ -6,12 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.github.pwittchen.reactivenetwork.R;
-import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.github.pwittchen.reactivenetwork.library.ConnectivityStatus;
+import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -21,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
   private TextView tvConnectivityStatus;
   private ListView lvAccessPoints;
   private ReactiveNetwork reactiveNetwork;
+  private Subscription wifiSubscription;
+  private Subscription connectivitySubscription;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     super.onResume();
     reactiveNetwork = new ReactiveNetwork();
 
-    reactiveNetwork.observeConnectivity(this)
+    connectivitySubscription = reactiveNetwork.observeConnectivity(this)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
         .subscribe(new Action1<ConnectivityStatus>() {
@@ -42,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
           }
         });
 
-    reactiveNetwork.observeWifiAccessPoints(this)
+    wifiSubscription = reactiveNetwork.observeWifiAccessPoints(this)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
         .subscribe(new Action1<List<ScanResult>>() {
@@ -53,17 +70,19 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void displayAccessPoints(List<ScanResult> scanResults) {
-    List<String> wifiScanResults = new ArrayList<>();
+    List<String> ssids = new ArrayList<>();
 
     for (ScanResult scanResult : scanResults) {
-      wifiScanResults.add(scanResult.SSID);
+      ssids.add(scanResult.SSID);
     }
 
-    lvAccessPoints.setAdapter(
-        new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1,
-            wifiScanResults));
+    int itemLayoutId = android.R.layout.simple_list_item_1;
+    lvAccessPoints.setAdapter(new ArrayAdapter<>(this, itemLayoutId, ssids));
+  }
 
-    String message = getString(R.string.wifi_signal_strength_changed);
-    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+  @Override protected void onPause() {
+    super.onPause();
+    connectivitySubscription.unsubscribe();
+    wifiSubscription.unsubscribe();
   }
 }

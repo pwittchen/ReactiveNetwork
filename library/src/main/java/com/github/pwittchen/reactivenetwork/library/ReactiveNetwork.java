@@ -59,7 +59,6 @@ public final class ReactiveNetwork {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
 
           @Override public void onReceive(Context context, Intent intent) {
-
             ConnectivityStatus newStatus = getConnectivityStatus(context);
 
             // we need to perform check below,
@@ -72,11 +71,13 @@ public final class ReactiveNetwork {
         };
 
         context.registerReceiver(receiver, filter);
+
         subscriber.add(unsubscribeInUiThread(new Action0() {
           @Override public void call() {
             context.unregisterReceiver(receiver);
           }
         }));
+
       }
     });
   }
@@ -109,13 +110,14 @@ public final class ReactiveNetwork {
     final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     wifiManager.startScan(); // without starting scan, we may never receive any scan results
 
-    final IntentFilter filter = new IntentFilter(WifiManager.RSSI_CHANGED_ACTION);
+    final IntentFilter filter = new IntentFilter();
+    filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+    filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
     return Observable.create(new Observable.OnSubscribe<List<ScanResult>>() {
 
       @Override public void call(final Subscriber<? super List<ScanResult>> subscriber) {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
-
           @Override public void onReceive(Context context, Intent intent) {
             wifiManager.startScan(); // we need to start scan again to get fresh results ASAP
             subscriber.onNext(wifiManager.getScanResults());
@@ -123,18 +125,20 @@ public final class ReactiveNetwork {
         };
 
         context.registerReceiver(receiver, filter);
-        subscriber.add(unsubscribeInUiThread(new Action0() {
 
+        subscriber.add(unsubscribeInUiThread(new Action0() {
           @Override public void call() {
             context.unregisterReceiver(receiver);
           }
         }));
+
       }
     });
   }
 
   private Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
     return Subscriptions.create(new Action0() {
+
       @Override public void call() {
         if (Looper.getMainLooper() == Looper.myLooper()) {
           unsubscribe.call();
@@ -148,6 +152,7 @@ public final class ReactiveNetwork {
           });
         }
       }
+
     });
   }
 }
