@@ -86,7 +86,7 @@ This feature is available from 0.1.0 version.
 Internet connection check is disabled by default. We can enable it in the following way:
 
 ```java
-new ReactiveNetwork().enableInternetConnectionCheck()
+new ReactiveNetwork().enableInternetCheck()
   .observeConnectivity(context)
 ```
 
