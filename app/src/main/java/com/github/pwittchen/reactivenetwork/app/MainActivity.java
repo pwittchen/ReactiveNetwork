@@ -18,6 +18,7 @@ package com.github.pwittchen.reactivenetwork.app;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
+  private static final String TAG = "ReactiveNetwork";
   private TextView tvConnectivityStatus;
   private ListView lvAccessPoints;
   private ReactiveNetwork reactiveNetwork;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         .subscribeOn(Schedulers.io())
         .subscribe(new Action1<ConnectivityStatus>() {
           @Override public void call(ConnectivityStatus connectivityStatus) {
+            Log.d(TAG, connectivityStatus.toString());
             tvConnectivityStatus.setText(connectivityStatus.toString());
           }
         });

@@ -40,7 +40,20 @@ import rx.subscriptions.Subscriptions;
  */
 public final class ReactiveNetwork {
 
-  private static ConnectivityStatus status = ConnectivityStatus.UNDEFINED;
+  private boolean internetConnectionCheckEnabled = false;
+  private static ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
+
+  /**
+   * enables Internet connection check
+   * When it's called WIFI_CONNECTED_HAS_INTERNET and WIFI_CONNECTED_HAS_NO_INTERNET statuses
+   * can be emitted by observeConnectivity(context) method. When it isn't called
+   * only WIFI_CONNECTED can by emitted by observeConnectivity(context) method.
+   * @return ReactiveNetwork object
+   */
+  public ReactiveNetwork enableInternetCheck() {
+    internetConnectionCheckEnabled = true;
+    return this;
+  }
 
   /**
    * Observes ConnectivityStatus,
@@ -77,7 +90,6 @@ public final class ReactiveNetwork {
             context.unregisterReceiver(receiver);
           }
         }));
-
       }
     });
   }
@@ -87,15 +99,29 @@ public final class ReactiveNetwork {
     ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
     NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-    if (networkInfo != null) {
-      if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+    if (networkInfo == null) {
+      return ConnectivityStatus.OFFLINE;
+    }
+
+    if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+      if (internetConnectionCheckEnabled) {
+        return getWifiInternetStatus(networkInfo);
+      } else {
         return ConnectivityStatus.WIFI_CONNECTED;
-      } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-        return ConnectivityStatus.MOBILE_CONNECTED;
       }
+    } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+      return ConnectivityStatus.MOBILE_CONNECTED;
     }
 
     return ConnectivityStatus.OFFLINE;
+  }
+
+  private ConnectivityStatus getWifiInternetStatus(NetworkInfo networkInfo) {
+    if (networkInfo.isConnected()) {
+      return ConnectivityStatus.WIFI_CONNECTED_HAS_INTERNET;
+    } else {
+      return ConnectivityStatus.WIFI_CONNECTED_HAS_NO_INTERNET;
+    }
   }
 
   /**
@@ -131,7 +157,6 @@ public final class ReactiveNetwork {
             context.unregisterReceiver(receiver);
           }
         }));
-
       }
     });
   }
@@ -152,7 +177,6 @@ public final class ReactiveNetwork {
           });
         }
       }
-
     });
   }
 }
