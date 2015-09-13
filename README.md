@@ -17,6 +17,7 @@ Contents
 
 - [Usage](#usage)
   - [Observing connectivity](#observing-connectivity)
+  - [Enabling Internet check](#enabling-internet-check)
   - [Observing WiFi Access Points](#observing-wifi-access-points)
 - [Examples](#examples)
 - [Download](#download)
@@ -77,6 +78,25 @@ new ReactiveNetwork().observeConnectivity(context)
       }
     });
 ```
+
+### Enabling Internet check
+
+This feature is available from 0.1.0 version.
+
+Internet connection check is disabled by default. We can enable it in the following way:
+
+```java
+new ReactiveNetwork().enableInternetConnectionCheck()
+  .observeConnectivity(context)
+```
+
+Please note, that after enabling it, we will receive only one of the following events after connecting to WiFi network:
+- `WIFI_CONNECTED_HAS_INTERNET`
+- `WIFI_CONNECTED_HAS_NO_INTERNET`
+
+In such case, pure `WIFI_CONNECTED` status will never occur.
+
+When internet connection check is disabled (by default), we will receive only `WIFI_CONNECTED` status after connecting to WiFi. In such case, other statuses with `WIFI_` prefix will never occur.
 
 ### Observing WiFi Access Points
 
