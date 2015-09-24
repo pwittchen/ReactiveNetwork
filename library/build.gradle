@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-  compile 'io.reactivex:rxjava:1.0.13'
+  compile 'io.reactivex:rxjava:1.0.14'
   compile 'io.reactivex:rxandroid:1.0.1'
 
   androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
