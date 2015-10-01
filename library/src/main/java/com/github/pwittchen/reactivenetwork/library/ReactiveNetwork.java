@@ -48,6 +48,7 @@ public final class ReactiveNetwork {
    * When it's called WIFI_CONNECTED_HAS_INTERNET and WIFI_CONNECTED_HAS_NO_INTERNET statuses
    * can be emitted by observeConnectivity(context) method. When it isn't called
    * only WIFI_CONNECTED can by emitted by observeConnectivity(context) method.
+   *
    * @return ReactiveNetwork object
    */
   public ReactiveNetwork enableInternetCheck() {
@@ -91,7 +92,7 @@ public final class ReactiveNetwork {
           }
         }));
       }
-    });
+    }).defaultIfEmpty(ConnectivityStatus.OFFLINE);
   }
 
   private ConnectivityStatus getConnectivityStatus(Context context) {
