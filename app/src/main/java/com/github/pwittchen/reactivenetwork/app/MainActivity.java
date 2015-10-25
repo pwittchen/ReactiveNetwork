@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
     reactiveNetwork = new ReactiveNetwork();
 
     connectivitySubscription = reactiveNetwork.observeConnectivity(this)
-        .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Action1<ConnectivityStatus>() {
           @Override public void call(ConnectivityStatus connectivityStatus) {
             Log.d(TAG, connectivityStatus.toString());
@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     wifiSubscription = reactiveNetwork.observeWifiAccessPoints(this)
-        .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Action1<List<ScanResult>>() {
           @Override public void call(List<ScanResult> scanResults) {
             displayAccessPoints(scanResults);

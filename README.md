@@ -55,9 +55,9 @@ We can observe `ConnectivityStatus` with `observeConnectivity(context)` method i
 
 ```java
 new ReactiveNetwork().observeConnectivity(context)
-    .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
     ... // anything else what you can do with RxJava
+    .observeOn(AndroidSchedulers.mainThread())
     .subscribe(new Action1<ConnectivityStatus>() {
       @Override public void call(ConnectivityStatus connectivityStatus) {
         // do something with connectivityStatus
@@ -71,9 +71,9 @@ We can react on a concrete status or statuses with the `filter(...)` method from
 
 ```java
 new ReactiveNetwork().observeConnectivity(context)
-    .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
     .filter(ConnectivityStatus.isEqualTo(ConnectivityStatus.WIFI_CONNECTED))
+    .observeOn(AndroidSchedulers.mainThread())
     .subscribe(new Action1<ConnectivityStatus>() {
       @Override public void call(ConnectivityStatus connectivityStatus) {
         // do something with connectivityStatus, which will be WIFI_CONNECTED
@@ -106,9 +106,9 @@ We can observe WiFi Access Points with `observeWifiAccessPoints(context)` method
 
 ```java
 new ReactiveNetwork().observeWifiAccessPoints(context)
-    .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
     ... // anything else what you can do with RxJava
+    .observeOn(AndroidSchedulers.mainThread())
     .subscribe(new Action1<List<ScanResult>>() {
       @Override public void call(List<ScanResult> scanResults) {
         // do something with scanResults
