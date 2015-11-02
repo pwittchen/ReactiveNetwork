@@ -41,7 +41,7 @@ import rx.subscriptions.Subscriptions;
 public final class ReactiveNetwork {
 
   private boolean internetConnectionCheckEnabled = false;
-  private static ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
+  private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
 
   /**
    * enables Internet connection check
