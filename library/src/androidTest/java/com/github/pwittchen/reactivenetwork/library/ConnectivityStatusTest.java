@@ -24,7 +24,8 @@ import static com.google.common.truth.Truth.assertThat;
   @Test public void testStatusShouldBeEqualToOneOfGivenMultipleValues() {
     // given
     ConnectivityStatus mobileConnected = ConnectivityStatus.MOBILE_CONNECTED;
-    ConnectivityStatus givenStatuses[] = {ConnectivityStatus.WIFI_CONNECTED, ConnectivityStatus.MOBILE_CONNECTED};
+    ConnectivityStatus givenStatuses[] =
+        {ConnectivityStatus.WIFI_CONNECTED, ConnectivityStatus.MOBILE_CONNECTED};
 
     // when
     Func1<ConnectivityStatus, Boolean> equalTo = ConnectivityStatus.isEqualTo(givenStatuses);
@@ -50,7 +51,8 @@ import static com.google.common.truth.Truth.assertThat;
   @Test public void testStatusShouldNotBeEqualToOneOfGivenMultipleValues() {
     // given
     ConnectivityStatus offline = ConnectivityStatus.OFFLINE;
-    ConnectivityStatus givenStatuses[] = {ConnectivityStatus.WIFI_CONNECTED, ConnectivityStatus.MOBILE_CONNECTED};
+    ConnectivityStatus givenStatuses[] =
+        { ConnectivityStatus.WIFI_CONNECTED, ConnectivityStatus.MOBILE_CONNECTED };
 
     // when
     Func1<ConnectivityStatus, Boolean> notEqualTo = ConnectivityStatus.isNotEqualTo(givenStatuses);
