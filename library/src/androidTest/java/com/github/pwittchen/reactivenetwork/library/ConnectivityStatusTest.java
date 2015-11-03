@@ -25,7 +25,7 @@ import static com.google.common.truth.Truth.assertThat;
     // given
     ConnectivityStatus mobileConnected = ConnectivityStatus.MOBILE_CONNECTED;
     ConnectivityStatus givenStatuses[] =
-        {ConnectivityStatus.WIFI_CONNECTED, ConnectivityStatus.MOBILE_CONNECTED};
+        { ConnectivityStatus.WIFI_CONNECTED, ConnectivityStatus.MOBILE_CONNECTED };
 
     // when
     Func1<ConnectivityStatus, Boolean> equalTo = ConnectivityStatus.isEqualTo(givenStatuses);
