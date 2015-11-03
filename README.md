@@ -23,6 +23,7 @@ Contents
 - [Download](#download)
 - [Tests](#tests)
 - [Code style](#code-style)
+- [Static code analysis](#static-code-analysis)
 - [License](#license)
 
 Usage
@@ -155,6 +156,17 @@ Code style
 ----------
 
 Code style used in the project is called `SquareAndroid` from Java Code Styles repository by Square available at: https://github.com/square/java-code-styles. Currently, library doesn't have checkstyle verification attached. It can be done in the future.
+
+Static code analysis
+--------------------
+
+Static code analysis runs Checkstyle, FindBugs, PMD and Lint. It can be executed with command:
+
+ ```
+ ./gradlew check
+ ```
+
+ Reports from analysis are generated in `library/build/reports/` directory.
 
 License
 -------
