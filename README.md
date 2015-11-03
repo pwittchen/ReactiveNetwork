@@ -155,7 +155,7 @@ Tests are available in `library/src/androidTest/java/` directory and can be exec
 Code style
 ----------
 
-Code style used in the project is called `SquareAndroid` from Java Code Styles repository by Square available at: https://github.com/square/java-code-styles. Currently, library doesn't have checkstyle verification attached. It can be done in the future.
+Code style used in the project is called `SquareAndroid` from Java Code Styles repository by Square available at: https://github.com/square/java-code-styles.
 
 Static code analysis
 --------------------
