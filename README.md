@@ -166,7 +166,7 @@ Static code analysis runs Checkstyle, FindBugs, PMD and Lint. It can be executed
  ./gradlew check
  ```
 
- Reports from analysis are generated in `library/build/reports/` directory.
+Reports from analysis are generated in `library/build/reports/` directory.
 
 License
 -------
