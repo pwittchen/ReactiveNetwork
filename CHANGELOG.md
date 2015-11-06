@@ -1,6 +1,17 @@
 CHANGELOG
 =========
 
+v. 0.1.3
+--------
+*06 Nov 2015*
+
+- fixed bug with incorrect status after going back from background inside the sample app reported in issue #31
+- fixed RxJava usage in sample app
+- fixed RxJava usage in code snippets in `README.md`
+- added static code analysis
+- updated code formatting
+- added sample sample app in Kotlin
+
 v. 0.1.2
 --------
 *01 Oct 2015*
