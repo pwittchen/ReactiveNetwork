@@ -122,6 +122,8 @@ Examples
 
 Exemplary application is located in `app` directory of this repository.
 
+If you want to know, how to use this library with Kotlin, check `app-kotlin` directory.
+
 Download
 --------
 
