@@ -27,11 +27,11 @@ android {
 }
 
 dependencies {
-  compile 'io.reactivex:rxjava:1.0.14'
+  compile 'io.reactivex:rxjava:1.1.0'
   compile 'io.reactivex:rxandroid:1.0.1'
 
   androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
-  androidTestCompile('com.google.truth:truth:0.25') {
+  androidTestCompile('com.google.truth:truth:0.27') {
     exclude group: 'junit' // Android has JUnit built in
   }
 }
