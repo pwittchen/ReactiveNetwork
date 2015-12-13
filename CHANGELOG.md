@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+v. 0.1.4
+--------
+*13 Dec 2015*
+
+- bumped RxJava dependency to v. 1.1.0
+- bumped RxAndroid dependency to v. 1.1.0
+- bumped Google Truth test dependency to v. 0.27
+
 v. 0.1.3
 --------
 *06 Nov 2015*
