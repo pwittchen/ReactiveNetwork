@@ -117,6 +117,8 @@ new ReactiveNetwork().observeWifiAccessPoints(context)
     });
 ```
 
+**Hint**: If you want to operate on a single `ScanResult` instead of `List<ScanResult>` in a `subscribe(...)` method, consider using `flatMap(...)` and `Observable.from(...)` operators from RxJava for transforming the stream.
+
 Examples
 --------
 
