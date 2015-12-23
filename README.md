@@ -6,7 +6,7 @@
 
 ReactiveNetwork is an Android library listening network connection state and change of the WiFi signal strength with RxJava Observables. It's a successor of [Network Events](https://github.com/pwittchen/NetworkEvents) library rewritten with Reactive Programming approach.
 
-Library is compatible with RxJava 1.0.+ and RxAndroid 1.0.+ and uses them under the hood.
+Library is compatible with RxJava 1.+ and RxAndroid 1.+ and uses them under the hood.
 
 min sdk version = 9
 
