@@ -5,7 +5,7 @@ v. 0.1.5
 --------
 *10 Jan 2016*
 
-- Due to memory leak in WifiManager reported in issue [43945](https://code.google.com/p/android/issues/detail?id=43945) in Android issue tracker replaced Activity Context with Application Context in sample notes and added appropriate note in `README.md`
+- Due to memory leak in WifiManager reported in issue [43945](https://code.google.com/p/android/issues/detail?id=43945) in Android issue tracker replaced Activity Context with Application Context in sample apps and added appropriate note in `README.md`
 - added `ACCESS_COARSE_LOCATION` permission to `AndroidManifest.xml` to be able to scan WiFi access points on Android 6
 
 v. 0.1.4
