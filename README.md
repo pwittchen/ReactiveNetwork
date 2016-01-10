@@ -36,6 +36,10 @@ Observable<ConnectivityStatus> observeConnectivity(final Context context)
 Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)
 ```
 
+**Please note**: Due to memory leak in `WifiManager` reported
+in [issue 43945](https://code.google.com/p/android/issues/detail?id=43945) in Android issue tracker
+it's recommended to use Application Context instead of Activity Context.
+
 ### Observing connectivity
 
 `ConnectivityStatus` can have one of the following values:
