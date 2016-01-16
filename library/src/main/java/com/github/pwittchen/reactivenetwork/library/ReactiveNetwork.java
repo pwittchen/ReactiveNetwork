@@ -163,7 +163,7 @@ public final class ReactiveNetwork {
   }
 
   /**
-   * Observes WiFi signal level.
+   * Observe WiFi signal level.
    * Returns WiFi signal level
    *
    * @param context Context of the activity or an application
