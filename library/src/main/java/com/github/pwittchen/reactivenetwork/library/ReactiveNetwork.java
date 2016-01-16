@@ -162,6 +162,45 @@ public final class ReactiveNetwork {
     });
   }
 
+  /**
+   * Observes WiFi signal level.
+   * Returns WiFi signal level
+   *
+   * @param context Context of the activity or an application
+   * @param  numLevels
+   * @return RxJava Observable with WiFi signal level
+   */
+  public Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels) {
+    final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+    final IntentFilter filter = new IntentFilter();
+    filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+
+    return Observable.create(new Observable.OnSubscribe<Integer>() {
+
+      @Override
+      public void call(final Subscriber<? super Integer> subscriber) {
+        final BroadcastReceiver receiver = new BroadcastReceiver() {
+          @Override
+          public void onReceive(Context context, Intent intent) {
+            int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), numLevels);
+            subscriber.onNext(level);
+          }
+        };
+
+        context.registerReceiver(receiver, filter);
+
+        subscriber.add(unsubscribeInUiThread(new Action0() {
+          @Override
+          public void call() {
+            context.unregisterReceiver(receiver);
+          }
+        }));
+      }
+    }).defaultIfEmpty(0);
+  }
+
+
   private Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
     return Subscriptions.create(new Action0() {
 
