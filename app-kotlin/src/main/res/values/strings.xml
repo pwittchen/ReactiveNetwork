@@ -1,7 +1,9 @@
 <resources>
   <string name="app_name">ReactiveNetwork</string>
   <string name="waiting_for_connectivity_status">Waiting for connectivity status&#8230;</string>
+  <string name="waiting_for_wifi_signal_level">Waiting for WiFi signal level&#8230;</string>
   <string name="connectivity_status">Connectivity status:</string>
+  <string name="wifi_signal_level">WiFi signal level:</string>
   <string name="available_access_points">Available Access Points:</string>
   <string name="waiting_for_signal_strength_change">Waiting for signal strength change&#8230;</string>
 </resources>

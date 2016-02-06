@@ -19,6 +19,7 @@ Contents
   - [Observing connectivity](#observing-connectivity)
   - [Enabling Internet check](#enabling-internet-check)
   - [Observing WiFi Access Points](#observing-wifi-access-points)
+  - [Observing WiFi signal level](#observing-wifi-signal-level)
 - [Examples](#examples)
 - [Download](#download)
 - [Tests](#tests)
@@ -122,6 +123,24 @@ new ReactiveNetwork().observeWifiAccessPoints(context)
 ```
 
 **Hint**: If you want to operate on a single `ScanResult` instead of `List<ScanResult>` in a `subscribe(...)` method, consider using `flatMap(...)` and `Observable.from(...)` operators from RxJava for transforming the stream.
+
+### Observing WiFi signal level
+
+We can observe WiFi signal level with `observeWifiSignalLevel(context, numLevels)` method. Subscriber will be called everytime, when signal level of the connected WiFi  changes (it usually happens when user is moving around with a mobile device). We can do it in the following way:
+
+```java
+new ReactiveNetwork().observeWifiSignalLevel(context, numLevels)
+    .subscribeOn(Schedulers.io())
+    ... // anything else what you can do with RxJava
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Action1<Integer>() {
+      @Override public void call(Integer level) {
+        // do something with level
+      }
+    });
+```
+
+We can also use `observeWifiSignalLevel(context)` method, which uses default levels, which is equal to 4.
 
 Examples
 --------

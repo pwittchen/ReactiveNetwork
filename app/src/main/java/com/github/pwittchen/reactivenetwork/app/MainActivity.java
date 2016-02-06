@@ -22,11 +22,14 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.github.pwittchen.reactivenetwork.R;
 import com.github.pwittchen.reactivenetwork.library.ConnectivityStatus;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -35,17 +38,22 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends Activity {
 
   private static final String TAG = "ReactiveNetwork";
+  private static final String WIFI_SIGNAL_LEVEL_MESSAGE = "wifi signal level: ";
+  private static final int WIFI_NUM_LEVELS = 4;
   private TextView tvConnectivityStatus;
+  private TextView tvWifiSignalLevel;
   private ListView lvAccessPoints;
   private ReactiveNetwork reactiveNetwork;
   private Subscription wifiSubscription;
   private Subscription connectivitySubscription;
+  private Subscription signalLevelSubscription;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     tvConnectivityStatus = (TextView) findViewById(R.id.connectivity_status);
     lvAccessPoints = (ListView) findViewById(R.id.access_points);
+    tvWifiSignalLevel = (TextView) findViewById(R.id.wifi_signal_level);
   }
 
   @Override protected void onResume() {
@@ -62,6 +70,18 @@ public class MainActivity extends Activity {
           }
         });
 
+    signalLevelSubscription =
+        reactiveNetwork.observeWifiSignalLevel(getApplicationContext(), WIFI_NUM_LEVELS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<Integer>() {
+              @Override public void call(Integer level) {
+                final String message = WIFI_SIGNAL_LEVEL_MESSAGE.concat(level.toString());
+                Log.d(TAG, message);
+                tvWifiSignalLevel.setText(message);
+              }
+            });
+
     wifiSubscription = reactiveNetwork.observeWifiAccessPoints(getApplicationContext())
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -73,7 +93,7 @@ public class MainActivity extends Activity {
   }
 
   private void displayAccessPoints(List<ScanResult> scanResults) {
-    List<String> ssids = new ArrayList<>();
+    final List<String> ssids = new ArrayList<>();
 
     for (ScanResult scanResult : scanResults) {
       ssids.add(scanResult.SSID);
@@ -85,7 +105,14 @@ public class MainActivity extends Activity {
 
   @Override protected void onPause() {
     super.onPause();
-    connectivitySubscription.unsubscribe();
-    wifiSubscription.unsubscribe();
+    safelyUnsubscribe(connectivitySubscription);
+    safelyUnsubscribe(wifiSubscription);
+    safelyUnsubscribe(signalLevelSubscription);
+  }
+
+  private void safelyUnsubscribe(Subscription subscription) {
+    if (subscription != null && !subscription.isUnsubscribed()) {
+      subscription.unsubscribe();
+    }
   }
 }

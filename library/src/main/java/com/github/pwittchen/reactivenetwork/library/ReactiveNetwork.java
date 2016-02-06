@@ -40,11 +40,12 @@ import rx.subscriptions.Subscriptions;
  */
 public final class ReactiveNetwork {
 
+  private static final int DEFAULT_WIFI_NUM_LEVELS = 4;
   private boolean internetConnectionCheckEnabled = false;
   private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
 
   /**
-   * enables Internet connection check
+   * Enables Internet connection check.
    * When it's called WIFI_CONNECTED_HAS_INTERNET and WIFI_CONNECTED_HAS_NO_INTERNET statuses
    * can be emitted by observeConnectivity(context) method. When it isn't called
    * only WIFI_CONNECTED can by emitted by observeConnectivity(context) method.
@@ -160,6 +161,53 @@ public final class ReactiveNetwork {
         }));
       }
     });
+  }
+
+  /**
+   * Observes WiFi signal level with default num levels value
+   * Returns WiFi signal level
+   *
+   * @param context Context of the activity or an application
+   * @return RxJava Observable with WiFi signal level
+   */
+  public Observable<Integer> observeWifiSignalLevel(final Context context) {
+    return observeWifiSignalLevel(context, DEFAULT_WIFI_NUM_LEVELS);
+  }
+
+  /**
+   * Observes WiFi signal level.
+   * Returns WiFi signal level
+   *
+   * @param context Context of the activity or an application
+   * @param numLevels The number of levels to consider in the calculated level as Integer
+   * @return RxJava Observable with WiFi signal level
+   */
+  public Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels) {
+    final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+    final IntentFilter filter = new IntentFilter();
+    filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+
+    return Observable.create(new Observable.OnSubscribe<Integer>() {
+
+      @Override public void call(final Subscriber<? super Integer> subscriber) {
+        final BroadcastReceiver receiver = new BroadcastReceiver() {
+          @Override public void onReceive(Context context, Intent intent) {
+            final int rssi = wifiManager.getConnectionInfo().getRssi();
+            final int level = WifiManager.calculateSignalLevel(rssi, numLevels);
+            subscriber.onNext(level);
+          }
+        };
+
+        context.registerReceiver(receiver, filter);
+
+        subscriber.add(unsubscribeInUiThread(new Action0() {
+          @Override public void call() {
+            context.unregisterReceiver(receiver);
+          }
+        }));
+      }
+    }).defaultIfEmpty(0);
   }
 
   private Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
