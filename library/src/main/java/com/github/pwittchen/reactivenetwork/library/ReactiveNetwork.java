@@ -39,7 +39,6 @@ import rx.subscriptions.Subscriptions;
  * with RxJava Observables. It can be easily used with RxAndroid.
  */
 public final class ReactiveNetwork {
-
   private static final int DEFAULT_WIFI_NUM_LEVELS = 4;
   private boolean internetConnectionCheckEnabled = false;
   private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
@@ -69,12 +68,10 @@ public final class ReactiveNetwork {
     filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
     return Observable.create(new Observable.OnSubscribe<ConnectivityStatus>() {
-
       @Override public void call(final Subscriber<? super ConnectivityStatus> subscriber) {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
-
           @Override public void onReceive(Context context, Intent intent) {
-            ConnectivityStatus newStatus = getConnectivityStatus(context);
+            final ConnectivityStatus newStatus = getConnectivityStatus(context);
 
             // we need to perform check below,
             // because after going off-line, onReceive() is called twice
@@ -96,10 +93,10 @@ public final class ReactiveNetwork {
     }).defaultIfEmpty(ConnectivityStatus.OFFLINE);
   }
 
-  private ConnectivityStatus getConnectivityStatus(Context context) {
-    String service = Context.CONNECTIVITY_SERVICE;
-    ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
-    NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+  private ConnectivityStatus getConnectivityStatus(final Context context) {
+    final String service = Context.CONNECTIVITY_SERVICE;
+    final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
+    final NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
     if (networkInfo == null) {
       return ConnectivityStatus.OFFLINE;
@@ -118,7 +115,7 @@ public final class ReactiveNetwork {
     return ConnectivityStatus.OFFLINE;
   }
 
-  private ConnectivityStatus getWifiInternetStatus(NetworkInfo networkInfo) {
+  private ConnectivityStatus getWifiInternetStatus(final NetworkInfo networkInfo) {
     if (networkInfo.isConnected()) {
       return ConnectivityStatus.WIFI_CONNECTED_HAS_INTERNET;
     } else {
@@ -143,7 +140,6 @@ public final class ReactiveNetwork {
     filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
     return Observable.create(new Observable.OnSubscribe<List<ScanResult>>() {
-
       @Override public void call(final Subscriber<? super List<ScanResult>> subscriber) {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
           @Override public void onReceive(Context context, Intent intent) {
@@ -189,7 +185,6 @@ public final class ReactiveNetwork {
     filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
 
     return Observable.create(new Observable.OnSubscribe<Integer>() {
-
       @Override public void call(final Subscriber<? super Integer> subscriber) {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
           @Override public void onReceive(Context context, Intent intent) {
