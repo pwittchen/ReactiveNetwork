@@ -35,6 +35,14 @@ Library has two RxJava Observables available in the public API:
 ```java
 Observable<ConnectivityStatus> observeConnectivity(final Context context)
 Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)
+Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels)
+Observable<Integer> observeWifiSignalLevel(final Context context)
+```
+
+Moreover it has the following helper method for checking connectivity:
+
+```java
+ConnectivityStatus getConnectivityStatus(final Context context, final boolean checkInternet)
 ```
 
 **Please note**: Due to memory leak in `WifiManager` reported
