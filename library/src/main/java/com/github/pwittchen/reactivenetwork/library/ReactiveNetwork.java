@@ -40,7 +40,7 @@ import rx.subscriptions.Subscriptions;
  */
 public final class ReactiveNetwork {
   private static final int DEFAULT_WIFI_NUM_LEVELS = 4;
-  private boolean internetConnectionCheckEnabled = false;
+  private boolean checkInternet = false;
   private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
 
   /**
@@ -52,7 +52,7 @@ public final class ReactiveNetwork {
    * @return ReactiveNetwork object
    */
   public ReactiveNetwork enableInternetCheck() {
-    internetConnectionCheckEnabled = true;
+    checkInternet = true;
     return this;
   }
 
@@ -71,7 +71,7 @@ public final class ReactiveNetwork {
       @Override public void call(final Subscriber<? super ConnectivityStatus> subscriber) {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
           @Override public void onReceive(Context context, Intent intent) {
-            final ConnectivityStatus newStatus = getConnectivityStatus(context);
+            final ConnectivityStatus newStatus = getConnectivityStatus(context, checkInternet);
 
             // we need to perform check below,
             // because after going off-line, onReceive() is called twice
@@ -93,7 +93,8 @@ public final class ReactiveNetwork {
     }).defaultIfEmpty(ConnectivityStatus.OFFLINE);
   }
 
-  private ConnectivityStatus getConnectivityStatus(final Context context) {
+  public ConnectivityStatus getConnectivityStatus(final Context context,
+      final boolean checkInternet) {
     final String service = Context.CONNECTIVITY_SERVICE;
     final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
     final NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -103,7 +104,7 @@ public final class ReactiveNetwork {
     }
 
     if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-      if (internetConnectionCheckEnabled) {
+      if (checkInternet) {
         return getWifiInternetStatus(networkInfo);
       } else {
         return ConnectivityStatus.WIFI_CONNECTED;
@@ -180,7 +181,6 @@ public final class ReactiveNetwork {
    */
   public Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels) {
     final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-
     final IntentFilter filter = new IntentFilter();
     filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
 
