@@ -37,81 +37,82 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
 
-    private static final String TAG = "ReactiveNetwork";
-    private TextView tvConnectivityStatus;
-    private TextView wifiSignalLevel;
-    private ListView lvAccessPoints;
-    private ReactiveNetwork reactiveNetwork;
-    private Subscription wifiSubscription;
-    private Subscription connectivitySubscription;
-    private Subscription wifiSignalLevelSubscription;
+  private static final String TAG = "ReactiveNetwork";
+  private static final String WIFI_SIGNAL_LEVEL_MESSAGE = "wifi signal level: ";
+  private static final int WIFI_NUM_LEVELS = 4;
+  private TextView tvConnectivityStatus;
+  private TextView tvWifiSignalLevel;
+  private ListView lvAccessPoints;
+  private ReactiveNetwork reactiveNetwork;
+  private Subscription wifiSubscription;
+  private Subscription connectivitySubscription;
+  private Subscription signalLevelSubscription;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        tvConnectivityStatus = (TextView) findViewById(R.id.connectivity_status);
-        lvAccessPoints = (ListView) findViewById(R.id.access_points);
-        wifiSignalLevel = (TextView) findViewById(R.id.wifi_signal_level);
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    tvConnectivityStatus = (TextView) findViewById(R.id.connectivity_status);
+    lvAccessPoints = (ListView) findViewById(R.id.access_points);
+    tvWifiSignalLevel = (TextView) findViewById(R.id.wifi_signal_level);
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    reactiveNetwork = new ReactiveNetwork();
+
+    connectivitySubscription = reactiveNetwork.observeConnectivity(getApplicationContext())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<ConnectivityStatus>() {
+          @Override public void call(ConnectivityStatus connectivityStatus) {
+            Log.d(TAG, connectivityStatus.toString());
+            tvConnectivityStatus.setText(connectivityStatus.toString());
+          }
+        });
+
+    signalLevelSubscription =
+        reactiveNetwork.observeWifiSignalLevel(getApplicationContext(), WIFI_NUM_LEVELS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<Integer>() {
+              @Override public void call(Integer level) {
+                final String message = WIFI_SIGNAL_LEVEL_MESSAGE.concat(level.toString());
+                Log.d(TAG, message);
+                tvWifiSignalLevel.setText(message);
+              }
+            });
+
+    wifiSubscription = reactiveNetwork.observeWifiAccessPoints(getApplicationContext())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<List<ScanResult>>() {
+          @Override public void call(List<ScanResult> scanResults) {
+            displayAccessPoints(scanResults);
+          }
+        });
+  }
+
+  private void displayAccessPoints(List<ScanResult> scanResults) {
+    final List<String> ssids = new ArrayList<>();
+
+    for (ScanResult scanResult : scanResults) {
+      ssids.add(scanResult.SSID);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        reactiveNetwork = new ReactiveNetwork();
+    int itemLayoutId = android.R.layout.simple_list_item_1;
+    lvAccessPoints.setAdapter(new ArrayAdapter<>(this, itemLayoutId, ssids));
+  }
 
-        connectivitySubscription = reactiveNetwork.observeConnectivity(getApplicationContext())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ConnectivityStatus>() {
-                    @Override
-                    public void call(ConnectivityStatus connectivityStatus) {
-                        Log.d(TAG, connectivityStatus.toString());
-                        tvConnectivityStatus.setText(connectivityStatus.toString());
-                    }
-                });
+  @Override protected void onPause() {
+    super.onPause();
+    safelyUnsubscribe(connectivitySubscription);
+    safelyUnsubscribe(wifiSubscription);
+    safelyUnsubscribe(signalLevelSubscription);
+  }
 
-
-        wifiSignalLevelSubscription = reactiveNetwork.observeWifiSignalLevel(getApplicationContext(), 4)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer level) {
-                        Log.d(TAG, "wifi signal level:" + level);
-                        wifiSignalLevel.setText("wifi signal level:" + level);
-                    }
-                });
-
-
-        wifiSubscription = reactiveNetwork.observeWifiAccessPoints(getApplicationContext())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<ScanResult>>() {
-                    @Override
-                    public void call(List<ScanResult> scanResults) {
-                        displayAccessPoints(scanResults);
-                    }
-                });
-
+  private void safelyUnsubscribe(Subscription subscription) {
+    if (subscription != null && !subscription.isUnsubscribed()) {
+      subscription.unsubscribe();
     }
-
-    private void displayAccessPoints(List<ScanResult> scanResults) {
-        List<String> ssids = new ArrayList<>();
-
-        for (ScanResult scanResult : scanResults) {
-            ssids.add(scanResult.SSID);
-        }
-
-        int itemLayoutId = android.R.layout.simple_list_item_1;
-        lvAccessPoints.setAdapter(new ArrayAdapter<>(this, itemLayoutId, ssids));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        connectivitySubscription.unsubscribe();
-        wifiSubscription.unsubscribe();
-        wifiSignalLevelSubscription.unsubscribe();
-    }
+  }
 }
