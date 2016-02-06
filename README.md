@@ -140,7 +140,7 @@ new ReactiveNetwork().observeWifiSignalLevel(context, numLevels)
     });
 ```
 
-We can also use `observeWifiSignalLevel(context)` method, which uses default levels, which is equal to 4.
+We can also use `observeWifiSignalLevel(context)` method, which uses default levels value, which is equal to 4.
 
 Examples
 --------
