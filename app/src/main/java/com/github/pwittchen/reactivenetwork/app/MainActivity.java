@@ -67,7 +67,10 @@ public class MainActivity extends Activity {
             Log.d(TAG, status.toString());
             tvConnectivityStatus.setText(status.description);
 
-            if (status == ConnectivityStatus.OFFLINE) {
+            final boolean isOffline = status == ConnectivityStatus.OFFLINE;
+            final boolean isMobileConnected = status == ConnectivityStatus.MOBILE_CONNECTED;
+
+            if (isOffline || isMobileConnected) {
               final String description = WifiSignalLevel.NO_SIGNAL.description;
               tvWifiSignalLevel.setText(WIFI_SIGNAL_LEVEL_MESSAGE.concat(description));
             }

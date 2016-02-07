@@ -20,7 +20,9 @@ import android.net.wifi.ScanResult
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
+import com.github.pwittchen.reactivenetwork.library.ConnectivityStatus
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
+import com.github.pwittchen.reactivenetwork.library.WifiSignalLevel
 import kotlinx.android.synthetic.main.activity_main.access_points
 import kotlinx.android.synthetic.main.activity_main.connectivity_status
 import kotlinx.android.synthetic.main.activity_main.wifi_signal_level
@@ -55,6 +57,14 @@ class MainActivity : Activity() {
         .subscribe { connectivityStatus ->
           Log.d(TAG, connectivityStatus.toString())
           connectivity_status.text = connectivityStatus.description;
+
+          val isOffline = connectivityStatus == ConnectivityStatus.OFFLINE
+          val isMobileConnected = connectivityStatus == ConnectivityStatus.MOBILE_CONNECTED
+
+          if (isOffline || isMobileConnected) {
+            val description = WifiSignalLevel.NO_SIGNAL.description
+            wifi_signal_level.text = WIFI_SIGNAL_LEVEL_MESSAGE + description
+          }
         }
 
     signalLevelSub = reactiveNetwork.observeWifiSignalLevel(applicationContext)
