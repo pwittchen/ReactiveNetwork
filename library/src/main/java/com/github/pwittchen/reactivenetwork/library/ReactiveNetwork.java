@@ -31,6 +31,7 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Func1;
 import rx.subscriptions.Subscriptions;
 
 /**
@@ -160,8 +161,24 @@ public final class ReactiveNetwork {
   }
 
   /**
+   * Observes WiFi signal level with predefined max num levels.
+   * Returns WiFi signal level as enum with information about current level
+   *
+   * @param context Context of the activity or an application
+   * @return WifiSignalLevel as an enum
+   */
+  public Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context) {
+    return observeWifiSignalLevel(context, WifiSignalLevel.getMaxLevel()).map(
+        new Func1<Integer, WifiSignalLevel>() {
+          @Override public WifiSignalLevel call(Integer level) {
+            return WifiSignalLevel.fromLevel(level);
+          }
+        });
+  }
+
+  /**
    * Observes WiFi signal level.
-   * Returns WiFi signal level
+   * Returns WiFi signal level as an integer
    *
    * @param context Context of the activity or an application
    * @param numLevels The number of levels to consider in the calculated level as Integer

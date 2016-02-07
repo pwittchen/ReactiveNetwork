@@ -6,12 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
-import kotlinx.android.synthetic.activity_main.*
+import kotlinx.android.synthetic.activity_main.access_points
+import kotlinx.android.synthetic.activity_main.connectivity_status
+import kotlinx.android.synthetic.activity_main.wifi_signal_level
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
-import rx.functions.Action1
 import rx.schedulers.Schedulers
-import java.util.*
+import java.util.ArrayList
 
 class MainActivity : Activity() {
   private var wifiSub: Subscription? = null
@@ -20,8 +21,7 @@ class MainActivity : Activity() {
 
   companion object {
     private val TAG = "ReactiveNetwork"
-    private val WIFI_NUM_LEVELS = 4;
-    private val WIFI_SIGNAL_LEVEL_MESSAGE = "wifi signal level: ";
+    private val WIFI_SIGNAL_LEVEL_MESSAGE = "WiFi signal level: ";
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,17 +37,16 @@ class MainActivity : Activity() {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { connectivityStatus ->
-          connectivity_status.text = connectivityStatus.toString();
           Log.d(TAG, connectivityStatus.toString())
+          connectivity_status.text = connectivityStatus.toString();
         }
 
-    signalLevelSub = reactiveNetwork.observeWifiSignalLevel(applicationContext, WIFI_NUM_LEVELS)
+    signalLevelSub = reactiveNetwork.observeWifiSignalLevel(applicationContext)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { signalLevel ->
-          val message = WIFI_SIGNAL_LEVEL_MESSAGE.concat(signalLevel.toString())
-          wifi_signal_level.text = message
-          Log.d(TAG, message);
+        .subscribe { wifiSignalLevel ->
+          Log.d(TAG, wifiSignalLevel.toString())
+          wifi_signal_level.text = WIFI_SIGNAL_LEVEL_MESSAGE.concat(wifiSignalLevel.description);
         }
 
     wifiSub = reactiveNetwork.observeWifiAccessPoints(applicationContext)

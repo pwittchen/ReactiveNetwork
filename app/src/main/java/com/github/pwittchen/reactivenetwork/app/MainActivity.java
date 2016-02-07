@@ -27,6 +27,7 @@ import com.github.pwittchen.reactivenetwork.R;
 import com.github.pwittchen.reactivenetwork.library.ConnectivityStatus;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 
+import com.github.pwittchen.reactivenetwork.library.WifiSignalLevel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +39,7 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends Activity {
 
   private static final String TAG = "ReactiveNetwork";
-  private static final String WIFI_SIGNAL_LEVEL_MESSAGE = "wifi signal level: ";
-  private static final int WIFI_NUM_LEVELS = 4;
+  private static final String WIFI_SIGNAL_LEVEL_MESSAGE = "WiFi signal level: ";
   private TextView tvConnectivityStatus;
   private TextView tvWifiSignalLevel;
   private ListView lvAccessPoints;
@@ -70,17 +70,16 @@ public class MainActivity extends Activity {
           }
         });
 
-    signalLevelSubscription =
-        reactiveNetwork.observeWifiSignalLevel(getApplicationContext(), WIFI_NUM_LEVELS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<Integer>() {
-              @Override public void call(Integer level) {
-                final String message = WIFI_SIGNAL_LEVEL_MESSAGE.concat(level.toString());
-                Log.d(TAG, message);
-                tvWifiSignalLevel.setText(message);
-              }
-            });
+    signalLevelSubscription = reactiveNetwork.observeWifiSignalLevel(getApplicationContext())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<WifiSignalLevel>() {
+          @Override public void call(WifiSignalLevel wifiSignalLevel) {
+            Log.d(TAG, wifiSignalLevel.toString());
+            final String description = wifiSignalLevel.description;
+            tvWifiSignalLevel.setText(WIFI_SIGNAL_LEVEL_MESSAGE.concat(description));
+          }
+        });
 
     wifiSubscription = reactiveNetwork.observeWifiAccessPoints(getApplicationContext())
         .subscribeOn(Schedulers.io())

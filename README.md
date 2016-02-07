@@ -36,6 +36,7 @@ Library has two RxJava Observables available in the public API:
 Observable<ConnectivityStatus> observeConnectivity(final Context context)
 Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)
 Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels)
+Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context)
 ```
 
 Moreover it has the following helper method for checking connectivity:
@@ -146,6 +147,8 @@ new ReactiveNetwork().observeWifiSignalLevel(context, numLevels)
       }
     });
 ```
+
+We can also observe WiFi signal level with `observeWifiSignalLevel(final Context context)` method, which has predefined num levels and returns `Observable<WifiSignalLevel>`. `WifiSignalLevel` is an enum, which contains information about current signal level.
 
 Examples
 --------
