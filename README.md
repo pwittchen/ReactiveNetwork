@@ -148,7 +148,33 @@ new ReactiveNetwork().observeWifiSignalLevel(context, numLevels)
     });
 ```
 
-We can also observe WiFi signal level with `observeWifiSignalLevel(final Context context)` method, which has predefined num levels and returns `Observable<WifiSignalLevel>`. `WifiSignalLevel` is an enum, which contains information about current signal level.
+We can also observe WiFi signal level with `observeWifiSignalLevel(final Context context)` method, which has predefined num levels value, which is equal to 5 and returns `Observable<WifiSignalLevel>`. `WifiSignalLevel` is an enum, which contains information about current signal level. We can do it as follows:
+
+```java
+new ReactiveNetwork().observeWifiSignalLevel(context)
+    .subscribeOn(Schedulers.io())
+    ... // anything else what you can do with RxJava
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Action1<WifiSignalLevel>() {
+      @Override public void call(WifiSignalLevel signalLevel) {
+        // do something with signalLevel
+      }
+    });
+```
+
+`WifiSignalLevel` has the following values:
+
+```java
+public enum WifiSignalLevel {
+  NO_SIGNAL(0, "no signal"),
+  VERY_POOR(1, "very poor"),
+  POOR(2, "poor"),
+  MEDIUM(3, "medium"),
+  GOOD(4, "good"),
+  VERY_GOOD(5, "very good");
+  ...
+}
+```
 
 Examples
 --------
