@@ -39,7 +39,6 @@ import rx.subscriptions.Subscriptions;
  * with RxJava Observables. It can be easily used with RxAndroid.
  */
 public final class ReactiveNetwork {
-  private static final int DEFAULT_WIFI_NUM_LEVELS = 4;
   private boolean checkInternet = false;
   private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
 
@@ -158,17 +157,6 @@ public final class ReactiveNetwork {
         }));
       }
     });
-  }
-
-  /**
-   * Observes WiFi signal level with default num levels value
-   * Returns WiFi signal level
-   *
-   * @param context Context of the activity or an application
-   * @return RxJava Observable with WiFi signal level
-   */
-  public Observable<Integer> observeWifiSignalLevel(final Context context) {
-    return observeWifiSignalLevel(context, DEFAULT_WIFI_NUM_LEVELS);
   }
 
   /**
