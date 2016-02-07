@@ -34,14 +34,12 @@ public enum WifiSignalLevel {
         return GOOD;
       case 5:
         return VERY_GOOD;
+      default:
+        return NO_SIGNAL;
     }
-    return NO_SIGNAL;
   }
 
   @Override public String toString() {
-    return "WifiSignalLevel{" +
-        "level=" + level +
-        ", description='" + description + '\'' +
-        '}';
+    return "WifiSignalLevel{" + "level=" + level + ", description='" + description + '\'' + '}';
   }
 }
