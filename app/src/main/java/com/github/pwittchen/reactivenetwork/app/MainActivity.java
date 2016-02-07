@@ -37,7 +37,6 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
-
   private static final String TAG = "ReactiveNetwork";
   private static final String WIFI_SIGNAL_LEVEL_MESSAGE = "WiFi signal level: ";
   private TextView tvConnectivityStatus;
@@ -64,9 +63,14 @@ public class MainActivity extends Activity {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Action1<ConnectivityStatus>() {
-          @Override public void call(ConnectivityStatus connectivityStatus) {
-            Log.d(TAG, connectivityStatus.toString());
-            tvConnectivityStatus.setText(connectivityStatus.description);
+          @Override public void call(final ConnectivityStatus status) {
+            Log.d(TAG, status.toString());
+            tvConnectivityStatus.setText(status.description);
+
+            if (status == ConnectivityStatus.OFFLINE) {
+              final String description = WifiSignalLevel.NO_SIGNAL.description;
+              tvWifiSignalLevel.setText(WIFI_SIGNAL_LEVEL_MESSAGE.concat(description));
+            }
           }
         });
 
@@ -74,9 +78,9 @@ public class MainActivity extends Activity {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Action1<WifiSignalLevel>() {
-          @Override public void call(WifiSignalLevel wifiSignalLevel) {
-            Log.d(TAG, wifiSignalLevel.toString());
-            final String description = wifiSignalLevel.description;
+          @Override public void call(final WifiSignalLevel level) {
+            Log.d(TAG, level.toString());
+            final String description = level.description;
             tvWifiSignalLevel.setText(WIFI_SIGNAL_LEVEL_MESSAGE.concat(description));
           }
         });
@@ -85,7 +89,7 @@ public class MainActivity extends Activity {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Action1<List<ScanResult>>() {
-          @Override public void call(List<ScanResult> scanResults) {
+          @Override public void call(final List<ScanResult> scanResults) {
             displayAccessPoints(scanResults);
           }
         });

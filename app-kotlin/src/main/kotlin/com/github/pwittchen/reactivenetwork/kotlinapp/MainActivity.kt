@@ -21,9 +21,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
-import kotlinx.android.synthetic.activity_main.access_points
-import kotlinx.android.synthetic.activity_main.connectivity_status
-import kotlinx.android.synthetic.activity_main.wifi_signal_level
+import kotlinx.android.synthetic.main.activity_main.access_points
+import kotlinx.android.synthetic.main.activity_main.connectivity_status
+import kotlinx.android.synthetic.main.activity_main.wifi_signal_level
+
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -61,7 +62,7 @@ class MainActivity : Activity() {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { wifiSignalLevel ->
           Log.d(TAG, wifiSignalLevel.toString())
-          wifi_signal_level.text = WIFI_SIGNAL_LEVEL_MESSAGE.concat(wifiSignalLevel.description);
+          wifi_signal_level.text = WIFI_SIGNAL_LEVEL_MESSAGE + wifiSignalLevel.description;
         }
 
     wifiSub = reactiveNetwork.observeWifiAccessPoints(applicationContext)
