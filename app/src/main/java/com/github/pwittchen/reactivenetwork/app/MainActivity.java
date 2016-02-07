@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
         .subscribe(new Action1<ConnectivityStatus>() {
           @Override public void call(ConnectivityStatus connectivityStatus) {
             Log.d(TAG, connectivityStatus.toString());
-            tvConnectivityStatus.setText(connectivityStatus.toString());
+            tvConnectivityStatus.setText(connectivityStatus.description);
           }
         });
 

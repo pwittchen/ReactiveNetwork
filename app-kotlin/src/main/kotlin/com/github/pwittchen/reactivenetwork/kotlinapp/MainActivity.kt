@@ -38,7 +38,7 @@ class MainActivity : Activity() {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { connectivityStatus ->
           Log.d(TAG, connectivityStatus.toString())
-          connectivity_status.text = connectivityStatus.toString();
+          connectivity_status.text = connectivityStatus.description;
         }
 
     signalLevelSub = reactiveNetwork.observeWifiSignalLevel(applicationContext)

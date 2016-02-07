@@ -25,14 +25,10 @@ public enum ConnectivityStatus {
   MOBILE_CONNECTED("connected to mobile network"),
   OFFLINE("offline");
 
-  private final String status;
+  public final String description;
 
-  ConnectivityStatus(String status) {
-    this.status = status;
-  }
-
-  @Override public String toString() {
-    return status;
+  ConnectivityStatus(final String description) {
+    this.description = description;
   }
 
   /**
@@ -82,4 +78,7 @@ public enum ConnectivityStatus {
     };
   }
 
+  @Override public String toString() {
+    return "ConnectivityStatus{" + "description='" + description + '\'' + '}';
+  }
 }
