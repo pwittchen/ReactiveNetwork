@@ -34,6 +34,11 @@ public enum WifiSignalLevel {
     return EXCELLENT.level;
   }
 
+  /**
+   * Gets WifiSignalLevel enum basing on integer value
+   * @param level as an integer
+   * @return WifiSignalLevel enum
+   */
   public static WifiSignalLevel fromLevel(final int level) {
     switch (level) {
       case 0:
