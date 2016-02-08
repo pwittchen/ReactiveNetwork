@@ -39,7 +39,7 @@ import rx.subscriptions.Subscriptions;
  * listening network connection state and change of the WiFi signal strength
  * with RxJava Observables. It can be easily used with RxAndroid.
  */
-public final class ReactiveNetwork {
+public class ReactiveNetwork {
   private boolean checkInternet = false;
   private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
 
