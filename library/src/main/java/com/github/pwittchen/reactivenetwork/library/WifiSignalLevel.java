@@ -17,11 +17,10 @@ package com.github.pwittchen.reactivenetwork.library;
 
 public enum WifiSignalLevel {
   NO_SIGNAL(0, "no signal"),
-  VERY_POOR(1, "very poor"),
-  POOR(2, "poor"),
-  MEDIUM(3, "medium"),
-  GOOD(4, "good"),
-  VERY_GOOD(5, "very good");
+  POOR(1, "poor"),
+  FAIR(2, "fair"),
+  GOOD(3, "good"),
+  EXCELLENT(4, "excellent");
 
   public final int level;
   public final String description;
@@ -32,7 +31,7 @@ public enum WifiSignalLevel {
   }
 
   public static int getMaxLevel() {
-    return VERY_GOOD.level;
+    return EXCELLENT.level;
   }
 
   public static WifiSignalLevel fromLevel(final int level) {
@@ -40,15 +39,13 @@ public enum WifiSignalLevel {
       case 0:
         return NO_SIGNAL;
       case 1:
-        return VERY_POOR;
-      case 2:
         return POOR;
+      case 2:
+        return FAIR;
       case 3:
-        return MEDIUM;
-      case 4:
         return GOOD;
-      case 5:
-        return VERY_GOOD;
+      case 4:
+        return EXCELLENT;
       default:
         return NO_SIGNAL;
     }

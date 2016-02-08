@@ -167,11 +167,10 @@ new ReactiveNetwork().observeWifiSignalLevel(context)
 ```java
 public enum WifiSignalLevel {
   NO_SIGNAL(0, "no signal"),
-  VERY_POOR(1, "very poor"),
-  POOR(2, "poor"),
-  MEDIUM(3, "medium"),
-  GOOD(4, "good"),
-  VERY_GOOD(5, "very good");
+  POOR(1, "poor"),
+  FAIR(2, "fair"),
+  GOOD(3, "good"),
+  EXCELLENT(4, "excellent");
   ...
 }
 ```
