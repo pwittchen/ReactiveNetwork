@@ -148,7 +148,7 @@ new ReactiveNetwork().observeWifiSignalLevel(context, numLevels)
     });
 ```
 
-We can also observe WiFi signal level with `observeWifiSignalLevel(final Context context)` method, which has predefined num levels value, which is equal to 5 and returns `Observable<WifiSignalLevel>`. `WifiSignalLevel` is an enum, which contains information about current signal level. We can do it as follows:
+We can also observe WiFi signal level with `observeWifiSignalLevel(final Context context)` method, which has predefined num levels value, which is equal to 4 and returns `Observable<WifiSignalLevel>`. `WifiSignalLevel` is an enum, which contains information about current signal level. We can do it as follows:
 
 ```java
 new ReactiveNetwork().observeWifiSignalLevel(context)
