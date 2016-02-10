@@ -1,6 +1,21 @@
 CHANGELOG
 =========
 
+v. 0.2.0
+--------
+*10 Feb 2016*
+
+- added possibility to observe WiFi signal level with `observeWifiSignalLevel(context, numLevels)`  and `observeWifiSignalLevel(context)` method
+- created `WifiSignalLevel` enum
+- added internet check to parameters of `getConnectivityStatus(context, checkInternet)` method
+- made `getConnectivityStatus(context, checkInternet)` method public
+- changed String variable `status` in `ConnectivityStatus` enum to `description` and made it public
+- changed output of the `toString()` method in `ConnectivityStatus` to keep consistency with another enum
+- made `ReactiveNetwork` class non-final
+- bumped Kotlin version in sample app to 1.0.0-rc-1036
+- increased immutability of code of the library
+- updated sample apps and documentation
+
 v. 0.1.5
 --------
 *10 Jan 2016*
