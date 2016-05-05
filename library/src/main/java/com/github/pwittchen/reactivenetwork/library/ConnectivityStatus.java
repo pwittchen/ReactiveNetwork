@@ -19,9 +19,7 @@ import rx.functions.Func1;
 
 public enum ConnectivityStatus {
   UNKNOWN("unknown"),
-  WIFI_CONNECTED("connected to WiFi"),
-  WIFI_CONNECTED_HAS_INTERNET("connected to WiFi (Internet available)"),
-  WIFI_CONNECTED_HAS_NO_INTERNET("connected to WiFi (Internet not available)"),
+  WIFI_CONNECTED("connected to WiFi network"),
   MOBILE_CONNECTED("connected to mobile network"),
   OFFLINE("offline");
 

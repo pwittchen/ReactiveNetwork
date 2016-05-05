@@ -40,17 +40,20 @@ public class MainActivity extends Activity {
   private static final String TAG = "ReactiveNetwork";
   private static final String WIFI_SIGNAL_LEVEL_MESSAGE = "WiFi signal level: ";
   private TextView tvConnectivityStatus;
+  private TextView tvInternetStatus;
   private TextView tvWifiSignalLevel;
   private ListView lvAccessPoints;
   private ReactiveNetwork reactiveNetwork;
   private Subscription wifiSubscription;
-  private Subscription connectivitySubscription;
+  private Subscription networkConnectivitySubscription;
+  private Subscription internetConnectivitySubscription;
   private Subscription signalLevelSubscription;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     tvConnectivityStatus = (TextView) findViewById(R.id.connectivity_status);
+    tvInternetStatus = (TextView) findViewById(R.id.internet_status);
     lvAccessPoints = (ListView) findViewById(R.id.access_points);
     tvWifiSignalLevel = (TextView) findViewById(R.id.wifi_signal_level);
   }
@@ -59,21 +62,31 @@ public class MainActivity extends Activity {
     super.onResume();
     reactiveNetwork = new ReactiveNetwork();
 
-    connectivitySubscription = reactiveNetwork.observeConnectivity(getApplicationContext())
+    networkConnectivitySubscription =
+        reactiveNetwork.observeNetworkConnectivity(getApplicationContext())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<ConnectivityStatus>() {
+              @Override public void call(final ConnectivityStatus status) {
+                Log.d(TAG, status.toString());
+                tvConnectivityStatus.setText(status.description);
+
+                final boolean isOffline = status == ConnectivityStatus.OFFLINE;
+                final boolean isMobileConnected = status == ConnectivityStatus.MOBILE_CONNECTED;
+
+                if (isOffline || isMobileConnected) {
+                  final String description = WifiSignalLevel.NO_SIGNAL.description;
+                  tvWifiSignalLevel.setText(WIFI_SIGNAL_LEVEL_MESSAGE.concat(description));
+                }
+              }
+            });
+
+    internetConnectivitySubscription = reactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<ConnectivityStatus>() {
-          @Override public void call(final ConnectivityStatus status) {
-            Log.d(TAG, status.toString());
-            tvConnectivityStatus.setText(status.description);
-
-            final boolean isOffline = status == ConnectivityStatus.OFFLINE;
-            final boolean isMobileConnected = status == ConnectivityStatus.MOBILE_CONNECTED;
-
-            if (isOffline || isMobileConnected) {
-              final String description = WifiSignalLevel.NO_SIGNAL.description;
-              tvWifiSignalLevel.setText(WIFI_SIGNAL_LEVEL_MESSAGE.concat(description));
-            }
+        .subscribe(new Action1<Boolean>() {
+          @Override public void call(Boolean isConnectedToInternet) {
+            tvInternetStatus.setText(isConnectedToInternet.toString());
           }
         });
 
@@ -111,9 +124,14 @@ public class MainActivity extends Activity {
 
   @Override protected void onPause() {
     super.onPause();
-    safelyUnsubscribe(connectivitySubscription);
-    safelyUnsubscribe(wifiSubscription);
-    safelyUnsubscribe(signalLevelSubscription);
+    safelyUnsubscribe(networkConnectivitySubscription, internetConnectivitySubscription,
+        wifiSubscription, signalLevelSubscription);
+  }
+
+  private void safelyUnsubscribe(Subscription... subscriptions) {
+    for (Subscription subscription : subscriptions) {
+      safelyUnsubscribe(subscription);
+    }
   }
 
   private void safelyUnsubscribe(Subscription subscription) {

@@ -24,7 +24,11 @@ import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Looper;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
@@ -32,6 +36,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
 /**
@@ -40,21 +45,11 @@ import rx.subscriptions.Subscriptions;
  * with RxJava Observables. It can be easily used with RxAndroid.
  */
 public class ReactiveNetwork {
-  private boolean checkInternet = false;
+  private static final String DEFAULT_PING_HOST = "www.google.com";
+  private static final int DEFAULT_PING_PORT = 80;
+  private static final int DEFAULT_PING_INTERVAL_IN_MS = 2000;
+  private static final int DEFAULT_PING_TIMEOUT_IN_MS = 2000;
   private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
-
-  /**
-   * Enables Internet connection check.
-   * When it's called WIFI_CONNECTED_HAS_INTERNET and WIFI_CONNECTED_HAS_NO_INTERNET statuses
-   * can be emitted by observeConnectivity(context) method. When it isn't called
-   * only WIFI_CONNECTED can by emitted by observeConnectivity(context) method.
-   *
-   * @return ReactiveNetwork object
-   */
-  public ReactiveNetwork enableInternetCheck() {
-    checkInternet = true;
-    return this;
-  }
 
   /**
    * Observes ConnectivityStatus,
@@ -63,7 +58,7 @@ public class ReactiveNetwork {
    * @param context Context of the activity or an application
    * @return RxJava Observable with ConnectivityStatus
    */
-  public Observable<ConnectivityStatus> observeConnectivity(final Context context) {
+  public Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context) {
     final IntentFilter filter = new IntentFilter();
     filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
@@ -71,7 +66,7 @@ public class ReactiveNetwork {
       @Override public void call(final Subscriber<? super ConnectivityStatus> subscriber) {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
           @Override public void onReceive(Context context, Intent intent) {
-            final ConnectivityStatus newStatus = getConnectivityStatus(context, checkInternet);
+            final ConnectivityStatus newStatus = getConnectivityStatus(context);
 
             // we need to perform check below,
             // because after going off-line, onReceive() is called twice
@@ -93,8 +88,13 @@ public class ReactiveNetwork {
     }).defaultIfEmpty(ConnectivityStatus.OFFLINE);
   }
 
-  public ConnectivityStatus getConnectivityStatus(final Context context,
-      final boolean checkInternet) {
+  /**
+   * Gets current network connectivity status
+   *
+   * @param context Application Context is recommended here
+   * @return ConnectivityStatus, which can be WIFI_CONNECTED, MOBILE_CONNECTED or OFFLINE
+   */
+  public ConnectivityStatus getConnectivityStatus(final Context context) {
     final String service = Context.CONNECTIVITY_SERVICE;
     final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
     final NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -104,11 +104,7 @@ public class ReactiveNetwork {
     }
 
     if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-      if (checkInternet) {
-        return getWifiInternetStatus(networkInfo);
-      } else {
-        return ConnectivityStatus.WIFI_CONNECTED;
-      }
+      return ConnectivityStatus.WIFI_CONNECTED;
     } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
       return ConnectivityStatus.MOBILE_CONNECTED;
     }
@@ -116,12 +112,46 @@ public class ReactiveNetwork {
     return ConnectivityStatus.OFFLINE;
   }
 
-  private ConnectivityStatus getWifiInternetStatus(final NetworkInfo networkInfo) {
-    if (networkInfo.isConnected()) {
-      return ConnectivityStatus.WIFI_CONNECTED_HAS_INTERNET;
-    } else {
-      return ConnectivityStatus.WIFI_CONNECTED_HAS_NO_INTERNET;
-    }
+  /**
+   * Observes connectivity with the Internet with default settings. It pings remote host
+   * (www.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * for determining if device is connected to the Internet or not. Please note that this method is
+   * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
+   * transfer, but it gives you actual information if device is connected to the Internet or not.
+   *
+   * @return RxJava Observable with Boolean - true, when we have an access to the Internet
+   * and false if not
+   */
+  public Observable<Boolean> observeInternetConnectivity() {
+    return observeInternetConnectivity(DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST,
+        DEFAULT_PING_PORT, DEFAULT_PING_TIMEOUT_IN_MS);
+  }
+
+  /**
+   * Observes connectivity with the Internet by opening socket connection with remote host
+   *
+   * @param interval in milliseconds determining how often we want to check connectivity
+   * @param host for checking Internet connectivity
+   * @param port for checking Internet connectivity
+   * @param timeout for pinging remote host
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  public Observable<Boolean> observeInternetConnectivity(final int interval, final String host,
+      final int port, final int timeout) {
+    return Observable.interval(interval, TimeUnit.MILLISECONDS, Schedulers.io())
+        .map(new Func1<Long, Boolean>() {
+          @Override public Boolean call(Long tick) {
+            try {
+              Socket socket = new Socket();
+              socket.connect(new InetSocketAddress(host, port), timeout);
+              return socket.isConnected();
+            } catch (IOException e) {
+              return Boolean.FALSE;
+            }
+          }
+        })
+        .distinctUntilChanged();
   }
 
   /**
