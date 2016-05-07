@@ -16,8 +16,8 @@ Contents
 --------
 
 - [Usage](#usage)
-  - [Observing connectivity](#observing-connectivity)
-  - [Enabling Internet check](#enabling-internet-check)
+  - [Observing network connectivity](#observing-network-connectivity)
+  - [Observing Internet connectivity](#observing-internet-connectivity)
   - [Observing WiFi Access Points](#observing-wifi-access-points)
   - [Observing WiFi signal level](#observing-wifi-signal-level)
 - [Examples](#examples)
@@ -30,10 +30,12 @@ Contents
 Usage
 -----
 
-Library has two RxJava Observables available in the public API:
+Library has the following RxJava Observables available in the public API:
 
 ```java
-Observable<ConnectivityStatus> observeConnectivity(final Context context)
+Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context)
+Observable<Boolean> observeInternetConnectivity()
+Observable<Boolean> observeInternetConnectivity(final int interval, final String host, final int port, final int timeout)
 Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)
 Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels)
 Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context)
@@ -42,14 +44,14 @@ Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context)
 Moreover it has the following helper method for checking connectivity:
 
 ```java
-ConnectivityStatus getConnectivityStatus(final Context context, final boolean checkInternet)
+ConnectivityStatus getConnectivityStatus(final Context context)
 ```
 
 **Please note**: Due to memory leak in `WifiManager` reported
 in [issue 43945](https://code.google.com/p/android/issues/detail?id=43945) in Android issue tracker
 it's recommended to use Application Context instead of Activity Context.
 
-### Observing connectivity
+### Observing network connectivity
 
 `ConnectivityStatus` can have one of the following values:
 
@@ -57,18 +59,16 @@ it's recommended to use Application Context instead of Activity Context.
 public enum ConnectivityStatus {
   UNKNOWN("unknown"),
   WIFI_CONNECTED("connected to WiFi"),
-  WIFI_CONNECTED_HAS_INTERNET("connected to WiFi (Internet available)"),
-  WIFI_CONNECTED_HAS_NO_INTERNET("connected to WiFi (Internet not available)"),
   MOBILE_CONNECTED("connected to mobile network"),
   OFFLINE("offline");
   ...
 }  
 ```
 
-We can observe `ConnectivityStatus` with `observeConnectivity(context)` method in the following way:
+We can observe `ConnectivityStatus` with `observeNetworkConnectivity(context)` method in the following way:
 
 ```java
-new ReactiveNetwork().observeConnectivity(context)
+new ReactiveNetwork().observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
     ... // anything else what you can do with RxJava
     .observeOn(AndroidSchedulers.mainThread())
@@ -84,7 +84,7 @@ When `ConnectivityStatus` changes, subscriber will be notified.
 We can react on a concrete status or statuses with the `filter(...)` method from RxJava, `isEqualTo(final ConnectivityStatus... statuses)` and `isNotEqualTo(final ConnectivityStatus... statuses)` methods located in `ConnectivityStatus`.
 
 ```java
-new ReactiveNetwork().observeConnectivity(context)
+new ReactiveNetwork().observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
     .filter(ConnectivityStatus.isEqualTo(ConnectivityStatus.WIFI_CONNECTED))
     .observeOn(AndroidSchedulers.mainThread())
@@ -95,24 +95,32 @@ new ReactiveNetwork().observeConnectivity(context)
     });
 ```
 
-### Enabling Internet check
+`observeNetworkConnectivity(context)` checks only connectivity with the network (not Internet) as is based on BroadCastReceiver. Concrete WiFi or mobile network may be connected to the Internet (and usually is), but it doesn't have to.
 
-This feature is available from 0.1.0 version.
+### Observing Internet connectivity
 
-Internet connection check is disabled by default. We can enable it in the following way:
+We can observe connectivity with the Internet in the following way:
 
 ```java
-new ReactiveNetwork().enableInternetCheck()
-  .observeConnectivity(context)
+new ReactiveNetwork().observeInternetConnectivity()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<Boolean>() {
+          @Override public void call(Boolean isConnectedToInternet) {
+            // do something with isConnectedToInternet value
+          }
+        });
 ```
 
-Please note, that after enabling it, we will receive only one of the following events after connecting to WiFi network:
-- `WIFI_CONNECTED_HAS_INTERNET`
-- `WIFI_CONNECTED_HAS_NO_INTERNET`
+**Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) and consumes data transfer. Use this method if you really need it.
 
-In such case, pure `WIFI_CONNECTED` status will never occur.
+If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
 
-When internet connection check is disabled (by default), we will receive only `WIFI_CONNECTED` status after connecting to WiFi. In such case, other statuses with `WIFI_` prefix will never occur.
+```java
+Observable<Boolean> observeInternetConnectivity(final int interval, final String host, final int port, final int timeout)
+```
+
+It allows you to specify custom interval of checking connectivity in milliseconds, host, port and connection timeout in milliseconds.
 
 ### Observing WiFi Access Points
 
