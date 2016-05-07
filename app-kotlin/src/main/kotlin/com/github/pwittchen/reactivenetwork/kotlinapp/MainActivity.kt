@@ -23,9 +23,7 @@ import android.widget.ArrayAdapter
 import com.github.pwittchen.reactivenetwork.library.ConnectivityStatus
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.WifiSignalLevel
-import kotlinx.android.synthetic.main.activity_main.access_points
-import kotlinx.android.synthetic.main.activity_main.connectivity_status
-import kotlinx.android.synthetic.main.activity_main.wifi_signal_level
+import kotlinx.android.synthetic.main.activity_main.*
 
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -35,6 +33,7 @@ import java.util.ArrayList
 class MainActivity : Activity() {
   private var wifiSub: Subscription? = null
   private var connectivitySub: Subscription? = null
+  private var internetSub: Subscription? = null
   private var signalLevelSub: Subscription? = null
 
   companion object {
@@ -51,7 +50,7 @@ class MainActivity : Activity() {
     super.onResume()
     val reactiveNetwork: ReactiveNetwork = ReactiveNetwork()
 
-    connectivitySub = reactiveNetwork.observeConnectivity(applicationContext)
+    connectivitySub = reactiveNetwork.observeNetworkConnectivity(applicationContext)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { connectivityStatus ->
@@ -65,6 +64,13 @@ class MainActivity : Activity() {
             val description = WifiSignalLevel.NO_SIGNAL.description
             wifi_signal_level.text = WIFI_SIGNAL_LEVEL_MESSAGE + description
           }
+        }
+
+    internetSub = reactiveNetwork.observeInternetConnectivity()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { isConnectedToInternet ->
+          internet_status.text = isConnectedToInternet.toString()
         }
 
     signalLevelSub = reactiveNetwork.observeWifiSignalLevel(applicationContext)
@@ -94,6 +100,7 @@ class MainActivity : Activity() {
   override fun onPause() {
     super.onPause()
     safelyUnsubscribe(connectivitySub)
+    safelyUnsubscribe(internetSub)
     safelyUnsubscribe(signalLevelSub)
     safelyUnsubscribe(wifiSub)
   }
