@@ -112,7 +112,7 @@ new ReactiveNetwork().observeInternetConnectivity()
         });
 ```
 
-**Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) and consumes data transfer. Use this method if you really need it.
+**Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it.
 
 If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
 
