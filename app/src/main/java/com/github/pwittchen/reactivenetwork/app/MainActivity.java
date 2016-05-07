@@ -130,13 +130,9 @@ public class MainActivity extends Activity {
 
   private void safelyUnsubscribe(Subscription... subscriptions) {
     for (Subscription subscription : subscriptions) {
-      safelyUnsubscribe(subscription);
-    }
-  }
-
-  private void safelyUnsubscribe(Subscription subscription) {
-    if (subscription != null && !subscription.isUnsubscribed()) {
-      subscription.unsubscribe();
+      if (subscription != null && !subscription.isUnsubscribed()) {
+        subscription.unsubscribe();
+      }
     }
   }
 }
