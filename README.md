@@ -10,7 +10,7 @@ Library is compatible with RxJava 1.+ and RxAndroid 1.+ and uses them under the 
 
 min sdk version = 9
 
-**Please note**: Right now, this `README.md` file contains draft of the documentation for the new library version, which hasn't been released yet. If you are looking for documentation the lastest release, see JavaDoc.
+**Please note**: Right now, this `README.md` file contains draft of the documentation for the new library version, which hasn't been released yet. If you are looking for documentation of the latest release, see JavaDoc.
 
 JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/
 
