@@ -1,6 +1,30 @@
 CHANGELOG
 =========
 
+v. 0.3.0
+--------
+*07 Jun 2016*
+
+- removed `enableInternetCheck()` method
+- removed  `ConnectivityStatus.WIFI_CONNECTED_HAS_INTERNET` enum value
+- removed `ConnectivityStatus.WIFI_CONNECTED_HAS_NO_INTERNET` enum value
+- changed method name from `Observable<ConnectivityStatus> observeConnectivity(final Context context)` to `Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context)`
+- deprecated `Observable<ConnectivityStatus> observeConnectivity(final Context context)` method
+- deprecated `Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)` method
+- depreceated `Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context)` method
+- deprecated `Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels)` method
+- changed method signature from `ConnectivityStatus getConnectivityStatus(final Context context, final boolean checkInternet)` to `ConnectivityStatus getConnectivityStatus(final Context context)`
+- updated `ConnectivityStatus getConnectivityStatus(final Context context)` method and added JavaDoc for it
+- added `Observable<Boolean> observeInternetConnectivity(final int interval, final String host, final int port, final int timeout)` method
+- added `Observable<Boolean> observeInternetConnectivity()` method
+- added `android.permission.INTERNET` to the `AndroidManifest.xml`
+- updated JavaDoc
+- updated sample apps
+- updated documentation in `README.md`
+- bumped RxJava version to 1.1.5
+- bumped RxAndroid version to 1.2.0
+- bumped Google Truth version to 0.28 (test dependency)
+
 v. 0.2.0
 --------
 *10 Feb 2016*
