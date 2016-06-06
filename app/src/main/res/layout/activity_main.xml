@@ -54,46 +54,4 @@
       android:textAppearance="@android:style/TextAppearance.Medium"
       />
 
-  <TextView
-      android:id="@+id/wifi_signal_level_label"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/internet_status"
-      android:paddingBottom="@dimen/text_view_padding"
-      android:paddingTop="@dimen/text_view_padding"
-      android:text="@string/wifi_signal_level"
-      android:textAppearance="@android:style/TextAppearance.Medium"
-      android:textStyle="bold"
-      />
-
-  <TextView
-      android:id="@+id/wifi_signal_level"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/wifi_signal_level_label"
-      android:paddingBottom="@dimen/text_view_padding"
-      android:paddingTop="@dimen/text_view_padding"
-      android:text="@string/waiting_for_wifi_signal_level"
-      android:textAppearance="@android:style/TextAppearance.Medium"
-      />
-
-  <TextView
-      android:id="@+id/access_points_label"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@id/wifi_signal_level"
-      android:paddingBottom="@dimen/text_view_padding"
-      android:paddingTop="@dimen/text_view_padding"
-      android:text="@string/available_access_points"
-      android:textAppearance="@android:style/TextAppearance.Medium"
-      android:textStyle="bold"
-      />
-
-  <ListView
-      android:id="@+id/access_points"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/access_points_label"
-      />
-
 </RelativeLayout>

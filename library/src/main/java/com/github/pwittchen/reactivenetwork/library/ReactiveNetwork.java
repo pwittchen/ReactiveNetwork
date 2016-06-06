@@ -89,6 +89,18 @@ public class ReactiveNetwork {
   }
 
   /**
+   * Observes ConnectivityStatus,
+   * which can be WIFI_CONNECTED, MOBILE_CONNECTED or OFFLINE
+   *
+   * @param context Context of the activity or an application
+   * @return RxJava Observable with ConnectivityStatus
+   * @deprecated use {@link #observeNetworkConnectivity(Context)} instead.
+   */
+  @Deprecated public Observable<ConnectivityStatus> observeConnectivity(final Context context) {
+    return observeNetworkConnectivity(context);
+  }
+
+  /**
    * Gets current network connectivity status
    *
    * @param context Application Context is recommended here
@@ -161,8 +173,10 @@ public class ReactiveNetwork {
    *
    * @param context Context of the activity or an application
    * @return RxJava Observable with list of WiFi scan results
+   * @deprecated use <a href="https://github.com/pwittchen/ReactiveWiFi">ReactiveWiFi</a> library
+   * instead
    */
-  public Observable<List<ScanResult>> observeWifiAccessPoints(final Context context) {
+  @Deprecated public Observable<List<ScanResult>> observeWifiAccessPoints(final Context context) {
     final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     wifiManager.startScan(); // without starting scan, we may never receive any scan results
 
@@ -196,8 +210,10 @@ public class ReactiveNetwork {
    *
    * @param context Context of the activity or an application
    * @return WifiSignalLevel as an enum
+   * @deprecated use <a href="https://github.com/pwittchen/ReactiveWiFi">ReactiveWiFi</a> library
+   * instead
    */
-  public Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context) {
+  @Deprecated public Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context) {
     return observeWifiSignalLevel(context, WifiSignalLevel.getMaxLevel()).map(
         new Func1<Integer, WifiSignalLevel>() {
           @Override public WifiSignalLevel call(Integer level) {
@@ -213,8 +229,11 @@ public class ReactiveNetwork {
    * @param context Context of the activity or an application
    * @param numLevels The number of levels to consider in the calculated level as Integer
    * @return RxJava Observable with WiFi signal level
+   * @deprecated use <a href="https://github.com/pwittchen/ReactiveWiFi">ReactiveWiFi</a> library
+   * instead
    */
-  public Observable<Integer> observeWifiSignalLevel(final Context context, final int numLevels) {
+  @Deprecated public Observable<Integer> observeWifiSignalLevel(final Context context,
+      final int numLevels) {
     final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     final IntentFilter filter = new IntentFilter();
     filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
