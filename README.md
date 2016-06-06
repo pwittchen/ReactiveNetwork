@@ -10,7 +10,7 @@ Library is compatible with RxJava 1.+ and RxAndroid 1.+ and uses them under the 
 
 min sdk version = 9
 
-**Please note**: Functionality releated to observing WiFi Access Points and WiFi singal level is currently deprecated and is a subject to remove in the next release (0.4.0). If you want to use this functionality, check [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) project.
+**Please note**: Functionality releated to observing WiFi Access Points and WiFi singal level is currently deprecated and is will be removed in the next release (0.4.0). If you want to use this functionality, check [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) project.
 
 JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/
 
