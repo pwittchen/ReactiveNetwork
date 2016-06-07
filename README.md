@@ -109,6 +109,8 @@ new ReactiveNetwork().observeInternetConnectivity()
         });
 ```
 
+An `Observable` will return `true` to the subscription if device is connected to the Internet and `false` if not.
+
 **Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it.
 
 If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
