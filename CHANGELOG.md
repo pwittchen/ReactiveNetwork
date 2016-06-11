@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+v. 0.4.0
+--------
+*11 Jun 2016*
+
+**Removed deprecated methods from the public API**:
+- removed depreacted `Observable<ConnectivityStatus> observeConnectivity(final Context context)` method in favor of `Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context)` method
+- removed depreacted `Observable<List<ScanResult>> observeWifiAccessPoints(final Context context)` method in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library
+- removed depreacted `Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context)` method in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library
+- removed depreacted `Observable<Integer> observeWifiSignalLevel(final Context context,final int numLevels)` method in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library
+
 v. 0.3.0
 --------
 *07 Jun 2016*
