@@ -4,15 +4,16 @@
 [![Build Status](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=master)](https://travis-ci.org/pwittchen/ReactiveNetwork)
 ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat)
 
-ReactiveNetwork is an Android library listening network connection state and Internet connectivity with RxJava Observables. It's a successor of [Network Events](https://github.com/pwittchen/NetworkEvents) library rewritten with Reactive Programming approach.
+ReactiveNetwork is an Android library listening **network connection state** and **Internet connectivity** with RxJava Observables. It's a successor of [Network Events](https://github.com/pwittchen/NetworkEvents) library rewritten with Reactive Programming approach.
 
 Library is compatible with RxJava 1.+ and RxAndroid 1.+ and uses them under the hood.
 
 min sdk version = 9
 
-**Please note**: Functionality releated to observing WiFi Access Points and WiFi singal strength (level) is currently deprecated and is will be removed in the next release (0.4.0). If you want to use this functionality, check [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) project.
-
 JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/
+
+**Important note**: Since version **0.4.0**, functionality releated to **observing WiFi Access Points** and **WiFi singal strength (level)** is removed in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library.
+If you want to use this functionality, check [**ReactiveWiFi**](https://github.com/pwittchen/ReactiveWiFi) project.
 
 Contents
 --------
