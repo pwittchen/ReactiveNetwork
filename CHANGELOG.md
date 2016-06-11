@@ -11,6 +11,11 @@ v. 0.4.0
 - removed depreacted `Observable<WifiSignalLevel> observeWifiSignalLevel(final Context context)` method in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library
 - removed depreacted `Observable<Integer> observeWifiSignalLevel(final Context context,final int numLevels)` method in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library
 
+**Removed permissions in AndroidManifest.xml**:
+- removed `android.permission.ACCESS_WIFI_STATE` permission from `AndroidManifest.xml`
+- removed `android.permission.CHANGE_WIFI_STATE` permission from `AndroidManifest.xml`
+- removed `android.permission.ACCESS_COARSE_LOCATION` permission from `AndroidManifest.xml`
+
 v. 0.3.0
 --------
 *07 Jun 2016*
