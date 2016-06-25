@@ -27,8 +27,8 @@ android {
 }
 
 dependencies {
-  compile 'io.reactivex:rxjava:1.1.5'
-  compile 'io.reactivex:rxandroid:1.2.0'
+  compile 'io.reactivex:rxjava:1.1.6'
+  compile 'io.reactivex:rxandroid:1.2.1'
 
   androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
   androidTestCompile('com.google.truth:truth:0.28') {
