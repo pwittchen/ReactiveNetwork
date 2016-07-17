@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Piotr Wittchen
+ * Copyright (C) 2016 Piotr Wittchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Looper;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -46,31 +45,24 @@ public class ReactiveNetwork {
   private static final int DEFAULT_PING_PORT = 80;
   private static final int DEFAULT_PING_INTERVAL_IN_MS = 2000;
   private static final int DEFAULT_PING_TIMEOUT_IN_MS = 2000;
-  private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
 
   /**
-   * Observes ConnectivityStatus,
-   * which can be WIFI_CONNECTED, MOBILE_CONNECTED or OFFLINE
+   * Observes network connectivity. Information about network state, type and name are contained in
+   * observed Connectivity object.
    *
    * @param context Context of the activity or an application
-   * @return RxJava Observable with ConnectivityStatus
+   * @return RxJava Observable with Connectivity class containing information about network state,
+   * type and name
    */
-  public Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context) {
+  public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final IntentFilter filter = new IntentFilter();
     filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
-    return Observable.create(new Observable.OnSubscribe<ConnectivityStatus>() {
-      @Override public void call(final Subscriber<? super ConnectivityStatus> subscriber) {
+    return Observable.create(new Observable.OnSubscribe<Connectivity>() {
+      @Override public void call(final Subscriber<? super Connectivity> subscriber) {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
           @Override public void onReceive(Context context, Intent intent) {
-            final ConnectivityStatus newStatus = getConnectivityStatus(context);
-
-            // we need to perform check below,
-            // because after going off-line, onReceive() is called twice
-            if (newStatus != status) {
-              status = newStatus;
-              subscriber.onNext(newStatus);
-            }
+            subscriber.onNext(Connectivity.create(context));
           }
         };
 
@@ -82,31 +74,7 @@ public class ReactiveNetwork {
           }
         }));
       }
-    }).defaultIfEmpty(ConnectivityStatus.OFFLINE);
-  }
-
-  /**
-   * Gets current network connectivity status
-   *
-   * @param context Application Context is recommended here
-   * @return ConnectivityStatus, which can be WIFI_CONNECTED, MOBILE_CONNECTED or OFFLINE
-   */
-  public ConnectivityStatus getConnectivityStatus(final Context context) {
-    final String service = Context.CONNECTIVITY_SERVICE;
-    final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
-    final NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-
-    if (networkInfo == null) {
-      return ConnectivityStatus.OFFLINE;
-    }
-
-    if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-      return ConnectivityStatus.WIFI_CONNECTED;
-    } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-      return ConnectivityStatus.MOBILE_CONNECTED;
-    }
-
-    return ConnectivityStatus.OFFLINE;
+    }).defaultIfEmpty(Connectivity.create());
   }
 
   /**
