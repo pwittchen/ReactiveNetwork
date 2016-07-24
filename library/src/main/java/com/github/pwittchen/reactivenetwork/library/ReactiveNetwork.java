@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Piotr Wittchen
+ * Copyright (C) 2016 Piotr Wittchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,18 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Looper;
+import android.os.Build;
+import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
 
 /**
  * ReactiveNetwork is an Android library
@@ -46,67 +38,42 @@ public class ReactiveNetwork {
   private static final int DEFAULT_PING_PORT = 80;
   private static final int DEFAULT_PING_INTERVAL_IN_MS = 2000;
   private static final int DEFAULT_PING_TIMEOUT_IN_MS = 2000;
-  private ConnectivityStatus status = ConnectivityStatus.UNKNOWN;
 
   /**
-   * Observes ConnectivityStatus,
-   * which can be WIFI_CONNECTED, MOBILE_CONNECTED or OFFLINE
+   * Observes network connectivity. Information about network state, type and name are contained in
+   * observed Connectivity object.
    *
    * @param context Context of the activity or an application
-   * @return RxJava Observable with ConnectivityStatus
+   * @return RxJava Observable with Connectivity class containing information about network state,
+   * type and name
    */
-  public Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context) {
-    final IntentFilter filter = new IntentFilter();
-    filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+  public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
+    final NetworkObservingStrategy strategy;
+    final boolean isAtLeastLollipop = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
-    return Observable.create(new Observable.OnSubscribe<ConnectivityStatus>() {
-      @Override public void call(final Subscriber<? super ConnectivityStatus> subscriber) {
-        final BroadcastReceiver receiver = new BroadcastReceiver() {
-          @Override public void onReceive(Context context, Intent intent) {
-            final ConnectivityStatus newStatus = getConnectivityStatus(context);
+    if (isAtLeastLollipop) {
+      strategy = new LollipopNetworkObservingStrategy();
+    } else {
+      strategy = new PreLollipopNetworkObservingStrategy();
+    }
 
-            // we need to perform check below,
-            // because after going off-line, onReceive() is called twice
-            if (newStatus != status) {
-              status = newStatus;
-              subscriber.onNext(newStatus);
-            }
-          }
-        };
-
-        context.registerReceiver(receiver, filter);
-
-        subscriber.add(unsubscribeInUiThread(new Action0() {
-          @Override public void call() {
-            context.unregisterReceiver(receiver);
-          }
-        }));
-      }
-    }).defaultIfEmpty(ConnectivityStatus.OFFLINE);
+    return observeNetworkConnectivity(context, strategy);
   }
 
   /**
-   * Gets current network connectivity status
+   * Observes network connectivity. Information about network state, type and name are contained in
+   * observed Connectivity object. Moreover, allows you to define NetworkObservingStrategy.
    *
-   * @param context Application Context is recommended here
-   * @return ConnectivityStatus, which can be WIFI_CONNECTED, MOBILE_CONNECTED or OFFLINE
+   * @param context Context of the activity or an application
+   * @param strategy NetworkObserving strategy to be applied - you can use one of the existing
+   * strategies {@link PreLollipopNetworkObservingStrategy},
+   * {@link LollipopNetworkObservingStrategy} or create your own custom strategy
+   * @return RxJava Observable with Connectivity class containing information about network state,
+   * type and name
    */
-  public ConnectivityStatus getConnectivityStatus(final Context context) {
-    final String service = Context.CONNECTIVITY_SERVICE;
-    final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
-    final NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-
-    if (networkInfo == null) {
-      return ConnectivityStatus.OFFLINE;
-    }
-
-    if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-      return ConnectivityStatus.WIFI_CONNECTED;
-    } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-      return ConnectivityStatus.MOBILE_CONNECTED;
-    }
-
-    return ConnectivityStatus.OFFLINE;
+  public Observable<Connectivity> observeNetworkConnectivity(final Context context,
+      final NetworkObservingStrategy strategy) {
+    return strategy.observeNetworkConnectivity(context);
   }
 
   /**
@@ -149,24 +116,5 @@ public class ReactiveNetwork {
           }
         })
         .distinctUntilChanged();
-  }
-
-  private Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
-    return Subscriptions.create(new Action0() {
-
-      @Override public void call() {
-        if (Looper.getMainLooper() == Looper.myLooper()) {
-          unsubscribe.call();
-        } else {
-          final Scheduler.Worker inner = AndroidSchedulers.mainThread().createWorker();
-          inner.schedule(new Action0() {
-            @Override public void call() {
-              unsubscribe.call();
-              inner.unsubscribe();
-            }
-          });
-        }
-      }
-    });
   }
 }
