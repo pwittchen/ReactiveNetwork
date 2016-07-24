@@ -36,15 +36,10 @@ Usage
 Library has the following RxJava Observables available in the public API:
 
 ```java
-Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context)
+Observable<Connectivity> observeNetworkConnectivity(final Context context)
+Observable<Connectivity> observeNetworkConnectivity(final Context context, final NetworkObservingStrategy strategy)
 Observable<Boolean> observeInternetConnectivity()
 Observable<Boolean> observeInternetConnectivity(final int interval, final String host, final int port, final int timeout)
-```
-
-Moreover it has the following helper method for checking connectivity:
-
-```java
-ConnectivityStatus getConnectivityStatus(final Context context)
 ```
 
 **Please note**: Due to memory leak in `WifiManager` reported
@@ -53,49 +48,69 @@ it's recommended to use Application Context instead of Activity Context.
 
 ### Observing network connectivity
 
-`ConnectivityStatus` can have one of the following values:
+`Connectivity` class has the following methods:
 
 ```java
-public enum ConnectivityStatus {
-  UNKNOWN("unknown"),
-  WIFI_CONNECTED("connected to WiFi"),
-  MOBILE_CONNECTED("connected to mobile network"),
-  OFFLINE("offline");
-  ...
-}  
+// factory methods responsible for creating Connectivity object
+Connectivity create()
+Connectivity create(Context context)
+Connectivity create(NetworkInfo.State state, int type, String name)
+
+// methods returning information about connectivity
+NetworkInfo.State getState()
+int getType()
+String getName()
+boolean isDefault()
+String toString()
+
+// helper methods for filter(...) method from RxJava
+Func1<Connectivity, Boolean> hasState(final NetworkInfo.State... states)
+Func1<Connectivity, Boolean> hasType(final int... types)
 ```
 
-We can observe `ConnectivityStatus` with `observeNetworkConnectivity(context)` method in the following way:
+We can observe `Connectivity` with `observeNetworkConnectivity(context)` method in the following way:
 
 ```java
 new ReactiveNetwork().observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
     ... // anything else what you can do with RxJava
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Action1<ConnectivityStatus>() {
-      @Override public void call(ConnectivityStatus connectivityStatus) {
-        // do something with connectivityStatus
+    .subscribe(new Action1<Connectivity>() {
+      @Override public void call(Connectivity connectivity) {
+        // do something with connectivity
+        // you can call connectivity.getState();
+        // connectivity.getType(); or connectivity.toString();
       }
     });
 ```
 
-When `ConnectivityStatus` changes, subscriber will be notified.
+When `Connectivity` changes, subscriber will be notified. `Connectivity` can change its state or type.
 
-We can react on a concrete status or statuses with the `filter(...)` method from RxJava, `isEqualTo(final ConnectivityStatus... statuses)` and `isNotEqualTo(final ConnectivityStatus... statuses)` methods located in `ConnectivityStatus`.
+We can react on a concrete state, states, type or types changes with the `filter(...)` method from RxJava, `hasState(final NetworkInfo.State... states)` and `hasType(final int... types)` methods located in `Connectivity` class.
 
 ```java
 new ReactiveNetwork().observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
-    .filter(ConnectivityStatus.isEqualTo(ConnectivityStatus.WIFI_CONNECTED))
+    .filter(Connectivity.hasState(NetworkInfo.State.CONNECTED))
+    .filter(Connectivity.hasType(ConnectivityManager.TYPE_WIFI))
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Action1<ConnectivityStatus>() {
-      @Override public void call(ConnectivityStatus connectivityStatus) {
-        // do something with connectivityStatus, which will be WIFI_CONNECTED
+    .subscribe(new Action1<Connectivity>() {
+      @Override public void call(Connectivity connectivity) {
+        // do something
       }
     });
 ```
 
-`observeNetworkConnectivity(context)` checks only connectivity with the network (not Internet) as is based on BroadCastReceiver. Concrete WiFi or mobile network may be connected to the Internet (and usually is), but it doesn't have to.
+`observeNetworkConnectivity(context)` checks only connectivity with the network (not Internet) as it's based on `BroadcastReceiver` for API 20 and lower and uses `NetworkCallback` for API 21 and higher.
+ Concrete WiFi or mobile network may be connected to the Internet (and usually is), but it doesn't have to.
+
+You can also use method:
+
+```java
+Observable<Connectivity> observeNetworkConnectivity(final Context context, final NetworkObservingStrategy strategy)
+```
+
+This method allows you to apply your own network observing strategy and is used by the library under the hood to determine appropriate strategy depending on the version of Android system.
 
 ### Observing Internet connectivity
 

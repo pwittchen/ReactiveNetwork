@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Piotr Wittchen
+ * Copyright (C) 2016 Piotr Wittchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 package com.github.pwittchen.reactivenetwork.app;
 
 import android.app.Activity;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import com.github.pwittchen.reactivenetwork.library.ConnectivityStatus;
+import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,10 +50,12 @@ public class MainActivity extends Activity {
         reactiveNetwork.observeNetworkConnectivity(getApplicationContext())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<ConnectivityStatus>() {
-              @Override public void call(final ConnectivityStatus status) {
-                Log.d(TAG, status.toString());
-                tvConnectivityStatus.setText(status.description);
+            .subscribe(new Action1<Connectivity>() {
+              @Override public void call(final Connectivity connectivity) {
+                Log.d(TAG, connectivity.toString());
+                final NetworkInfo.State state = connectivity.getState();
+                final String name = connectivity.getName();
+                tvConnectivityStatus.setText(String.format("state: %s, name: %s", state, name));
               }
             });
 
