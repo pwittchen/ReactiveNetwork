@@ -1,6 +1,24 @@
 CHANGELOG
 =========
 
+v. 0.5.0
+--------
+*24 Jul 2016*
+
+- handled all connection types (including Ethernet) (issue #71)
+- removed `ConnectivityStatus` enum and replaced it with `Connectivity` class.
+- replaced `Observable<ConnectivityStatus> observeNetworkConnectivity(final Context context)` method with `Observable<Connectivity> observeNetworkConnectivity(final Context context)`
+- introduced a new way of network monitoring with [NetworkCallback](https://developer.android.com/reference/android/net/ConnectivityManager.NetworkCallback.html) available from Android N (API 21) (issue #62)
+- added `NetworkObservingStrategy`, which allows applying different network monitoring strategies
+- added `PreLollipopNetworkObservingStrategy` with old network monitoring implementation
+- added `LollipopNetworkObservingStrategy` with new network monitoring implementation
+- added `Observable<Connectivity> observeNetworkConnectivity(final Context context, final NetworkObservingStrategy strategy)` method to ReactiveNetwork class
+- made method for creating Observables static like in original RxJava library
+- added `create()` method to `ReactiveNetwork` class
+- made constructor of `ReactiveNetwork` class protected
+- added `Preconditions` class verifying correctness of the input parameters
+- added more unit tests
+
 v. 0.4.0
 --------
 *11 Jun 2016*
