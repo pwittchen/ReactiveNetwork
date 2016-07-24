@@ -1,1 +1,3 @@
 com.github.pwittchen.reactivenetwork.library
+com.github.pwittchen.reactivenetwork.library.network.observing
+com.github.pwittchen.reactivenetwork.library.network.observing.strategy
