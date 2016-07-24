@@ -24,6 +24,7 @@ Contents
 
 - [Usage](#usage)
   - [Observing network connectivity](#observing-network-connectivity)
+    - [Connectivity class](#connectivity-class)
   - [Observing Internet connectivity](#observing-internet-connectivity)
 - [Examples](#examples)
 - [Download](#download)
@@ -49,26 +50,6 @@ in [issue 43945](https://code.google.com/p/android/issues/detail?id=43945) in An
 it's recommended to use Application Context instead of Activity Context.
 
 ### Observing network connectivity
-
-`Connectivity` class has the following methods:
-
-```java
-// factory methods responsible for creating Connectivity object
-Connectivity create()
-Connectivity create(Context context)
-Connectivity create(NetworkInfo.State state, int type, String name)
-
-// methods returning information about connectivity
-NetworkInfo.State getState()
-int getType()
-String getName()
-boolean isDefault()
-String toString()
-
-// helper methods for filter(...) method from RxJava
-Func1<Connectivity, Boolean> hasState(final NetworkInfo.State... states)
-Func1<Connectivity, Boolean> hasType(final int... types)
-```
 
 We can observe `Connectivity` with `observeNetworkConnectivity(context)` method in the following way:
 
@@ -113,6 +94,28 @@ Observable<Connectivity> observeNetworkConnectivity(final Context context, final
 ```
 
 This method allows you to apply your own network observing strategy and is used by the library under the hood to determine appropriate strategy depending on the version of Android system.
+
+#### Connectivity class
+
+`Connectivity` class is used by `observeNetworkConnectivity(context)` and `observeNetworkConnectivity(context,networkObservingStrategy)` methods. It has the following API:
+
+```java
+// factory methods responsible for creating Connectivity object
+Connectivity create()
+Connectivity create(Context context)
+Connectivity create(NetworkInfo.State state, int type, String name)
+
+// methods returning information about connectivity
+NetworkInfo.State getState()
+int getType()
+String getName()
+boolean isDefault()
+String toString()
+
+// helper methods for filter(...) method from RxJava
+Func1<Connectivity, Boolean> hasState(final NetworkInfo.State... states)
+Func1<Connectivity, Boolean> hasType(final int... types)
+```
 
 ### Observing Internet connectivity
 
