@@ -14,7 +14,7 @@ min sdk version = 9
 
 JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/
 
-**This is draft of the documentation for version 0.5.0! If you want to see API of the currently released library version, see JavaDoc.**
+**This is draft of the documentation for version 0.5.0, so documentation may be outdated until this version will be available on Maven Central!**
 
 **Important note**:exclamation:: Since version **0.4.0**, functionality releated to **observing WiFi Access Points** and **WiFi singal strength (level)** is removed in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library.
 If you want to use this functionality, check [**ReactiveWiFi**](https://github.com/pwittchen/ReactiveWiFi) project.
