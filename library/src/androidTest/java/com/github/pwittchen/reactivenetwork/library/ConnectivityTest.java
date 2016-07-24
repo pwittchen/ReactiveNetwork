@@ -15,6 +15,7 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.test.runner.AndroidJUnit4;
@@ -26,7 +27,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(AndroidJUnit4.class) public class ConnectivityTest {
 
-  @Test public void testStatusShouldBeEqualToGivenValue() {
+  @Test public void statusShouldBeEqualToGivenValue() {
     // given
     final NetworkInfo.State givenState = NetworkInfo.State.CONNECTED;
     final int givenType = ConnectivityManager.TYPE_WIFI;
@@ -41,7 +42,7 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(shouldBeEqualToGivenStatus).isTrue();
   }
 
-  @Test public void testStatusShouldBeEqualToOneOfGivenMultipleValues() {
+  @Test public void statusShouldBeEqualToOneOfGivenMultipleValues() {
     // given
     final NetworkInfo.State givenState = NetworkInfo.State.CONNECTING;
     final int givenType = ConnectivityManager.TYPE_WIFI;
@@ -58,7 +59,7 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(shouldBeEqualToGivenStatus).isTrue();
   }
 
-  @Test public void testTypeShouldBeEqualToGivenValue() {
+  @Test public void typeShouldBeEqualToGivenValue() {
     // given
     final NetworkInfo.State givenState = NetworkInfo.State.CONNECTED;
     final int givenType = ConnectivityManager.TYPE_WIFI;
@@ -73,7 +74,7 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(shouldBeEqualToGivenStatus).isTrue();
   }
 
-  @Test public void testTypeShouldBeEqualToOneOfGivenMultipleValues() {
+  @Test public void typeShouldBeEqualToOneOfGivenMultipleValues() {
     // given
     final NetworkInfo.State givenState = NetworkInfo.State.CONNECTING;
     final int givenType = ConnectivityManager.TYPE_MOBILE;
@@ -88,5 +89,59 @@ import static com.google.common.truth.Truth.assertThat;
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void createShouldThrowAnExceptionWhenContextIsNull() {
+    // given
+    Context context = null;
+
+    // when
+    Connectivity.create(context);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void createShouldThrowAnExceptionWhenStateIsNull() {
+    // given
+    NetworkInfo.State state = null;
+    int type = 0;
+    String name = "name";
+
+    // when
+    Connectivity.create(state, type, name);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void createShouldThrowAnExceptionWhenNameIsNull() {
+    // given
+    NetworkInfo.State state = NetworkInfo.State.CONNECTED;
+    int type = 0;
+    String name = null;
+
+    // when
+    Connectivity.create(state, type, name);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void createShouldThrowAnExceptionWhenNameIsEmpty() {
+    // given
+    NetworkInfo.State state = NetworkInfo.State.CONNECTED;
+    int type = 0;
+    String name = "";
+
+    // when
+    Connectivity.create(state, type, name);
+
+    // then
+    // an exception is thrown
   }
 }

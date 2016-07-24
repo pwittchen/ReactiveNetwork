@@ -39,6 +39,18 @@ public class ReactiveNetwork {
   private static final int DEFAULT_PING_INTERVAL_IN_MS = 2000;
   private static final int DEFAULT_PING_TIMEOUT_IN_MS = 2000;
 
+  protected ReactiveNetwork() {
+  }
+
+  /**
+   * Creates a new instance of the ReactiveNetwork class
+   *
+   * @return ReactiveNetwork object
+   */
+  public static ReactiveNetwork create() {
+    return new ReactiveNetwork();
+  }
+
   /**
    * Observes network connectivity. Information about network state, type and name are contained in
    * observed Connectivity object.
@@ -47,7 +59,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Connectivity class containing information about network state,
    * type and name
    */
-  public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
+  public static Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final NetworkObservingStrategy strategy;
     final boolean isAtLeastLollipop = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
@@ -71,8 +83,10 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Connectivity class containing information about network state,
    * type and name
    */
-  public Observable<Connectivity> observeNetworkConnectivity(final Context context,
+  public static Observable<Connectivity> observeNetworkConnectivity(final Context context,
       final NetworkObservingStrategy strategy) {
+    Preconditions.checkNotNull(context, "context == null");
+    Preconditions.checkNotNull(strategy, "strategy == null");
     return strategy.observeNetworkConnectivity(context);
   }
 
@@ -86,7 +100,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have an access to the Internet
    * and false if not
    */
-  public Observable<Boolean> observeInternetConnectivity() {
+  public static Observable<Boolean> observeInternetConnectivity() {
     return observeInternetConnectivity(DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST,
         DEFAULT_PING_PORT, DEFAULT_PING_TIMEOUT_IN_MS);
   }
@@ -94,21 +108,26 @@ public class ReactiveNetwork {
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host
    *
-   * @param interval in milliseconds determining how often we want to check connectivity
+   * @param intervalInMs in milliseconds determining how often we want to check connectivity
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
-   * @param timeout for pinging remote host
+   * @param timeoutInMs for pinging remote host in milliseconds
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
-  public Observable<Boolean> observeInternetConnectivity(final int interval, final String host,
-      final int port, final int timeout) {
-    return Observable.interval(interval, TimeUnit.MILLISECONDS, Schedulers.io())
+  public static Observable<Boolean> observeInternetConnectivity(final int intervalInMs,
+      final String host, final int port, final int timeoutInMs) {
+    Preconditions.checkPositive(intervalInMs, "intervalInMs is not positive number");
+    Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
+    Preconditions.checkPositive(port, "port is not positive number");
+    Preconditions.checkPositive(timeoutInMs, "timeoutInMs is not positive number");
+
+    return Observable.interval(intervalInMs, TimeUnit.MILLISECONDS, Schedulers.io())
         .map(new Func1<Long, Boolean>() {
           @Override public Boolean call(Long tick) {
             try {
               Socket socket = new Socket();
-              socket.connect(new InetSocketAddress(host, port), timeout);
+              socket.connect(new InetSocketAddress(host, port), timeoutInMs);
               return socket.isConnected();
             } catch (IOException e) {
               return Boolean.FALSE;

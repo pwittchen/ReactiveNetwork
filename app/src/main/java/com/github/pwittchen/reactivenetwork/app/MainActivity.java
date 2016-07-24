@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
   private static final String TAG = "ReactiveNetwork";
   private TextView tvConnectivityStatus;
   private TextView tvInternetStatus;
-  private ReactiveNetwork reactiveNetwork;
   private Subscription networkConnectivitySubscription;
   private Subscription internetConnectivitySubscription;
 
@@ -44,10 +43,9 @@ public class MainActivity extends Activity {
 
   @Override protected void onResume() {
     super.onResume();
-    reactiveNetwork = new ReactiveNetwork();
 
     networkConnectivitySubscription =
-        reactiveNetwork.observeNetworkConnectivity(getApplicationContext())
+        ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Action1<Connectivity>() {
@@ -59,7 +57,7 @@ public class MainActivity extends Activity {
               }
             });
 
-    internetConnectivitySubscription = reactiveNetwork.observeInternetConnectivity()
+    internetConnectivitySubscription = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Action1<Boolean>() {
