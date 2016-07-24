@@ -37,6 +37,7 @@ Library has the following RxJava Observables available in the public API:
 
 ```java
 Observable<Connectivity> observeNetworkConnectivity(final Context context)
+Observable<Connectivity> observeNetworkConnectivity(final Context context, final NetworkObservingStrategy strategy)
 Observable<Boolean> observeInternetConnectivity()
 Observable<Boolean> observeInternetConnectivity(final int interval, final String host, final int port, final int timeout)
 ```
@@ -100,7 +101,16 @@ new ReactiveNetwork().observeNetworkConnectivity(context)
     });
 ```
 
-`observeNetworkConnectivity(context)` checks only connectivity with the network (not Internet) as is based on BroadCastReceiver. Concrete WiFi or mobile network may be connected to the Internet (and usually is), but it doesn't have to.
+`observeNetworkConnectivity(context)` checks only connectivity with the network (not Internet) as it's based on `BroadcastReceiver` for API 20 and lower and uses `NetworkCallback` for API 21 and higher.
+ Concrete WiFi or mobile network may be connected to the Internet (and usually is), but it doesn't have to.
+
+You can also use method:
+
+```java
+Observable<Connectivity> observeNetworkConnectivity(final Context context, final NetworkObservingStrategy strategy)
+```
+
+This method allows you to apply your own network observing strategy and is used by the library under the hood to determine appropriate strategy depending on the version of Android system.
 
 ### Observing Internet connectivity
 

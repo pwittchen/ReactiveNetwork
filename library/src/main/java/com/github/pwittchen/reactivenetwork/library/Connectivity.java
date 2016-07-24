@@ -20,6 +20,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import rx.functions.Func1;
 
+/**
+ * Connectivity class represents current connectivity, which consists of state, type and name
+ */
 public class Connectivity {
   private static final NetworkInfo.State DEFAULT_STATE = NetworkInfo.State.DISCONNECTED;
   private static final int DEFAULT_TYPE = -1;
