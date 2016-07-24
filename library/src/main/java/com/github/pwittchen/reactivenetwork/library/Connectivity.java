@@ -37,10 +37,13 @@ public class Connectivity {
   }
 
   public static Connectivity create(Context context) {
+    Preconditions.checkNotNull(context, "context == null");
     return new Connectivity(context);
   }
 
   public static Connectivity create(NetworkInfo.State state, int type, String name) {
+    Preconditions.checkNotNull(state, "state == null");
+    Preconditions.checkNotNullOrEmpty(name, "name is null or empty");
     return new Connectivity(state, type, name);
   }
 

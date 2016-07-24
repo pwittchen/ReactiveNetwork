@@ -8,6 +8,8 @@ ReactiveNetwork is an Android library listening **network connection state** and
 
 Library is compatible with RxJava 1.+ and RxAndroid 1.+ and uses them under the hood.
 
+Library supports both new and legacy network monitoring strategies.
+
 min sdk version = 9
 
 JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/
@@ -54,7 +56,7 @@ it's recommended to use Application Context instead of Activity Context.
 We can observe `Connectivity` with `observeNetworkConnectivity(context)` method in the following way:
 
 ```java
-new ReactiveNetwork().observeNetworkConnectivity(context)
+ReactiveNetwork.observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
     ... // anything else what you can do with RxJava
     .observeOn(AndroidSchedulers.mainThread())
@@ -72,7 +74,7 @@ When `Connectivity` changes, subscriber will be notified. `Connectivity` can cha
 We can react on a concrete state, states, type or types changes with the `filter(...)` method from RxJava, `hasState(final NetworkInfo.State... states)` and `hasType(final int... types)` methods located in `Connectivity` class.
 
 ```java
-new ReactiveNetwork().observeNetworkConnectivity(context)
+ReactiveNetwork.observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
     .filter(Connectivity.hasState(NetworkInfo.State.CONNECTED))
     .filter(Connectivity.hasType(ConnectivityManager.TYPE_WIFI))
@@ -122,7 +124,7 @@ Func1<Connectivity, Boolean> hasType(final int... types)
 We can observe connectivity with the Internet in the following way:
 
 ```java
-new ReactiveNetwork().observeInternetConnectivity()
+ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Action1<Boolean>() {

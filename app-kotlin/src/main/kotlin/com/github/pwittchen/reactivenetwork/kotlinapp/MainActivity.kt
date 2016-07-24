@@ -39,9 +39,8 @@ class MainActivity : Activity() {
 
   override fun onResume() {
     super.onResume()
-    val reactiveNetwork: ReactiveNetwork = ReactiveNetwork()
 
-    connectivitySub = reactiveNetwork.observeNetworkConnectivity(applicationContext)
+    connectivitySub = ReactiveNetwork.observeNetworkConnectivity(applicationContext)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { connectivity ->
@@ -51,7 +50,7 @@ class MainActivity : Activity() {
           connectivity_status.text = String.format("state: %s, name: %s", state, name);
         }
 
-    internetSub = reactiveNetwork.observeInternetConnectivity()
+    internetSub = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { isConnectedToInternet ->
