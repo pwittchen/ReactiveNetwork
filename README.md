@@ -202,7 +202,7 @@ Who is using this library?
 --------------------------
 - [PAT Track - realtime Tracker for the public transit in Pittsburgh, PA](https://play.google.com/store/apps/details?id=rectangledbmi.com.pittsburghrealtimetracker)
 
-Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail at piotr@wittchen.biz.pl
+Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail to piotr@wittchen.biz.pl
 
 License
 -------
