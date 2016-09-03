@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+v. 0.5.2
+--------
+*03 Sep 2016*
+
+- bumped RxJava to 1.1.9
+- bumped Gradle Build Tools to 2.1.3
+
 v. 0.5.1
 --------
 *30 Jul 2016*
