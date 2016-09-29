@@ -51,7 +51,12 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
 
         subscriber.add(unsubscribeInUiThread(new Action0() {
           @Override public void call() {
-            context.unregisterReceiver(receiver);
+            //Catch case where the receiver is already unregistered
+            try {
+              context.unregisterReceiver(receiver);
+            } catch (Exception e) {
+              // ignore exception
+            }
           }
         }));
       }
