@@ -133,7 +133,7 @@ public class Connectivity {
    * @return boolean true if connectivity is default and false if not
    */
   public boolean isDefault() {
-    return getState() == DEFAULT_STATE && getType() == DEFAULT_TYPE && getName() == DEFAULT_NAME;
+    return getState() == DEFAULT_STATE && getType() == DEFAULT_TYPE && getName().equals(DEFAULT_NAME);
   }
 
   @Override public String toString() {
