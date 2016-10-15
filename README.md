@@ -40,10 +40,12 @@ Usage
 Library has the following RxJava Observables available in the public API:
 
 ```java
-Observable<Connectivity> observeNetworkConnectivity(final Context context)
-Observable<Connectivity> observeNetworkConnectivity(final Context context, final NetworkObservingStrategy strategy)
+Observable<Connectivity> observeNetworkConnectivity(Context context)
+Observable<Connectivity> observeNetworkConnectivity(Context context, NetworkObservingStrategy strategy)
 Observable<Boolean> observeInternetConnectivity()
-Observable<Boolean> observeInternetConnectivity(final int interval, final String host, final int port, final int timeout)
+Observable<Boolean> observeInternetConnectivityImmediately()
+Observable<Boolean> observeInternetConnectivity(int intervalInMs, String host, int port, int timeout)
+Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
 ```
 
 **Please note**: Due to memory leak in `WifiManager` reported
@@ -70,7 +72,7 @@ ReactiveNetwork.observeNetworkConnectivity(context)
 
 When `Connectivity` changes, subscriber will be notified. `Connectivity` can change its state or type.
 
-We can react on a concrete state, states, type or types changes with the `filter(...)` method from RxJava, `hasState(final NetworkInfo.State... states)` and `hasType(final int... types)` methods located in `Connectivity` class.
+We can react on a concrete state, states, type or types changes with the `filter(...)` method from RxJava, `hasState(NetworkInfo.State... states)` and `hasType(int... types)` methods located in `Connectivity` class.
 
 ```java
 ReactiveNetwork.observeNetworkConnectivity(context)
@@ -91,7 +93,7 @@ ReactiveNetwork.observeNetworkConnectivity(context)
 You can also use method:
 
 ```java
-Observable<Connectivity> observeNetworkConnectivity(final Context context, final NetworkObservingStrategy strategy)
+Observable<Connectivity> observeNetworkConnectivity(Context context, NetworkObservingStrategy strategy)
 ```
 
 This method allows you to apply your own network observing strategy and is used by the library under the hood to determine appropriate strategy depending on the version of Android system.
@@ -114,8 +116,8 @@ boolean isDefault()
 String toString()
 
 // helper methods for filter(...) method from RxJava
-Func1<Connectivity, Boolean> hasState(final NetworkInfo.State... states)
-Func1<Connectivity, Boolean> hasType(final int... types)
+Func1<Connectivity, Boolean> hasState(NetworkInfo.State... states)
+Func1<Connectivity, Boolean> hasType(int... types)
 ```
 
 ### Observing Internet connectivity
@@ -137,10 +139,16 @@ An `Observable` will return `true` to the subscription if device is connected to
 
 **Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it. Optionally, you can unsubscribe subcription right after you get notification that Internet is available and do the work you want in order to decrease network calls.
 
+If you want to check Internet connectivity _as soon as possible_, you can use the following method:
+
+```java
+Observable<Boolean> observeInternetConnectivityImmediately()
+```
+
 If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
 
 ```java
-Observable<Boolean> observeInternetConnectivity(final int interval, final String host, final int port, final int timeout)
+Observable<Boolean> observeInternetConnectivity(int interval, String host, int port, int timeout)
 ```
 
 It allows you to specify custom interval of checking connectivity in milliseconds, host, port and connection timeout in milliseconds.

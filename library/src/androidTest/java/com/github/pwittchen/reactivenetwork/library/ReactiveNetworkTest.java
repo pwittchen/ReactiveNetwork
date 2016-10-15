@@ -20,8 +20,11 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import rx.Observable;
 import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -32,6 +35,7 @@ import static com.google.common.truth.Truth.assertThat;
   private static final int TEST_VALID_PORT = 80;
   private static final int TEST_VALID_TIMEOUT = 1000;
   private static final int TEST_VALID_INTERVAL = 1000;
+  public static final int TEST_VALID_INITIAL_INTERVAL = 1000;
 
   @Test public void testReactiveNetworkObjectShouldNotBeNull() {
     // given
@@ -42,6 +46,90 @@ import static com.google.common.truth.Truth.assertThat;
 
     // then
     assertThat(reactiveNetwork).isNotNull();
+  }
+
+  @Test
+  public void observeNetworkConnectivityShouldNotBeNull() {
+    // given
+    Context context = InstrumentationRegistry.getTargetContext();
+
+    // when
+    Observable<Connectivity> observable;
+    observable = ReactiveNetwork.observeNetworkConnectivity(context);
+
+    // then
+    assertThat(observable).isNotNull();
+  }
+
+  @Test
+  public void observeNetworkConnectivityWithStrategyShouldNotBeNull() {
+    // given
+    Context context = InstrumentationRegistry.getTargetContext();
+    NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+
+    // when
+    Observable<Connectivity> observable;
+    observable = ReactiveNetwork.observeNetworkConnectivity(context, strategy);
+
+    // then
+    assertThat(observable).isNotNull();
+  }
+
+  @Test
+  public void observeInternetConnectivityDefaultShouldNotBeNull() {
+    // given
+    Observable<Boolean> observable;
+
+    // when
+    observable = ReactiveNetwork.observeInternetConnectivity();
+
+    // then
+    assertThat(observable).isNotNull();
+  }
+
+  @Test
+  public void observeInternetConnectivityImmediatelyShouldNotBeNull() {
+    // given
+    Observable<Boolean> observable;
+
+    // when
+    observable = ReactiveNetwork.observeInternetConnectivityImmediately();
+
+    // then
+    assertThat(observable).isNotNull();
+  }
+
+  @Test
+  public void observeInternetConnectivityWithConfigurationShouldNotBeNull() {
+    // given
+    Observable<Boolean> observable;
+    int interval = TEST_VALID_INTERVAL;
+    String host = TEST_VALID_HOST;
+    int port = TEST_VALID_PORT;
+    int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    observable = ReactiveNetwork.observeInternetConnectivity(interval, host, port, timeout);
+
+    // then
+    assertThat(observable).isNotNull();
+  }
+
+  @Test
+  public void observeInternetConnectivityWithFullConfigurationShouldNotBeNull() {
+    // given
+    Observable<Boolean> observable;
+    int initialInterval = TEST_VALID_INITIAL_INTERVAL;
+    int interval = TEST_VALID_INTERVAL;
+    String host = TEST_VALID_HOST;
+    int port = TEST_VALID_PORT;
+    int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    observable = ReactiveNetwork.observeInternetConnectivity(initialInterval, interval, host, port, timeout);
+
+    // then
+    assertThat(observable).isNotNull();
   }
 
   @Test public void observeNetworkConnectivityShouldBeDefaultIfEmpty() {
@@ -194,6 +282,39 @@ import static com.google.common.truth.Truth.assertThat;
 
     // when
     ReactiveNetwork.observeInternetConnectivity(interval, host, port, timeout);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test
+  public void observeInternetConnectivityShouldNotThrowAnExceptionForZeroInitialInterval() {
+    // given
+    Observable<Boolean> observable;
+    int initialInterval = 0;
+    int interval = TEST_VALID_INTERVAL;
+    String host = TEST_VALID_HOST;
+    int port = TEST_VALID_PORT;
+    int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    observable = ReactiveNetwork.observeInternetConnectivity(initialInterval, interval, host, port, timeout);
+
+    // then
+    assertThat(observable).isNotNull();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void observeInternetConnectivityShouldThrowAnExceptionForNegativeInitialInterval() {
+    // given
+    int initialInterval = -1;
+    int interval = TEST_VALID_INTERVAL;
+    String host = TEST_VALID_HOST;
+    int port = TEST_VALID_PORT;
+    int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    ReactiveNetwork.observeInternetConnectivity(initialInterval, interval, host, port, timeout);
 
     // then
     // an exception is thrown
