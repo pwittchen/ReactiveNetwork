@@ -43,7 +43,6 @@ Library has the following RxJava Observables available in the public API:
 Observable<Connectivity> observeNetworkConnectivity(Context context)
 Observable<Connectivity> observeNetworkConnectivity(Context context, NetworkObservingStrategy strategy)
 Observable<Boolean> observeInternetConnectivity()
-Observable<Boolean> observeInternetConnectivityImmediately()
 Observable<Boolean> observeInternetConnectivity(int intervalInMs, String host, int port, int timeout)
 Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
 ```
@@ -137,13 +136,9 @@ ReactiveNetwork.observeInternetConnectivity()
 
 An `Observable` will return `true` to the subscription if device is connected to the Internet and `false` if not.
 
+Internet connectivity will be checked _as soon as possible_.
+
 **Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it. Optionally, you can unsubscribe subcription right after you get notification that Internet is available and do the work you want in order to decrease network calls.
-
-If you want to check Internet connectivity _as soon as possible_, you can use the following method:
-
-```java
-Observable<Boolean> observeInternetConnectivityImmediately()
-```
 
 If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
 

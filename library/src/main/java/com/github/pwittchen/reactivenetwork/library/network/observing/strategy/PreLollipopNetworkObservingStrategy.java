@@ -56,6 +56,7 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
               context.unregisterReceiver(receiver);
             } catch (Exception e) {
               // ignore exception
+              // TODO: this exception needs to be handled - issue #94
             }
           }
         }));

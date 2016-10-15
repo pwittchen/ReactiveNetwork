@@ -26,12 +26,24 @@ public class Preconditions {
   }
 
   /**
-   * Validation method, which checks is an integer number i positie
+   * Validation method, which checks is an integer number is positive
    *
    * @param number integer to verify
    * @param message to be thrown in exception
    */
-  public static void checkPositive(int number, String message) {
+  public static void checkGreaterOrEqualToZero(int number, String message) {
+    if (number < 0) {
+      throw new IllegalArgumentException(message);
+    }
+  }
+
+  /**
+   * Validation method, which checks is an integer number is non-zero or positive
+   *
+   * @param number integer to verify
+   * @param message to be thrown in exception
+   */
+  public static void checkGreaterThanZero(int number, String message) {
     if (number <= 0) {
       throw new IllegalArgumentException(message);
     }
