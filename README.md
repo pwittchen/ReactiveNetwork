@@ -148,6 +148,14 @@ Observable<Boolean> observeInternetConnectivity(int interval, String host, int p
 
 It allows you to specify custom interval of checking connectivity in milliseconds, host, port and connection timeout in milliseconds.
 
+You can also use the following method:
+
+```java
+Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
+```
+
+It does the same thing as method above, but allows to define initial delay of the first Internet connectivity check. Default is equal to zero.
+
 Examples
 --------
 
