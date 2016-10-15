@@ -35,7 +35,7 @@ import static com.google.common.truth.Truth.assertThat;
   private static final int TEST_VALID_PORT = 80;
   private static final int TEST_VALID_TIMEOUT = 1000;
   private static final int TEST_VALID_INTERVAL = 1000;
-  public static final int TEST_VALID_INITIAL_INTERVAL = 1000;
+  private static final int TEST_VALID_INITIAL_INTERVAL = 1000;
 
   @Test public void testReactiveNetworkObjectShouldNotBeNull() {
     // given
@@ -82,18 +82,6 @@ import static com.google.common.truth.Truth.assertThat;
 
     // when
     observable = ReactiveNetwork.observeInternetConnectivity();
-
-    // then
-    assertThat(observable).isNotNull();
-  }
-
-  @Test
-  public void observeInternetConnectivityImmediatelyShouldNotBeNull() {
-    // given
-    Observable<Boolean> observable;
-
-    // when
-    observable = ReactiveNetwork.observeInternetConnectivityImmediately();
 
     // then
     assertThat(observable).isNotNull();

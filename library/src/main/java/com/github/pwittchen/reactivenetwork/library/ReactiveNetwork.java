@@ -37,7 +37,7 @@ public class ReactiveNetwork {
   private static final String DEFAULT_PING_HOST = "www.google.com";
   private static final int DEFAULT_PING_PORT = 80;
   private static final int DEFAULT_PING_INTERVAL_IN_MS = 2000;
-  private static final int DEFAULT_INITIAL_PING_INTERVAL_IN_MS = DEFAULT_PING_INTERVAL_IN_MS;
+  private static final int DEFAULT_INITIAL_PING_INTERVAL_IN_MS = 0;
   private static final int DEFAULT_PING_TIMEOUT_IN_MS = 2000;
 
   protected ReactiveNetwork() {
@@ -102,23 +102,9 @@ public class ReactiveNetwork {
    * and false if not
    */
   public static Observable<Boolean> observeInternetConnectivity() {
-    return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS, DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST,
-        DEFAULT_PING_PORT, DEFAULT_PING_TIMEOUT_IN_MS);
-  }
-
-  /**
-   * Observes connectivity with the Internet <i>immediately</i> with default settings. It pings remote host
-   * (www.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
-   * for determining if device is connected to the Internet or not. Please note that this method is
-   * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
-   * transfer, but it gives you actual information if device is connected to the Internet or not.
-   *
-   * @return RxJava Observable with Boolean - true, when we have an access to the Internet
-   * and false if not
-   */
-  public static Observable<Boolean> observeInternetConnectivityImmediately() {
-    return observeInternetConnectivity(0, DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST,
-            DEFAULT_PING_PORT, DEFAULT_PING_TIMEOUT_IN_MS);
+    return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
+        DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST, DEFAULT_PING_PORT,
+        DEFAULT_PING_TIMEOUT_IN_MS);
   }
 
   /**
@@ -133,13 +119,15 @@ public class ReactiveNetwork {
    */
   public static Observable<Boolean> observeInternetConnectivity(final int intervalInMs,
       final String host, final int port, final int timeoutInMs) {
-    return observeInternetConnectivity(intervalInMs, intervalInMs, host, port, timeoutInMs);
+    return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS, intervalInMs, host,
+        port, timeoutInMs);
   }
 
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host
    *
-   * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity check
+   * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
+   * check
    * @param intervalInMs in milliseconds determining how often we want to check connectivity
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
@@ -147,28 +135,26 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
-  public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs,
-                                                                final String host, final int port, final int timeoutInMs) {
-    if (initialIntervalInMs < 0) {
-      throw new IllegalArgumentException("initialIntervalInMs is not a positive number nor a positive number");
-    }
-    Preconditions.checkPositive(intervalInMs, "intervalInMs is not positive number");
+  public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
+      final int intervalInMs, final String host, final int port, final int timeoutInMs) {
+    Preconditions.checkGreaterOrEqualToZero(initialIntervalInMs,
+        "initialIntervalInMs is not a positive number");
+    Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
     Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
-    Preconditions.checkPositive(port, "port is not positive number");
-    Preconditions.checkPositive(timeoutInMs, "timeoutInMs is not positive number");
+    Preconditions.checkGreaterThanZero(port, "port is not a positive number");
+    Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
 
-    return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS, Schedulers.io())
-            .map(new Func1<Long, Boolean>() {
-              @Override public Boolean call(Long tick) {
-                try {
-                  Socket socket = new Socket();
-                  socket.connect(new InetSocketAddress(host, port), timeoutInMs);
-                  return socket.isConnected();
-                } catch (IOException e) {
-                  return Boolean.FALSE;
-                }
-              }
-            })
-            .distinctUntilChanged();
+    return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
+        Schedulers.io()).map(new Func1<Long, Boolean>() {
+      @Override public Boolean call(Long tick) {
+        try {
+          Socket socket = new Socket();
+          socket.connect(new InetSocketAddress(host, port), timeoutInMs);
+          return socket.isConnected();
+        } catch (IOException e) {
+          return Boolean.FALSE;
+        }
+      }
+    }).distinctUntilChanged();
   }
 }
