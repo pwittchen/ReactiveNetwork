@@ -26,6 +26,7 @@ Contents
   - [Observing network connectivity](#observing-network-connectivity)
     - [Connectivity class](#connectivity-class)
   - [Observing Internet connectivity](#observing-internet-connectivity)
+    - [Customization of observing Internet connectivity](customization-of-observing-internet-connectivity)
 - [Examples](#examples)
 - [Download](#download)
 - [Tests](#tests)
@@ -142,6 +143,10 @@ Internet connectivity will be checked _as soon as possible_.
 
 **Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it. Optionally, you can unsubscribe subcription right after you get notification that Internet is available and do the work you want in order to decrease network calls.
 
+#### Customization of observing Internet connectivity
+
+Methods in this section should be used if they are really needed due to specific use cases.
+
 If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
 
 ```java
@@ -157,6 +162,25 @@ Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int int
 ```
 
 It does the same thing as method above, but allows to define initial delay of the first Internet connectivity check. Default is equal to zero.
+
+You can use method:
+
+```java
+Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
+```
+
+which allows you to define `SocketErrorHandler` implementation, which handle any errors which can occur during closing the socket connection.
+By default library uses `DefaultSocketErrorHandler`.
+
+You can also use method:
+
+```java
+Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
+```
+
+which allows you to implement `SocketErrorHandler` and `InternetObservingStrategy` in case you want to have your own strategy for monitoring connectivity with the Internet.
+
+These methods are created to allow the users fully customize the library and give them more control.
 
 Examples
 --------
