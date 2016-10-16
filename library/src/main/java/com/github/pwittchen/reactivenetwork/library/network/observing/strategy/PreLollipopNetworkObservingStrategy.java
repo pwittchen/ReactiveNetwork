@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Looper;
+import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import rx.Observable;
@@ -35,6 +36,9 @@ import rx.subscriptions.Subscriptions;
  * Network observing strategy for Android devices before Lollipop (API 20 or lower)
  */
 public class PreLollipopNetworkObservingStrategy implements NetworkObservingStrategy {
+  private final static String LOG_TAG = "ReactiveNetwork";
+  private static final String ON_ERROR_MSG = "receiver was already unregistered";
+
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final IntentFilter filter = new IntentFilter();
     filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -51,22 +55,27 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
 
         subscriber.add(unsubscribeInUiThread(new Action0() {
           @Override public void call() {
-            //Catch case where the receiver is already unregistered
-            try {
-              context.unregisterReceiver(receiver);
-            } catch (Exception e) {
-              // ignore exception
-              // TODO: this exception needs to be handled - issue #94
-            }
+            tryToUnregisterReceiver(context, receiver);
           }
         }));
       }
     }).defaultIfEmpty(Connectivity.create());
   }
 
+  private void tryToUnregisterReceiver(final Context context, final BroadcastReceiver receiver) {
+    try {
+      context.unregisterReceiver(receiver);
+    } catch (Exception exception) {
+      onError(ON_ERROR_MSG, exception);
+    }
+  }
+
+  @Override public void onError(final String message, final Exception exception) {
+    Log.e(LOG_TAG, message, exception);
+  }
+
   private Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
     return Subscriptions.create(new Action0() {
-
       @Override public void call() {
         if (Looper.getMainLooper() == Looper.myLooper()) {
           unsubscribe.call();

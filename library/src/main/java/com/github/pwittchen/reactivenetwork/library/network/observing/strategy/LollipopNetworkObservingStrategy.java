@@ -21,6 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.Network;
 import android.net.NetworkRequest;
+import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import rx.Observable;
@@ -31,7 +32,8 @@ import rx.functions.Action0;
  * Network observing strategy for devices with Android Lollipop (API 21) or higher
  */
 @TargetApi(21) public class LollipopNetworkObservingStrategy implements NetworkObservingStrategy {
-
+  private final static String LOG_TAG = "ReactiveNetwork";
+  private static final String ON_ERROR_MSG = "could not unregister network callback";
   private NetworkCallback networkCallback;
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
@@ -46,13 +48,25 @@ import rx.functions.Action0;
       }
     }).doOnUnsubscribe(new Action0() {
       @Override public void call() {
-        manager.unregisterNetworkCallback(networkCallback);
+        tryToUnregisterCallback(manager);
       }
     }).startWith(Connectivity.create(context)).distinctUntilChanged();
   }
 
-  private ConnectivityManager.NetworkCallback createNetworkCallback(
-      final Subscriber<? super Connectivity> subscriber, final Context context) {
+  private void tryToUnregisterCallback(final ConnectivityManager manager) {
+    try {
+      manager.unregisterNetworkCallback(networkCallback);
+    } catch (Exception exception) {
+      onError(ON_ERROR_MSG, exception);
+    }
+  }
+
+  @Override public void onError(final String message, final Exception exception) {
+    Log.e(LOG_TAG, message, exception);
+  }
+
+  private NetworkCallback createNetworkCallback(final Subscriber<? super Connectivity> subscriber,
+      final Context context) {
     return new ConnectivityManager.NetworkCallback() {
       @Override public void onAvailable(Network network) {
         subscriber.onNext(Connectivity.create(context));
