@@ -99,7 +99,7 @@ This method allows you to apply your own network observing strategy and is used 
 
 #### Connectivity class
 
-`Connectivity` class is used by `observeNetworkConnectivity(context)` and `observeNetworkConnectivity(context,networkObservingStrategy)` methods. It has the following API:
+`Connectivity` class is used by `observeNetworkConnectivity(context)` and `observeNetworkConnectivity(context, networkObservingStrategy)` methods. It has the following API:
 
 ```java
 // factory methods responsible for creating Connectivity object
