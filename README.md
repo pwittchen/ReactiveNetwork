@@ -45,6 +45,8 @@ Observable<Connectivity> observeNetworkConnectivity(Context context, NetworkObse
 Observable<Boolean> observeInternetConnectivity()
 Observable<Boolean> observeInternetConnectivity(int intervalInMs, String host, int port, int timeout)
 Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
+Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
+Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
 ```
 
 **Please note**: Due to memory leak in `WifiManager` reported
