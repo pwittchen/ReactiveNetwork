@@ -32,11 +32,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.subscriptions.Subscriptions;
 
+import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
+
 /**
  * Network observing strategy for Android devices before Lollipop (API 20 or lower)
  */
 public class PreLollipopNetworkObservingStrategy implements NetworkObservingStrategy {
-  private final static String LOG_TAG = "ReactiveNetwork";
   private static final String ON_ERROR_MSG = "receiver was already unregistered";
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {

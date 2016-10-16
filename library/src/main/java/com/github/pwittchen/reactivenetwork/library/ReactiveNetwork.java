@@ -17,16 +17,14 @@ package com.github.pwittchen.reactivenetwork.library;
 
 import android.content.Context;
 import android.os.Build;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.internet.socket.DefaultSocketErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 import rx.Observable;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * ReactiveNetwork is an Android library
@@ -34,6 +32,7 @@ import rx.schedulers.Schedulers;
  * with RxJava Observables. It can be easily used with RxAndroid.
  */
 public class ReactiveNetwork {
+  public final static String LOG_TAG = "ReactiveNetwork";
   private static final String DEFAULT_PING_HOST = "www.google.com";
   private static final int DEFAULT_PING_PORT = 80;
   private static final int DEFAULT_PING_INTERVAL_IN_MS = 2000;
@@ -104,7 +103,7 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity() {
     return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
         DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST, DEFAULT_PING_PORT,
-        DEFAULT_PING_TIMEOUT_IN_MS);
+        DEFAULT_PING_TIMEOUT_IN_MS, new DefaultSocketErrorHandler());
   }
 
   /**
@@ -120,7 +119,7 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity(final int intervalInMs,
       final String host, final int port, final int timeoutInMs) {
     return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS, intervalInMs, host,
-        port, timeoutInMs);
+        port, timeoutInMs, new DefaultSocketErrorHandler());
   }
 
   /**
@@ -137,24 +136,51 @@ public class ReactiveNetwork {
    */
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs) {
-    Preconditions.checkGreaterOrEqualToZero(initialIntervalInMs,
-        "initialIntervalInMs is not a positive number");
-    Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
-    Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
-    Preconditions.checkGreaterThanZero(port, "port is not a positive number");
-    Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
+    return observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port, timeoutInMs,
+        new DefaultSocketErrorHandler());
+  }
 
-    return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
-        Schedulers.io()).map(new Func1<Long, Boolean>() {
-      @Override public Boolean call(Long tick) {
-        try {
-          Socket socket = new Socket();
-          socket.connect(new InetSocketAddress(host, port), timeoutInMs);
-          return socket.isConnected();
-        } catch (IOException e) {
-          return Boolean.FALSE;
-        }
-      }
-    }).distinctUntilChanged();
+  /**
+   * Observes connectivity with the Internet by opening socket connection with remote host
+   *
+   * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
+   * check
+   * @param intervalInMs in milliseconds determining how often we want to check connectivity
+   * @param host for checking Internet connectivity
+   * @param port for checking Internet connectivity
+   * @param timeoutInMs for pinging remote host in milliseconds
+   * @param socketErrorHandler for handling errors while closing socket
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
+      final int intervalInMs, final String host, final int port, final int timeoutInMs,
+      final SocketErrorHandler socketErrorHandler) {
+    return observeInternetConnectivity(new DefaultInternetObservingStrategy(), initialIntervalInMs,
+        intervalInMs, host, port, timeoutInMs, socketErrorHandler);
+  }
+
+  /**
+   * Observes connectivity with the Internet by opening socket connection with remote host with
+   * custom strategy implementation
+   *
+   * @param strategy for observing Internet connectivity
+   * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
+   * check
+   * @param intervalInMs in milliseconds determining how often we want to check connectivity
+   * @param host for checking Internet connectivity
+   * @param port for checking Internet connectivity
+   * @param timeoutInMs for pinging remote host in milliseconds
+   * @param socketErrorHandler for handling errors while closing socket
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  public static Observable<Boolean> observeInternetConnectivity(
+      final InternetObservingStrategy strategy, final int initialIntervalInMs,
+      final int intervalInMs, final String host, final int port, final int timeoutInMs,
+      final SocketErrorHandler socketErrorHandler) {
+    Preconditions.checkNotNull(strategy, "strategy == null");
+    return strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
+        timeoutInMs, socketErrorHandler);
   }
 }

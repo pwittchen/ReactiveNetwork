@@ -28,11 +28,12 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action0;
 
+import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
+
 /**
  * Network observing strategy for devices with Android Lollipop (API 21) or higher
  */
 @TargetApi(21) public class LollipopNetworkObservingStrategy implements NetworkObservingStrategy {
-  private final static String LOG_TAG = "ReactiveNetwork";
   private static final String ON_ERROR_MSG = "could not unregister network callback";
   private NetworkCallback networkCallback;
 
