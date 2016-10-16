@@ -26,7 +26,7 @@ Contents
   - [Observing network connectivity](#observing-network-connectivity)
     - [Connectivity class](#connectivity-class)
   - [Observing Internet connectivity](#observing-internet-connectivity)
-    - [Customization of observing Internet connectivity](customization-of-observing-internet-connectivity)
+    - [Customization of observing Internet connectivity](#customization-of-observing-internet-connectivity)
 - [Examples](#examples)
 - [Download](#download)
 - [Tests](#tests)
