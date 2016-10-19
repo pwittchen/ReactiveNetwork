@@ -1,6 +1,21 @@
 CHANGELOG
 =========
 
+v. 0.6.0
+--------
+*20 Oct 2016*
+
+- fixed bug with the crash during unregister receiver for Pre-Lollipop devices #87 
+- extended `NetworkObservingStrategy` with `void onError(String message, Exception exception)` method, which allows handling errors in network observing strategies
+- closed the socket in the Internet connection check #91 
+- added `SocketErrorHandler` with a default implementation in `DefaultSocketErrorHandler` class, which allows handling errors during closing socket connection
+- delegated observing Internet connectivity functionality to separate class hidden behind `InternetObservingStrategy` interface
+- added an `InternetObservingStrategy` interface with the default implementation in `DefaultInternetObservingStrategy` class, which allows to customize Internet observing strategy
+- added `Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)` method to `ReactiveNetwork` class
+- added `Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)` method to `ReactiveNetwork` class
+- added `Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)` method to `ReactiveNetwork` class
+- bumped RxJava version to 1.2.1
+
 v. 0.5.2
 --------
 *03 Sep 2016*
