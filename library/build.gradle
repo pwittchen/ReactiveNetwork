@@ -52,6 +52,7 @@ dependencies {
   testCompile 'junit:junit:4.10'
   testCompile 'com.google.truth:truth:0.28'
   testCompile 'org.robolectric:robolectric:3.1.2'
+  testCompile 'org.mockito:mockito-core:1.10.19'
 }
 
 task wrapper(type: Wrapper) {
