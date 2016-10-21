@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'jacoco'
 apply plugin: 'jacoco-android'
 apply from: '../config/quality.gradle'
+apply from: '../maven_push.gradle'
 
 android {
   compileSdkVersion 23
@@ -56,5 +57,3 @@ dependencies {
 task wrapper(type: Wrapper) {
   gradleVersion = '2.2.1'
 }
-
-apply from: '../maven_push.gradle'
