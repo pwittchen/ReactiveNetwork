@@ -18,14 +18,16 @@ package com.github.pwittchen.reactivenetwork.library;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import rx.functions.Func1;
 
 import static com.google.common.truth.Truth.assertThat;
 
-@RunWith(AndroidJUnit4.class) public class ConnectivityTest {
+@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+public class ConnectivityTest {
 
   @Test public void statusShouldBeEqualToGivenValue() {
     // given

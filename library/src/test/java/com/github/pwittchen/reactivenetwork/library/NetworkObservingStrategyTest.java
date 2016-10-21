@@ -15,41 +15,44 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
 
-@RunWith(AndroidJUnit4.class) public class NetworkObservingStrategyTest {
+@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+public class NetworkObservingStrategyTest {
 
-  @Test public void lollipopObserveNetworkConnectivityShouldBeDefaultIfEmpty() {
+  @Test public void lollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
     // given
     NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
     // when
-    assertThatConnectivityIsDefault(strategy);
+    assertThatIsConnected(strategy);
   }
 
-  @Test public void preLollipopObserveNetworkConnectivityShouldBeDefaultIfEmpty() {
+  @Test public void preLollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
     // given
     NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
 
     // when
-    assertThatConnectivityIsDefault(strategy);
+    assertThatIsConnected(strategy);
   }
 
-  private void assertThatConnectivityIsDefault(NetworkObservingStrategy strategy) {
-    strategy.observeNetworkConnectivity(InstrumentationRegistry.getContext())
+  private void assertThatIsConnected(NetworkObservingStrategy strategy) {
+    strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
         .subscribe(new Action1<Connectivity>() {
           @Override public void call(Connectivity connectivity) {
             // then
-            assertThat(connectivity.isDefault()).isTrue();
+            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
           }
         });
   }
