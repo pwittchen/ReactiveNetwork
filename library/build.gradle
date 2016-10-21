@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'jacoco'
+apply plugin: 'jacoco-android'
 apply from: '../config/quality.gradle'
 
 android {
@@ -18,22 +20,38 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+    debug {
+      testCoverageEnabled true
+    }
   }
 
   packagingOptions {
     exclude 'LICENSE.txt'
     exclude 'META-INF/LICENSE.txt'
   }
+
+  testOptions {
+    unitTests.all {
+      jacoco {
+        includeNoLocationClasses = true
+      }
+    }
+  }
+}
+
+jacocoAndroidUnitTestReport {
+  csv.enabled false
+  html.enabled true
+  xml.enabled true
 }
 
 dependencies {
   compile 'io.reactivex:rxjava:1.2.1'
   compile 'io.reactivex:rxandroid:1.2.1'
 
-  androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
-  androidTestCompile('com.google.truth:truth:0.28') {
-    exclude group: 'junit' // Android has JUnit built in
-  }
+  testCompile 'junit:junit:4.10'
+  testCompile 'com.google.truth:truth:0.28'
+  testCompile 'org.robolectric:robolectric:3.1.2'
 }
 
 task wrapper(type: Wrapper) {

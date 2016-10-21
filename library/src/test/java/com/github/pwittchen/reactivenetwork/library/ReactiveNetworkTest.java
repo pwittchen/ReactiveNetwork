@@ -15,9 +15,9 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
+import android.app.Application;
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.socket.DefaultSocketErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
@@ -25,12 +25,16 @@ import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObs
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 import rx.Observable;
 import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
 
-@RunWith(AndroidJUnit4.class) public class ReactiveNetworkTest {
+@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+public class ReactiveNetworkTest {
 
   private static final String TEST_VALID_HOST = "www.test.com";
   private static final int TEST_VALID_PORT = 80;
@@ -51,7 +55,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void observeNetworkConnectivityShouldNotBeNull() {
     // given
-    Context context = InstrumentationRegistry.getTargetContext();
+    Context context = RuntimeEnvironment.application;
 
     // when
     Observable<Connectivity> observable;
@@ -63,7 +67,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void observeNetworkConnectivityWithStrategyShouldNotBeNull() {
     // given
-    Context context = InstrumentationRegistry.getTargetContext();
+    Context context = RuntimeEnvironment.application;
     NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
     // when
@@ -117,11 +121,14 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(observable).isNotNull();
   }
 
-  @Test public void observeNetworkConnectivityShouldBeDefaultIfEmpty() {
-    ReactiveNetwork.observeNetworkConnectivity(InstrumentationRegistry.getContext())
+  @Test public void observeNetworkConnectivityShouldBeConnectedOnStartWhenNetworkIsAvailable() {
+
+    final Application context = RuntimeEnvironment.application;
+
+    ReactiveNetwork.observeNetworkConnectivity(context)
         .subscribe(new Action1<Connectivity>() {
           @Override public void call(Connectivity connectivity) {
-            assertThat(connectivity.isDefault()).isTrue();
+            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
           }
         });
   }
@@ -142,7 +149,7 @@ import static com.google.common.truth.Truth.assertThat;
   @Test(expected = IllegalArgumentException.class)
   public void observeNetworkConnectivityShouldThrowAnExceptionForNullStrategy() {
     // given
-    Context context = InstrumentationRegistry.getContext();
+    Context context = RuntimeEnvironment.application;
     NetworkObservingStrategy strategy = null;
 
     // when
