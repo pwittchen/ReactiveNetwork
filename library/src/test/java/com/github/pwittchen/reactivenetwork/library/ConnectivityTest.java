@@ -146,4 +146,61 @@ public class ConnectivityTest {
     // then
     // an exception is thrown
   }
+
+  @Test public void shouldReturnProperToStringValue() {
+    // given
+    NetworkInfo.State defaultState = NetworkInfo.State.DISCONNECTED;
+    int defaultType = -1;
+    String defaultName = "NONE";
+    String expectedToString = "Connectivity{"
+        + "state="
+        + defaultState
+        + ", type="
+        + defaultType
+        + ", name='"
+        + defaultName
+        + '\''
+        + '}';
+
+    // when
+    Connectivity connectivity = Connectivity.create();
+
+    // then
+    assertThat(connectivity.toString()).isEqualTo(expectedToString);
+  }
+
+  @Test public void shouldCreateDefaultConnectivity() {
+    // given
+    Connectivity connectivity;
+
+    // when
+    connectivity = Connectivity.create();
+
+    // then
+    assertThat(connectivity.isDefault()).isTrue();
+  }
+
+  @Test public void theSameConnectivityObjectsShouldBeEqual() {
+    // given
+    Connectivity connectivityOne = Connectivity.create();
+    Connectivity connectivityTwo = Connectivity.create();
+
+    // when
+    boolean objectsAreEqual = connectivityOne.equals(connectivityTwo);
+
+    // then
+    assertThat(objectsAreEqual).isTrue();
+  }
+
+  @Test public void twoDefaultObjectsShouldBeInTheSameBucket() {
+    // given
+    Connectivity connectivityOne = Connectivity.create();
+    Connectivity connectivityTwo = Connectivity.create();
+
+    // when
+    boolean hashCodesAreEqual = connectivityOne.hashCode() == connectivityTwo.hashCode();
+
+    // then
+    assertThat(hashCodesAreEqual).isTrue();
+  }
 }
