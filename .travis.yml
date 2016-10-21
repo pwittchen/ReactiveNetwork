@@ -10,5 +10,8 @@ android:
 install:
   - true
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 script:
-  - ./gradlew clean build check
+  - ./gradlew clean build test jacocoTestReport check
