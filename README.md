@@ -220,7 +220,7 @@ Tests are available in `library/src/test/java/` directory and can be executed on
 ./gradlew test
 ```
 
-To generate test coverage report, run the following command
+To generate test coverage report, run the following command:
 
 ```
 ./gradlew test jacocoTestReport
