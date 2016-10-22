@@ -214,10 +214,16 @@ dependencies {
 Tests
 -----
 
-Tests are available in `library/src/androidTest/java/` directory and can be executed on emulator or Android device from Android Studio or CLI with the following command:
+Tests are available in `library/src/test/java/` directory and can be executed on JVM without any emulator or Android device from Android Studio or CLI with the following command:
 
 ```
-./gradlew connectedCheck
+./gradlew test
+```
+
+To generate test coverage report, run the following command
+
+```
+./gradlew test jacocoTestReport
 ```
 
 Code style
