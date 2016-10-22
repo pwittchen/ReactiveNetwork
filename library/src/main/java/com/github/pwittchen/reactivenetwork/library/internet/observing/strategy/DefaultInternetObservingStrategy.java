@@ -30,6 +30,7 @@ import rx.schedulers.Schedulers;
  * Default strategy for monitoring connectivity with the Internet
  */
 public class DefaultInternetObservingStrategy implements InternetObservingStrategy {
+
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host
    *
@@ -56,25 +57,37 @@ public class DefaultInternetObservingStrategy implements InternetObservingStrate
 
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Func1<Long, Boolean>() {
-
-      boolean isConnected;
-
       @Override public Boolean call(Long tick) {
-        Socket socket = new Socket();
-        try {
-          socket.connect(new InetSocketAddress(host, port), timeoutInMs);
-          isConnected = socket.isConnected();
-        } catch (IOException e) {
-          isConnected = Boolean.FALSE;
-        } finally {
-          try {
-            socket.close();
-          } catch (IOException exception) {
-            socketErrorHandler.handleErrorDuringClosingSocket(exception);
-          }
-        }
-        return isConnected;
+        return isConnected(host, port, timeoutInMs, socketErrorHandler);
       }
     }).distinctUntilChanged();
+  }
+
+  /**
+   * checks if device is connected to given host at given port
+   *
+   * @param host to connect
+   * @param port to connect
+   * @param timeoutInMs connection timeout
+   * @param socketErrorHandler error handler for socket connection
+   * @return boolean true if connected and false if not
+   */
+  public boolean isConnected(final String host, final int port, final int timeoutInMs,
+      final SocketErrorHandler socketErrorHandler) {
+    boolean isConnected;
+    Socket socket = new Socket();
+    try {
+      socket.connect(new InetSocketAddress(host, port), timeoutInMs);
+      isConnected = socket.isConnected();
+    } catch (IOException e) {
+      isConnected = Boolean.FALSE;
+    } finally {
+      try {
+        socket.close();
+      } catch (IOException exception) {
+        socketErrorHandler.handleErrorDuringClosingSocket(exception);
+      }
+    }
+    return isConnected;
   }
 }
