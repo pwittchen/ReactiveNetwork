@@ -32,23 +32,23 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
 public class DefaultInternetObservingStrategyTest {
 
-  private final int initialIntervalInMs = 0;
-  private final int intervalInMs = 2000;
-  private final String host = "www.google.com";
-  private final int port = 80;
-  private final int timeoutInMs = 30;
+  private static final int INITIAL_INTERVAL_IN_MS = 0;
+  private static final int INTERVAL_IN_MS = 2000;
+  private static final String HOST = "www.google.com";
+  private static final int PORT = 80;
+  private static final int TIMEOUT_IN_MS = 30;
   private @Mock SocketErrorHandler socketErrorHandler;
 
   @Test public void shouldBeConnectedToTheInternet() {
     // given
     SocketErrorHandler socketErrorHandler = mock(SocketErrorHandler.class);
     DefaultInternetObservingStrategy strategy = spy(new DefaultInternetObservingStrategy());
-    when(strategy.isConnected(host, port, timeoutInMs, socketErrorHandler)).thenReturn(true);
+    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler)).thenReturn(true);
 
     // when
     Observable<Boolean> observable =
-        strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
-            timeoutInMs, socketErrorHandler);
+        strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, HOST, PORT,
+            TIMEOUT_IN_MS, socketErrorHandler);
 
     boolean isConnected = observable.toBlocking().first();
 
@@ -61,12 +61,12 @@ public class DefaultInternetObservingStrategyTest {
 
     SocketErrorHandler socketErrorHandler = mock(SocketErrorHandler.class);
     DefaultInternetObservingStrategy strategy = spy(new DefaultInternetObservingStrategy());
-    when(strategy.isConnected(host, port, timeoutInMs, socketErrorHandler)).thenReturn(false);
+    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler)).thenReturn(false);
 
     // when
     Observable<Boolean> observable =
-        strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
-            timeoutInMs, socketErrorHandler);
+        strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, HOST, PORT,
+            TIMEOUT_IN_MS, socketErrorHandler);
 
     boolean isConnected = observable.toBlocking().first();
 
