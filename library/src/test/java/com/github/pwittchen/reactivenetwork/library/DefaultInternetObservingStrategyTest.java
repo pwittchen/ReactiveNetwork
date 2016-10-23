@@ -17,27 +17,39 @@ package com.github.pwittchen.reactivenetwork.library;
 
 import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import rx.Observable;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class DefaultInternetObservingStrategyTest {
+@SuppressWarnings("PMD") public class DefaultInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
   private static final int INTERVAL_IN_MS = 2000;
   private static final String HOST = "www.google.com";
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
-  private @Mock SocketErrorHandler socketErrorHandler;
+  private DefaultInternetObservingStrategy strategy;
+  private SocketErrorHandler socketErrorHandler;
+
+  @Before public void setUp() {
+    strategy = spy(new DefaultInternetObservingStrategy());
+    socketErrorHandler = mock(SocketErrorHandler.class);
+  }
 
   @Test public void shouldBeConnectedToTheInternet() {
     // given
@@ -58,7 +70,6 @@ public class DefaultInternetObservingStrategyTest {
 
   @Test public void shouldNotBeConnectedToTheInternet() {
     // given
-
     SocketErrorHandler socketErrorHandler = mock(SocketErrorHandler.class);
     DefaultInternetObservingStrategy strategy = spy(new DefaultInternetObservingStrategy());
     when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler)).thenReturn(false);
@@ -72,5 +83,33 @@ public class DefaultInternetObservingStrategyTest {
 
     // then
     assertThat(isConnected).isFalse();
+  }
+
+  @Test public void shouldNotBeConnectedToTheInternetWhenSocketThrowsAnExceptionOnConnect()
+      throws IOException {
+    // given
+    final Socket socket = mock(Socket.class);
+    final InetSocketAddress address = new InetSocketAddress(HOST, PORT);
+    doThrow(new IOException()).when(socket).connect(address, TIMEOUT_IN_MS);
+
+    // when
+    final boolean isConnected =
+        strategy.isConnected(socket, HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler);
+
+    // then
+    assertThat(isConnected).isFalse();
+  }
+
+  @Test public void shouldHandleAnExceptionThrownDuringClosingTheSocket() throws IOException {
+    // given
+    final Socket socket = mock(Socket.class);
+    IOException givenException = new IOException("error during closing socket");
+    doThrow(givenException).when(socket).close();
+
+    // when
+    strategy.isConnected(socket, HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler);
+
+    // then
+    verify(socketErrorHandler, times(1)).handleErrorDuringClosingSocket(givenException);
   }
 }

@@ -74,8 +74,23 @@ public class DefaultInternetObservingStrategy implements InternetObservingStrate
    */
   public boolean isConnected(final String host, final int port, final int timeoutInMs,
       final SocketErrorHandler socketErrorHandler) {
+    final Socket socket = new Socket();
+    return isConnected(socket, host, port, timeoutInMs, socketErrorHandler);
+  }
+
+  /**
+   * checks if device is connected to given host at given port
+   *
+   * @param socket to connect
+   * @param host to connect
+   * @param port to connect
+   * @param timeoutInMs connection timeout
+   * @param socketErrorHandler error handler for socket connection
+   * @return boolean true if connected and false if not
+   */
+  public boolean isConnected(final Socket socket, final String host, final int port,
+      final int timeoutInMs, final SocketErrorHandler socketErrorHandler) {
     boolean isConnected;
-    Socket socket = new Socket();
     try {
       socket.connect(new InetSocketAddress(host, port), timeoutInMs);
       isConnected = socket.isConnected();
