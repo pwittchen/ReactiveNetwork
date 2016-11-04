@@ -3,7 +3,7 @@
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ReactiveNetwork-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/2290)
 [![Build Status](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=master)](https://travis-ci.org/pwittchen/ReactiveNetwork)
 [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/master/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork)
-![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.github.pwittchen/reactivenetwork)
 
 ReactiveNetwork is an Android library listening **network connection state** and **Internet connectivity** with RxJava Observables. It's a successor of [Network Events](https://github.com/pwittchen/NetworkEvents) library rewritten with Reactive Programming approach.
 
