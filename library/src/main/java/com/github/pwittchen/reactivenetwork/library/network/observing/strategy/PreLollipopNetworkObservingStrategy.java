@@ -35,10 +35,10 @@ import rx.subscriptions.Subscriptions;
 import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
 
 /**
- * Network observing strategy for Android devices before Lollipop (API 20 or lower)
+ * Network observing strategy for Android devices before Lollipop (API 20 or lower).
+ * Uses Broadcast Receiver.
  */
 public class PreLollipopNetworkObservingStrategy implements NetworkObservingStrategy {
-  private static final String ON_ERROR_MSG = "receiver was already unregistered";
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final IntentFilter filter = new IntentFilter();
@@ -67,7 +67,7 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
     try {
       context.unregisterReceiver(receiver);
     } catch (Exception exception) {
-      onError(ON_ERROR_MSG, exception);
+      onError("receiver was already unregistered", exception);
     }
   }
 

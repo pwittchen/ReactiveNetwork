@@ -16,13 +16,13 @@
 package com.github.pwittchen.reactivenetwork.library;
 
 import android.content.Context;
-import android.os.Build;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.socket.DefaultSocketErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.MarshmallowNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
 import rx.Observable;
 
@@ -61,9 +61,10 @@ public class ReactiveNetwork {
    */
   public static Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final NetworkObservingStrategy strategy;
-    final boolean isAtLeastLollipop = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
-    if (isAtLeastLollipop) {
+    if (Preconditions.isAtLeastAndroidMarshmallow()) {
+      strategy = new MarshmallowNetworkObservingStrategy();
+    } else if (Preconditions.isAtLeastAndroidLollipop()) {
       strategy = new LollipopNetworkObservingStrategy();
     } else {
       strategy = new PreLollipopNetworkObservingStrategy();
