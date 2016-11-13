@@ -15,6 +15,8 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
+import android.os.Build;
+
 public class Preconditions {
   /**
    * Validation method, which checks if an object is null
@@ -62,6 +64,14 @@ public class Preconditions {
     if (number <= 0) {
       throw new IllegalArgumentException(message);
     }
+  }
+
+  public static boolean isAtLeastAndroidLollipop() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+  }
+
+  public static boolean isAtLeastAndroidMarshmallow() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
   }
 }
 

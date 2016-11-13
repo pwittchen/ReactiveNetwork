@@ -41,7 +41,8 @@ public class Connectivity {
     return new Connectivity(context);
   }
 
-  public static Connectivity create(NetworkInfo.State state, int type, String name) {
+  public static Connectivity create(final NetworkInfo.State state, final int type,
+      final String name) {
     Preconditions.checkNotNull(state, "state == null");
     Preconditions.checkNotNullOrEmpty(name, "name is null or empty");
     return new Connectivity(state, type, name);
@@ -51,7 +52,7 @@ public class Connectivity {
     this(DEFAULT_STATE, DEFAULT_TYPE, DEFAULT_NAME);
   }
 
-  private Connectivity(Context context) {
+  private Connectivity(final Context context) {
     final NetworkInfo networkInfo = getNetworkInfo(context);
     if (networkInfo == null) {
       initAttributes(DEFAULT_STATE, DEFAULT_TYPE, DEFAULT_NAME);
@@ -60,17 +61,17 @@ public class Connectivity {
     }
   }
 
-  private Connectivity(NetworkInfo.State state, int type, String name) {
+  private Connectivity(final NetworkInfo.State state, final int type, final String name) {
     initAttributes(state, type, name);
   }
 
-  private NetworkInfo getNetworkInfo(Context context) {
+  private NetworkInfo getNetworkInfo(final Context context) {
     final String service = Context.CONNECTIVITY_SERVICE;
     final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
     return manager.getActiveNetworkInfo();
   }
 
-  private void initAttributes(NetworkInfo.State state, int type, String name) {
+  private void initAttributes(final NetworkInfo.State state, final int type, final String name) {
     this.state = state;
     this.type = type;
     this.name = name;
@@ -140,7 +141,7 @@ public class Connectivity {
     return "Connectivity{" + "state=" + state + ", type=" + type + ", name='" + name + '\'' + '}';
   }
 
-  @Override public boolean equals(Object o) {
+  @Override public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
