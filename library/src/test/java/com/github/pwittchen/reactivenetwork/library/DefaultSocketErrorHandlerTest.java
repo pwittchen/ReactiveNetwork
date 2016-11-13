@@ -16,22 +16,29 @@
 package com.github.pwittchen.reactivenetwork.library;
 
 import com.github.pwittchen.reactivenetwork.library.internet.socket.DefaultSocketErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
 public class DefaultSocketErrorHandlerTest {
 
+  @Spy DefaultSocketErrorHandler handler;
+
+  @Before public void setUp() {
+    handler = new DefaultSocketErrorHandler();
+    MockitoAnnotations.initMocks(this);
+  }
+
   @Test public void shouldHandleErrorDuringClosingSocket() {
     // given
-    SocketErrorHandler handler = spy(new DefaultSocketErrorHandler());
     Exception exception = new Exception("error during closing socket");
 
     // when

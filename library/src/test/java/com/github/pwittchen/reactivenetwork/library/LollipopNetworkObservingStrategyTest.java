@@ -19,8 +19,11 @@ import android.app.Application;
 import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -29,12 +32,19 @@ import rx.Subscription;
 import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
 public class LollipopNetworkObservingStrategyTest {
+
+  @Spy private NetworkObservingStrategy strategy;
+
+  @Before public void setUp() {
+    strategy = new LollipopNetworkObservingStrategy();
+    MockitoAnnotations.initMocks(this);
+  }
+
   @Test public void shouldObserveConnectivity() {
     // given
     NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
@@ -66,7 +76,6 @@ public class LollipopNetworkObservingStrategyTest {
 
   @Test public void shouldCallOnError() {
     // given
-    NetworkObservingStrategy strategy = spy(new LollipopNetworkObservingStrategy());
     String message = "error message";
     Exception exception = new Exception();
 
