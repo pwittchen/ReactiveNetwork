@@ -66,12 +66,24 @@ public class Preconditions {
     }
   }
 
+  /**
+   * Validation method, which checks if current Android version is at least Lollipop (API 21) or
+   * higher
+   *
+   * @return boolean true if current Android version is Lollipop or higher
+   */
   public static boolean isAtLeastAndroidLollipop() {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
   }
 
+  /**
+   * Validation method, which checks if current Android version is at least Marshmallow (API 23) or
+   * higher
+   *
+   * @return boolean true if current Android version is Marshmallow or higher
+   */
   public static boolean isAtLeastAndroidMarshmallow() {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
   }
 }
 
