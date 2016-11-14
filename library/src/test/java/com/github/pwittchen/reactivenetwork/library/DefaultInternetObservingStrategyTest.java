@@ -20,12 +20,13 @@ import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorH
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import rx.Observable;
@@ -44,13 +45,10 @@ import static org.mockito.Mockito.when;
   private static final String HOST = "www.google.com";
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
-  private @Spy DefaultInternetObservingStrategy strategy;
-  private @Mock SocketErrorHandler socketErrorHandler;
-  private @Mock Socket socket;
-
-  @Before public void setUp() {
-    MockitoAnnotations.initMocks(this);
-  }
+  @Rule public MockitoRule rule = MockitoJUnit.rule();
+  @Spy private DefaultInternetObservingStrategy strategy;
+  @Mock private SocketErrorHandler socketErrorHandler;
+  @Mock private Socket socket;
 
   @Test public void shouldBeConnectedToTheInternet() {
     // given
