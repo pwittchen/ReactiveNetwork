@@ -6,7 +6,7 @@ apply from: '../maven_push.gradle'
 
 android {
   compileSdkVersion 25
-  buildToolsVersion "23.0.2"
+  buildToolsVersion "24.0.3"
 
   defaultConfig {
     minSdkVersion 9

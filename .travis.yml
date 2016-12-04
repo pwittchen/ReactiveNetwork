@@ -3,14 +3,20 @@ jdk: oraclejdk8
 
 android:
   components:
-    - build-tools-23.0.2
+    - build-tools-24.0.3
     - tools
+    - platform-tools
     - android-25
     - extra-android-m2repository
     - extra-google-m2repository
 
 install:
   - true
+
+licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
