@@ -17,7 +17,7 @@ package com.github.pwittchen.reactivenetwork.library.internet.observing.strategy
 
 import com.github.pwittchen.reactivenetwork.library.Preconditions;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -31,6 +31,8 @@ import rx.schedulers.Schedulers;
  */
 public class DefaultInternetObservingStrategy implements InternetObservingStrategy {
 
+  public static final String ON_CLOSE_SOCKET_ERROR_MSG = "Could not close the socket";
+
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host
    *
@@ -40,25 +42,25 @@ public class DefaultInternetObservingStrategy implements InternetObservingStrate
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
-   * @param socketErrorHandler for handling errors while closing socket
+   * @param errorHandler for handling errors while closing socket
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
   @Override public Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
-      final SocketErrorHandler socketErrorHandler) {
+      final ErrorHandler errorHandler) {
     Preconditions.checkGreaterOrEqualToZero(initialIntervalInMs,
         "initialIntervalInMs is not a positive number");
     Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
     Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
     Preconditions.checkGreaterThanZero(port, "port is not a positive number");
     Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
-    Preconditions.checkNotNull(socketErrorHandler, "socketErrorHandler is null");
+    Preconditions.checkNotNull(errorHandler, "errorHandler is null");
 
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Func1<Long, Boolean>() {
       @Override public Boolean call(Long tick) {
-        return isConnected(host, port, timeoutInMs, socketErrorHandler);
+        return isConnected(host, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();
   }
@@ -69,13 +71,13 @@ public class DefaultInternetObservingStrategy implements InternetObservingStrate
    * @param host to connect
    * @param port to connect
    * @param timeoutInMs connection timeout
-   * @param socketErrorHandler error handler for socket connection
+   * @param errorHandler error handler for socket connection
    * @return boolean true if connected and false if not
    */
   public boolean isConnected(final String host, final int port, final int timeoutInMs,
-      final SocketErrorHandler socketErrorHandler) {
+      final ErrorHandler errorHandler) {
     final Socket socket = new Socket();
-    return isConnected(socket, host, port, timeoutInMs, socketErrorHandler);
+    return isConnected(socket, host, port, timeoutInMs, errorHandler);
   }
 
   /**
@@ -85,11 +87,11 @@ public class DefaultInternetObservingStrategy implements InternetObservingStrate
    * @param host to connect
    * @param port to connect
    * @param timeoutInMs connection timeout
-   * @param socketErrorHandler error handler for socket connection
+   * @param errorHandler error handler for socket connection
    * @return boolean true if connected and false if not
    */
   public boolean isConnected(final Socket socket, final String host, final int port,
-      final int timeoutInMs, final SocketErrorHandler socketErrorHandler) {
+      final int timeoutInMs, final ErrorHandler errorHandler) {
     boolean isConnected;
     try {
       socket.connect(new InetSocketAddress(host, port), timeoutInMs);
@@ -100,7 +102,7 @@ public class DefaultInternetObservingStrategy implements InternetObservingStrate
       try {
         socket.close();
       } catch (IOException exception) {
-        socketErrorHandler.handleErrorDuringClosingSocket(exception);
+        errorHandler.handleError(exception, ON_CLOSE_SOCKET_ERROR_MSG);
       }
     }
     return isConnected;

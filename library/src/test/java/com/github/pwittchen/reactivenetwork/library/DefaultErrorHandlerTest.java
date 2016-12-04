@@ -15,7 +15,8 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import com.github.pwittchen.reactivenetwork.library.internet.socket.DefaultSocketErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,19 +30,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class DefaultSocketErrorHandlerTest {
+public class DefaultErrorHandlerTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private DefaultSocketErrorHandler handler = new DefaultSocketErrorHandler();
+  @Spy private DefaultErrorHandler handler = new DefaultErrorHandler();
 
   @Test public void shouldHandleErrorDuringClosingSocket() {
     // given
-    Exception exception = new Exception("error during closing socket");
+    final String errorMsg = DefaultInternetObservingStrategy.ON_CLOSE_SOCKET_ERROR_MSG;
+    final Exception exception = new Exception(errorMsg);
 
     // when
-    handler.handleErrorDuringClosingSocket(exception);
+    handler.handleError(exception, errorMsg);
 
     // then
-    verify(handler, times(1)).handleErrorDuringClosingSocket(exception);
+    verify(handler, times(1)).handleError(exception, errorMsg);
   }
 }

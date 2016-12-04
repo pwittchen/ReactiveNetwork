@@ -33,7 +33,7 @@ public class NetworkObservingStrategyTest {
 
   @Test public void lollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
     // given
-    NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
     // when
     assertThatIsConnected(strategy);
@@ -41,7 +41,7 @@ public class NetworkObservingStrategyTest {
 
   @Test public void preLollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
     // given
-    NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
 
     // when
     assertThatIsConnected(strategy);

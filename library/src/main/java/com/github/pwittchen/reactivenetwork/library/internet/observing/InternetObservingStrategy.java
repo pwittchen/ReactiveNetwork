@@ -15,7 +15,7 @@
  */
 package com.github.pwittchen.reactivenetwork.library.internet.observing;
 
-import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
 import rx.Observable;
 
 /**
@@ -32,11 +32,11 @@ public interface InternetObservingStrategy {
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
-   * @param socketErrorHandler for handling errors while closing socket
+   * @param errorHandler for handling errors while checking connectivity
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
   Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
-      final SocketErrorHandler socketErrorHandler);
+      final ErrorHandler errorHandler);
 }

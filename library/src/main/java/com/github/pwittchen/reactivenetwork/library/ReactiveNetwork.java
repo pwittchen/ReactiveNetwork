@@ -18,8 +18,8 @@ package com.github.pwittchen.reactivenetwork.library;
 import android.content.Context;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.internet.socket.DefaultSocketErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.MarshmallowNetworkObservingStrategy;
@@ -104,7 +104,7 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity() {
     return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
         DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST, DEFAULT_PING_PORT,
-        DEFAULT_PING_TIMEOUT_IN_MS, new DefaultSocketErrorHandler());
+        DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
   }
 
   /**
@@ -120,7 +120,7 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity(final int intervalInMs,
       final String host, final int port, final int timeoutInMs) {
     return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS, intervalInMs, host,
-        port, timeoutInMs, new DefaultSocketErrorHandler());
+        port, timeoutInMs, new DefaultErrorHandler());
   }
 
   /**
@@ -138,7 +138,7 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs) {
     return observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port, timeoutInMs,
-        new DefaultSocketErrorHandler());
+        new DefaultErrorHandler());
   }
 
   /**
@@ -150,15 +150,15 @@ public class ReactiveNetwork {
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
-   * @param socketErrorHandler for handling errors while closing socket
+   * @param errorHandler for handling errors during connectivity check
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
-      final SocketErrorHandler socketErrorHandler) {
+      final ErrorHandler errorHandler) {
     return observeInternetConnectivity(new DefaultInternetObservingStrategy(), initialIntervalInMs,
-        intervalInMs, host, port, timeoutInMs, socketErrorHandler);
+        intervalInMs, host, port, timeoutInMs, errorHandler);
   }
 
   /**
@@ -172,16 +172,16 @@ public class ReactiveNetwork {
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
-   * @param socketErrorHandler for handling errors while closing socket
+   * @param errorHandler for handling errors during connectivity check
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
   public static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy, final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
-      final SocketErrorHandler socketErrorHandler) {
+      final ErrorHandler errorHandler) {
     Preconditions.checkNotNull(strategy, "strategy == null");
     return strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
-        timeoutInMs, socketErrorHandler);
+        timeoutInMs, errorHandler);
   }
 }
