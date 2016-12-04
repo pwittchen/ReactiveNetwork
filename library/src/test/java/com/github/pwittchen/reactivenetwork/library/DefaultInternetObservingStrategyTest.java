@@ -16,7 +16,7 @@
 package com.github.pwittchen.reactivenetwork.library;
 
 import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.internet.socket.SocketErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -47,17 +47,17 @@ import static org.mockito.Mockito.when;
   private static final int TIMEOUT_IN_MS = 30;
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private DefaultInternetObservingStrategy strategy;
-  @Mock private SocketErrorHandler socketErrorHandler;
+  @Mock private ErrorHandler errorHandler;
   @Mock private Socket socket;
 
   @Test public void shouldBeConnectedToTheInternet() {
     // given
-    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler)).thenReturn(true);
+    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);
 
     // when
-    Observable<Boolean> observable =
+    final Observable<Boolean> observable =
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, HOST, PORT,
-            TIMEOUT_IN_MS, socketErrorHandler);
+            TIMEOUT_IN_MS, errorHandler);
 
     boolean isConnected = observable.toBlocking().first();
 
@@ -67,12 +67,12 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldNotBeConnectedToTheInternet() {
     // given
-    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler)).thenReturn(false);
+    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(false);
 
     // when
-    Observable<Boolean> observable =
+    final Observable<Boolean> observable =
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, HOST, PORT,
-            TIMEOUT_IN_MS, socketErrorHandler);
+            TIMEOUT_IN_MS, errorHandler);
 
     boolean isConnected = observable.toBlocking().first();
 
@@ -88,7 +88,7 @@ import static org.mockito.Mockito.when;
 
     // when
     final boolean isConnected =
-        strategy.isConnected(socket, HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler);
+        strategy.isConnected(socket, HOST, PORT, TIMEOUT_IN_MS, errorHandler);
 
     // then
     assertThat(isConnected).isFalse();
@@ -96,13 +96,14 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldHandleAnExceptionThrownDuringClosingTheSocket() throws IOException {
     // given
-    IOException givenException = new IOException("error during closing socket");
+    final String errorMsg = DefaultInternetObservingStrategy.ON_CLOSE_SOCKET_ERROR_MSG;
+    final IOException givenException = new IOException(errorMsg);
     doThrow(givenException).when(socket).close();
 
     // when
-    strategy.isConnected(socket, HOST, PORT, TIMEOUT_IN_MS, socketErrorHandler);
+    strategy.isConnected(socket, HOST, PORT, TIMEOUT_IN_MS, errorHandler);
 
     // then
-    verify(socketErrorHandler, times(1)).handleErrorDuringClosingSocket(givenException);
+    verify(errorHandler, times(1)).handleError(givenException, errorMsg);
   }
 }

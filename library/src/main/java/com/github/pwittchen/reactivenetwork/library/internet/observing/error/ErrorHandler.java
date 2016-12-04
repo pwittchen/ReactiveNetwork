@@ -13,16 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library.internet.socket;
+package com.github.pwittchen.reactivenetwork.library.internet.observing.error;
 
-import android.util.Log;
-
-import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
-
-public class DefaultSocketErrorHandler implements SocketErrorHandler {
-  public static final String ON_ERROR_MSG = "Could not close the socket";
-
-  @Override public void handleErrorDuringClosingSocket(Exception exception) {
-    Log.e(LOG_TAG, ON_ERROR_MSG, exception);
-  }
+public interface ErrorHandler {
+  void handleError(final Exception exception, final String message);
 }

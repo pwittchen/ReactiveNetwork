@@ -44,7 +44,7 @@ public class LollipopNetworkObservingStrategyTest {
 
   @Test public void shouldObserveConnectivity() {
     // given
-    NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
     // when
     strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
@@ -59,12 +59,12 @@ public class LollipopNetworkObservingStrategyTest {
 
   @Test public void shouldStopObservingConnectivity() {
     // given
-    NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
-    Application context = RuntimeEnvironment.application;
-    Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
+    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final Application context = RuntimeEnvironment.application;
+    final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
 
     // when
-    Subscription subscription = observable.subscribe();
+    final Subscription subscription = observable.subscribe();
     subscription.unsubscribe();
 
     // then
@@ -73,8 +73,8 @@ public class LollipopNetworkObservingStrategyTest {
 
   @Test public void shouldCallOnError() {
     // given
-    String message = "error message";
-    Exception exception = new Exception();
+    final String message = "error message";
+    final Exception exception = new Exception();
 
     // when
     strategy.onError(message, exception);

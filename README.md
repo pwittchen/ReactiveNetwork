@@ -39,18 +39,6 @@ Contents
 Usage
 -----
 
-Library has the following RxJava Observables available in the public API:
-
-```java
-Observable<Connectivity> observeNetworkConnectivity(Context context)
-Observable<Connectivity> observeNetworkConnectivity(Context context, NetworkObservingStrategy strategy)
-Observable<Boolean> observeInternetConnectivity()
-Observable<Boolean> observeInternetConnectivity(int intervalInMs, String host, int port, int timeout)
-Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
-Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
-```
-
 **Please note**: Due to memory leak in `WifiManager` reported
 in [issue 43945](https://code.google.com/p/android/issues/detail?id=43945) in Android issue tracker
 it's recommended to use Application Context instead of Activity Context.
@@ -167,21 +155,23 @@ It does the same thing as method above, but allows to define initial delay of th
 You can use method:
 
 ```java
-Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
+Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
 ```
 
-which allows you to define `SocketErrorHandler` implementation, which handle any errors which can occur during closing the socket connection.
-By default library uses `DefaultSocketErrorHandler`.
+which allows you to define `ErrorHandler` implementation, which handle any errors which can occur during checking connectivity.
+By default library uses `DefaultErrorHandler`.
 
 You can also use method:
 
 ```java
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final SocketErrorHandler socketErrorHandler)
+Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
 ```
 
-which allows you to implement `SocketErrorHandler` and `InternetObservingStrategy` in case you want to have your own strategy for monitoring connectivity with the Internet.
+which allows you to implement `ErrorHandler` and `InternetObservingStrategy` in case you want to have your own strategy for monitoring connectivity with the Internet.
 
 These methods are created to allow the users to fully customize the library and give them more control.
+
+For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
 
 Examples
 --------
