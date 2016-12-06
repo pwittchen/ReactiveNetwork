@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion "23.0.1"
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
 
   defaultConfig {
     applicationId "com.github.pwittchen.reactivenetwork.app"
-    minSdkVersion 15
-    targetSdkVersion 23
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.compileSdkVersion
     versionCode 1
     versionName "1.0"
   }
