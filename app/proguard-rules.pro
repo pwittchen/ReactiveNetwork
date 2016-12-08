@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
+-dontwarn io.reactivex.functions.Function
+-dontwarn rx.internal.util.**
+-dontwarn sun.misc.Unsafe
