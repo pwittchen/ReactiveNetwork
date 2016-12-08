@@ -28,6 +28,7 @@ Contents
     - [Connectivity class](#connectivity-class)
   - [Observing Internet connectivity](#observing-internet-connectivity)
     - [Customization of observing Internet connectivity](#customization-of-observing-internet-connectivity)
+  - [ProGuard configuration](#proguard-configuration)
 - [Examples](#examples)
 - [Download](#download)
 - [Tests](#tests)
@@ -172,6 +173,15 @@ which allows you to implement `ErrorHandler` and `InternetObservingStrategy` in 
 These methods are created to allow the users to fully customize the library and give them more control.
 
 For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
+
+### ProGuard configuration
+
+```
+-dontwarn com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
+-dontwarn io.reactivex.functions.Function
+-dontwarn rx.internal.util.**
+-dontwarn sun.misc.Unsafe
+```
 
 Examples
 --------
