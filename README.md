@@ -248,6 +248,7 @@ Who is using this library?
 - [eero - Home WiFi System](https://play.google.com/store/apps/details?id=com.eero.android)
 - [ACN Android Framework](https://github.com/ugurcany/ACN-Android-Framework)
 - [Spatial Connect Android SDK](https://github.com/boundlessgeo/spatialconnect-android-sdk)
+- [Qiscus SDK for Android](https://github.com/qiscus/qiscus-sdk-android)
 - and more...
 
 Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail to piotr@wittchen.biz.pl
