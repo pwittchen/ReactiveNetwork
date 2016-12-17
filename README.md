@@ -36,7 +36,7 @@ Contents
 - [Static code analysis](#static-code-analysis)
 - [Who is using this library?](#who-is-using-this-library)
 - [Getting help](#getting-help)
-- [Changelog](#changelod)
+- [Changelog](#changelog)
 - [Releasing](#releasing)
 - [License](#license)
 
