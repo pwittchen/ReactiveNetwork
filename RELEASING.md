@@ -9,7 +9,7 @@ In order to release new version of the library, we need to perform the following
 - commit and push the changes
 - run command: `./gradlew uploadArchives`
 - go to the https://oss.sonatype.org website
-- log in
+- log in to Sonatype
 - go to "Staging Repositories" and sort by "Updated" date and time
 - close and release artifact
 - copy `library/build/docs/javadoc` directory
