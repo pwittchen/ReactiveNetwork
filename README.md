@@ -35,6 +35,7 @@ Contents
 - [Code style](#code-style)
 - [Static code analysis](#static-code-analysis)
 - [Who is using this library?](#who-is-using-this-library)
+- [Getting help](#getting-help)
 - [License](#license)
 
 Usage
@@ -254,6 +255,17 @@ Who is using this library?
 - and more...
 
 Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail to piotr@wittchen.biz.pl
+
+Getting help
+------------
+
+Do you need help related to using of configuring this library? 
+
+You can do the following things:
+- [Ask the question on StackOverflow](http://stackoverflow.com/questions/ask?tags=reactivenetwork)
+- [Create new GitHub issue](https://github.com/pwittchen/ReactiveNetwork/issues/new)
+
+Don't worry. Someone should help you with solving your problems.
 
 License
 -------
