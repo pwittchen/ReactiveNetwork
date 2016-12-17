@@ -36,6 +36,8 @@ Contents
 - [Static code analysis](#static-code-analysis)
 - [Who is using this library?](#who-is-using-this-library)
 - [Getting help](#getting-help)
+- [Changelog](#changelod)
+- [Releasing](#releasing)
 - [License](#license)
 
 Usage
@@ -266,6 +268,16 @@ You can do the following things:
 - [Create new GitHub issue](https://github.com/pwittchen/ReactiveNetwork/issues/new)
 
 Don't worry. Someone should help you with solving your problems.
+
+Changelog
+---------
+
+See [CHANGELOG.md](https://github.com/pwittchen/ReactiveNetwork/blob/master/CHANGELOG.md) file.
+
+Releasing
+---------
+
+See [RELEASING.md](https://github.com/pwittchen/ReactiveNetwork/blob/master/RELEASING.md) file.
 
 License
 -------
