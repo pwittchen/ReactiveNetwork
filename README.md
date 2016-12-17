@@ -259,7 +259,7 @@ Are you using this library in your app and want to be listed here? Send me a Pul
 Getting help
 ------------
 
-Do you need help related to using of configuring this library? 
+Do you need help related to using or configuring this library? 
 
 You can do the following things:
 - [Ask the question on StackOverflow](http://stackoverflow.com/questions/ask?tags=reactivenetwork)
