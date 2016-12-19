@@ -20,7 +20,7 @@ Want a few feature or improvement?
 ----------------------------------
 
 This is tiny library, so I would avoid overcomplicating it, but if you think a new feature
-would be useful, make this project better, then create a new issue.
+would be useful and make this project better, then create a new issue.
 After that, we can discuss it and work on a Pull Request.
 
 Want to create a Pull Request?
