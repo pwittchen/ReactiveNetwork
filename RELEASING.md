@@ -5,7 +5,7 @@ In order to release new version of the library, we need to perform the following
 - create new release issue on GitHub
 - prepare release notes and put them to the issue
 - checkout to the `master` branch
-- bump library version in `gradle.properties` file
+- bump library version (`VERSION_NAME` and `VERSION_CODE`) in `gradle.properties` file
 - commit and push the changes
 - run command: `./gradlew uploadArchives`
 - go to the https://oss.sonatype.org website
@@ -20,4 +20,4 @@ In order to release new version of the library, we need to perform the following
 - when sync is done, checkout to the `master` branch
 - update `CHANGELOG.md` file with new release version, current date and release notes
 - bump library version in "Download" section in `README.md` file
-- create new tagged GitHub release
+- create new tagged GitHub release with name the same as `VERSION_NAME` from `gradle.properties` and release notes
