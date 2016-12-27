@@ -21,6 +21,7 @@ import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import org.junit.Test;
@@ -347,5 +348,51 @@ public class ReactiveNetworkTest {
 
     // then
     // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
+    // given
+    final InternetObservingStrategy strategy = new DefaultInternetObservingStrategy();
+    final int initialInterval = -1;
+    final int interval = TEST_VALID_INTERVAL;
+    final String host = TEST_VALID_HOST;
+    final int port = TEST_VALID_PORT;
+    final int timeout = TEST_VALID_TIMEOUT;
+    final ErrorHandler errorHandler = new DefaultErrorHandler();
+
+    // when
+    Observable<Boolean> observable =
+        ReactiveNetwork.observeInternetConnectivity(strategy, initialInterval, interval, host, port,
+            timeout, errorHandler);
+
+    // then
+    assertThat(observable).isNotNull();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void observeInternetConnectivityShouldThrowAnExceptionWhenJustStrategyIsNull() {
+    // given
+    final InternetObservingStrategy strategy = null;
+
+    // when
+    ReactiveNetwork.observeInternetConnectivity(strategy);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test
+  public void observeInternetConnectivityShouldNotThrowAnExceptionWhenJustStrategyIsNotNull() {
+    // given
+    Observable<Boolean> observable;
+    final InternetObservingStrategy strategy = new DefaultInternetObservingStrategy();
+
+    // when
+    observable =
+        ReactiveNetwork.observeInternetConnectivity(strategy);
+
+    // then
+    assertThat(observable).isNotNull();
   }
 }

@@ -173,6 +173,14 @@ Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy 
 
 which allows you to implement `ErrorHandler` and `InternetObservingStrategy` in case you want to have your own strategy for monitoring connectivity with the Internet.
 
+You can use method:
+
+```java
+Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy)
+```
+
+which allows you to implement custom `InternetObservingStrategy` in case you want to have your own strategy. Remaining settings will be default.
+
 These methods are created to allow the users to fully customize the library and give them more control.
 
 For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/

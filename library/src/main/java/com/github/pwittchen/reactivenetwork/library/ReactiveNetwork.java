@@ -108,6 +108,26 @@ public class ReactiveNetwork {
   }
 
   /**
+   * Observes connectivity with the Internet with default settings,
+   * but with custom InternetObservingStrategy. It pings remote host
+   * (www.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * for determining if device is connected to the Internet or not. Please note that this method is
+   * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
+   * transfer, but it gives you actual information if device is connected to the Internet or not.
+   *
+   * @param strategy which implements InternetObservingStrategy
+   * @return RxJava Observable with Boolean - true, when we have an access to the Internet
+   * and false if not
+   */
+  public static Observable<Boolean> observeInternetConnectivity(
+      final InternetObservingStrategy strategy) {
+    Preconditions.checkNotNull(strategy, "strategy == null");
+    return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
+        DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST, DEFAULT_PING_PORT,
+        DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
+  }
+
+  /**
    * Observes connectivity with the Internet by opening socket connection with remote host
    *
    * @param intervalInMs in milliseconds determining how often we want to check connectivity
