@@ -15,7 +15,6 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +36,7 @@ public class DefaultErrorHandlerTest {
 
   @Test public void shouldHandleErrorDuringClosingSocket() {
     // given
-    final String errorMsg = DefaultInternetObservingStrategy.ON_CLOSE_SOCKET_ERROR_MSG;
+    final String errorMsg = "Could not close the socket";
     final Exception exception = new Exception(errorMsg);
 
     // when

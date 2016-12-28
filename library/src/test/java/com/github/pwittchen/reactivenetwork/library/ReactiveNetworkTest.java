@@ -21,7 +21,7 @@ import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import org.junit.Test;
@@ -353,7 +353,7 @@ public class ReactiveNetworkTest {
   @Test(expected = IllegalArgumentException.class)
   public void observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
     // given
-    final InternetObservingStrategy strategy = new DefaultInternetObservingStrategy();
+    final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
     final int initialInterval = -1;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
@@ -386,7 +386,7 @@ public class ReactiveNetworkTest {
   public void observeInternetConnectivityShouldNotThrowAnExceptionWhenJustStrategyIsNotNull() {
     // given
     Observable<Boolean> observable;
-    final InternetObservingStrategy strategy = new DefaultInternetObservingStrategy();
+    final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
 
     // when
     observable =

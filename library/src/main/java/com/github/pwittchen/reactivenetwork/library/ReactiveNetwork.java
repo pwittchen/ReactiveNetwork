@@ -17,7 +17,7 @@ package com.github.pwittchen.reactivenetwork.library;
 
 import android.content.Context;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
@@ -177,7 +177,7 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
-    return observeInternetConnectivity(new DefaultInternetObservingStrategy(), initialIntervalInMs,
+    return observeInternetConnectivity(new SocketInternetObservingStrategy(), initialIntervalInMs,
         intervalInMs, host, port, timeoutInMs, errorHandler);
   }
 

@@ -15,7 +15,7 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.DefaultInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-@SuppressWarnings("PMD") public class DefaultInternetObservingStrategyTest {
+@SuppressWarnings("PMD") public class SocketInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
   private static final int INTERVAL_IN_MS = 2000;
@@ -46,7 +46,7 @@ import static org.mockito.Mockito.when;
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private DefaultInternetObservingStrategy strategy;
+  @Spy private SocketInternetObservingStrategy strategy;
   @Mock private ErrorHandler errorHandler;
   @Mock private Socket socket;
 
@@ -96,7 +96,7 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldHandleAnExceptionThrownDuringClosingTheSocket() throws IOException {
     // given
-    final String errorMsg = DefaultInternetObservingStrategy.ON_CLOSE_SOCKET_ERROR_MSG;
+    final String errorMsg = "Could not close the socket";
     final IOException givenException = new IOException(errorMsg);
     doThrow(givenException).when(socket).close();
 
