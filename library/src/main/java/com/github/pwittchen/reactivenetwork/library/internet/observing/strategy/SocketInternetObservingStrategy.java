@@ -29,9 +29,7 @@ import rx.schedulers.Schedulers;
 /**
  * Default strategy for monitoring connectivity with the Internet
  */
-public class DefaultInternetObservingStrategy implements InternetObservingStrategy {
-
-  public static final String ON_CLOSE_SOCKET_ERROR_MSG = "Could not close the socket";
+public class SocketInternetObservingStrategy implements InternetObservingStrategy {
 
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host
@@ -102,7 +100,7 @@ public class DefaultInternetObservingStrategy implements InternetObservingStrate
       try {
         socket.close();
       } catch (IOException exception) {
-        errorHandler.handleError(exception, ON_CLOSE_SOCKET_ERROR_MSG);
+        errorHandler.handleError(exception, "Could not close the socket");
       }
     }
     return isConnected;
