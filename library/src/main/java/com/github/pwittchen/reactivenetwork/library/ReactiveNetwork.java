@@ -15,11 +15,13 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
+import android.Manifest;
 import android.content.Context;
+import android.support.annotation.RequiresPermission;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.MarshmallowNetworkObservingStrategy;
@@ -59,6 +61,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Connectivity class containing information about network state,
    * type and name
    */
+  @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
   public static Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final NetworkObservingStrategy strategy;
 
@@ -84,6 +87,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Connectivity class containing information about network state,
    * type and name
    */
+  @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
   public static Observable<Connectivity> observeNetworkConnectivity(final Context context,
       final NetworkObservingStrategy strategy) {
     Preconditions.checkNotNull(context, "context == null");
@@ -101,6 +105,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have an access to the Internet
    * and false if not
    */
+  @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity() {
     return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
         DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST, DEFAULT_PING_PORT,
@@ -119,6 +124,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have an access to the Internet
    * and false if not
    */
+  @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy) {
     Preconditions.checkNotNull(strategy, "strategy == null");
@@ -137,6 +143,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
+  @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(final int intervalInMs,
       final String host, final int port, final int timeoutInMs) {
     return observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS, intervalInMs, host,
@@ -155,6 +162,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
+  @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs) {
     return observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port, timeoutInMs,
@@ -174,6 +182,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
+  @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
@@ -196,6 +205,7 @@ public class ReactiveNetwork {
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
    */
+  @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy, final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
