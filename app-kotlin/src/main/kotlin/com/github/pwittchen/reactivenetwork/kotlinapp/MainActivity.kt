@@ -45,9 +45,9 @@ class MainActivity : Activity() {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { connectivity ->
           Log.d(TAG, connectivity.toString())
-          val state = connectivity.state;
+          val state = connectivity.state
           val name = connectivity.name
-          connectivity_status.text = String.format("state: %s, name: %s", state, name);
+          connectivity_status.text = String.format("state: %s, name: %s", state, name)
         }
 
     internetSub = ReactiveNetwork.observeInternetConnectivity()
