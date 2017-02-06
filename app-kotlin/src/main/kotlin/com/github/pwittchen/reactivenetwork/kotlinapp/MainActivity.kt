@@ -46,8 +46,8 @@ class MainActivity : Activity() {
         .subscribe { connectivity ->
           Log.d(TAG, connectivity.toString())
           val state = connectivity.state
-          val name = connectivity.name
-          connectivity_status.text = String.format("state: %s, name: %s", state, name)
+          val name = connectivity.typeName
+          connectivity_status.text = String.format("state: %s, typeName: %s", state, name)
         }
 
     internetSub = ReactiveNetwork.observeInternetConnectivity()

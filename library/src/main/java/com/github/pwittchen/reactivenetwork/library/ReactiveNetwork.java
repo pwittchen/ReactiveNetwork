@@ -54,12 +54,12 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes network connectivity. Information about network state, type and name are contained in
+   * Observes network connectivity. Information about network state, type and typeName are contained in
    * observed Connectivity object.
    *
    * @param context Context of the activity or an application
    * @return RxJava Observable with Connectivity class containing information about network state,
-   * type and name
+   * type and typeName
    */
   @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
   public static Observable<Connectivity> observeNetworkConnectivity(final Context context) {
@@ -77,7 +77,7 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes network connectivity. Information about network state, type and name are contained in
+   * Observes network connectivity. Information about network state, type and typeName are contained in
    * observed Connectivity object. Moreover, allows you to define NetworkObservingStrategy.
    *
    * @param context Context of the activity or an application
@@ -85,7 +85,7 @@ public class ReactiveNetwork {
    * strategies {@link PreLollipopNetworkObservingStrategy},
    * {@link LollipopNetworkObservingStrategy} or create your own custom strategy
    * @return RxJava Observable with Connectivity class containing information about network state,
-   * type and name
+   * type and typeName
    */
   @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
   public static Observable<Connectivity> observeNetworkConnectivity(final Context context,

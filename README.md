@@ -67,13 +67,13 @@ ReactiveNetwork.observeNetworkConnectivity(context)
 
 When `Connectivity` changes, subscriber will be notified. `Connectivity` can change its state or type.
 
-We can react on a concrete state, states, type or types changes with the `filter(...)` method from RxJava, `hasState(NetworkInfo.State... states)` and `hasType(int... types)` methods located in `Connectivity` class.
+We can react on a concrete state, states, type or types changes with the `filter(...)` method from RxJava, `hasState(NetworkInfo.State... states)` and `hasType(int... types)` methods located in `ConnectivityPredicate` class.
 
 ```java
 ReactiveNetwork.observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
-    .filter(Connectivity.hasState(NetworkInfo.State.CONNECTED))
-    .filter(Connectivity.hasType(ConnectivityManager.TYPE_WIFI))
+    .filter(ConnectivityPredicate.hasState(NetworkInfo.State.CONNECTED))
+    .filter(ConnectivityPredicate.hasType(ConnectivityManager.TYPE_WIFI))
     .observeOn(AndroidSchedulers.mainThread())
     .subscribe(new Action1<Connectivity>() {
       @Override public void call(Connectivity connectivity) {
@@ -98,21 +98,22 @@ This method allows you to apply your own network observing strategy and is used 
 `Connectivity` class is used by `observeNetworkConnectivity(context)` and `observeNetworkConnectivity(context, networkObservingStrategy)` methods. It has the following API:
 
 ```java
-// factory methods responsible for creating Connectivity object
 Connectivity create()
 Connectivity create(Context context)
-Connectivity create(NetworkInfo.State state, int type, String name)
 
-// methods returning information about connectivity
 NetworkInfo.State getState()
+NetworkInfo.DetailedState getDetailedState()
 int getType()
-String getName()
-boolean isDefault()
-String toString()
+int getSubType()
+boolean isAvailable()
+boolean isFailover()
+boolean isRoaming()
+String getTypeName()
+String getSubTypeName()
+String getReason()
+String getExtraInfo()
 
-// helper methods for filter(...) method from RxJava
-Func1<Connectivity, Boolean> hasState(NetworkInfo.State... states)
-Func1<Connectivity, Boolean> hasType(int... types)
+class Builder
 ```
 
 ### Observing Internet connectivity

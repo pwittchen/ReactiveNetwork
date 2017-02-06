@@ -14,6 +14,8 @@ coverage:
   status:
     changes: false
     patch: true
+      default:
+        threshold: 20%
     project:
       default:
         against: parent
