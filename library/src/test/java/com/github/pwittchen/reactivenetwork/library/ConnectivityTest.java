@@ -28,16 +28,19 @@ import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
 public class ConnectivityTest {
+  private static final String TYPE_NAME_WIFI = "WIFI";
+  private static final String TYPE_NAME_MOBILE = "MOBILE";
 
   @Test public void statusShouldBeEqualToGivenValue() {
     // given
-    final NetworkInfo.State givenState = NetworkInfo.State.CONNECTED;
-    final int givenType = ConnectivityManager.TYPE_WIFI;
-    final String givenTypeName = "WIFI";
-    final Connectivity connectivity = Connectivity.create(givenState, givenType, givenTypeName);
+    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
+        .type(ConnectivityManager.TYPE_WIFI)
+        .typeName(TYPE_NAME_WIFI)
+        .build();
 
     // when
-    final Func1<Connectivity, Boolean> equalTo = Connectivity.hasState(connectivity.getState());
+    final Func1<Connectivity, Boolean> equalTo =
+        ConnectivityPredicate.hasState(connectivity.getState());
     final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
 
     // then
@@ -46,16 +49,16 @@ public class ConnectivityTest {
 
   @Test public void statusShouldBeEqualToOneOfGivenMultipleValues() {
     // given
-    final NetworkInfo.State givenState = NetworkInfo.State.CONNECTING;
-    final int givenType = ConnectivityManager.TYPE_WIFI;
-    final String givenTypeName = "WIFI";
-    final Connectivity connectivity = Connectivity.create(givenState, givenType, givenTypeName);
+    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTING)
+        .type(ConnectivityManager.TYPE_WIFI)
+        .typeName(TYPE_NAME_WIFI)
+        .build();
 
     final NetworkInfo.State states[] =
         { NetworkInfo.State.CONNECTED, NetworkInfo.State.CONNECTING };
 
     // when
-    final Func1<Connectivity, Boolean> equalTo = Connectivity.hasState(states);
+    final Func1<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasState(states);
     final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
 
     // then
@@ -64,13 +67,14 @@ public class ConnectivityTest {
 
   @Test public void typeShouldBeEqualToGivenValue() {
     // given
-    final NetworkInfo.State givenState = NetworkInfo.State.CONNECTED;
-    final int givenType = ConnectivityManager.TYPE_WIFI;
-    final String givenTypeName = "WIFI";
-    final Connectivity connectivity = Connectivity.create(givenState, givenType, givenTypeName);
+    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
+        .type(ConnectivityManager.TYPE_WIFI)
+        .typeName(TYPE_NAME_WIFI)
+        .build();
 
     // when
-    final Func1<Connectivity, Boolean> equalTo = Connectivity.hasType(connectivity.getType());
+    final Func1<Connectivity, Boolean> equalTo =
+        ConnectivityPredicate.hasType(connectivity.getType());
     final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
 
     // then
@@ -79,15 +83,15 @@ public class ConnectivityTest {
 
   @Test public void typeShouldBeEqualToOneOfGivenMultipleValues() {
     // given
-    final NetworkInfo.State givenState = NetworkInfo.State.CONNECTING;
-    final int givenType = ConnectivityManager.TYPE_MOBILE;
-    final String givenTypeName = "MOBILE";
-    final Connectivity connectivity = Connectivity.create(givenState, givenType, givenTypeName);
+    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTING)
+        .type(ConnectivityManager.TYPE_MOBILE)
+        .typeName(TYPE_NAME_MOBILE)
+        .build();
 
     final int givenTypes[] = { ConnectivityManager.TYPE_WIFI, ConnectivityManager.TYPE_MOBILE };
 
     // when
-    final Func1<Connectivity, Boolean> equalTo = Connectivity.hasType(givenTypes);
+    final Func1<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasType(givenTypes);
     final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
 
     // then
@@ -106,79 +110,26 @@ public class ConnectivityTest {
     // an exception is thrown
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void createShouldThrowAnExceptionWhenStateIsNull() {
-    // given
-    final NetworkInfo.State state = null;
-    final int type = 0;
-    final String name = "name";
-
-    // when
-    Connectivity.create(state, type, name);
-
-    // then
-    // an exception is thrown
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void createShouldThrowAnExceptionWhenNameIsNull() {
-    // given
-    final NetworkInfo.State state = NetworkInfo.State.CONNECTED;
-    final int type = 0;
-    final String name = null;
-
-    // when
-    Connectivity.create(state, type, name);
-
-    // then
-    // an exception is thrown
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void createShouldThrowAnExceptionWhenNameIsEmpty() {
-    // given
-    final NetworkInfo.State state = NetworkInfo.State.CONNECTED;
-    final int type = 0;
-    final String name = "";
-
-    // when
-    Connectivity.create(state, type, name);
-
-    // then
-    // an exception is thrown
-  }
-
   @Test public void shouldReturnProperToStringValue() {
     // given
-    final NetworkInfo.State defaultState = NetworkInfo.State.DISCONNECTED;
-    final int defaultType = -1;
-    final String defaultName = "NONE";
     final String expectedToString = "Connectivity{"
-        + "state="
-        + defaultState
-        + ", type="
-        + defaultType
-        + ", name='"
-        + defaultName
-        + '\''
-        + '}';
+        + "state=DISCONNECTED, "
+        + "detailedState=IDLE, "
+        + "type=-1, "
+        + "subType=-1, "
+        + "available=false, "
+        + "failover=false, "
+        + "roaming=false, "
+        + "typeName='NONE', "
+        + "subTypeName='NONE', "
+        + "reason='', "
+        + "extraInfo=''}";
 
     // when
     Connectivity connectivity = Connectivity.create();
 
     // then
     assertThat(connectivity.toString()).isEqualTo(expectedToString);
-  }
-
-  @Test public void shouldCreateDefaultConnectivity() {
-    // given
-    Connectivity connectivity;
-
-    // when
-    connectivity = Connectivity.create();
-
-    // then
-    assertThat(connectivity.isDefault()).isTrue();
   }
 
   @Test public void theSameConnectivityObjectsShouldBeEqual() {
@@ -203,5 +154,44 @@ public class ConnectivityTest {
 
     // then
     assertThat(hashCodesAreEqual).isTrue();
+  }
+
+  @Test public void shouldCreateConnectivityWithBuilder() {
+    // given
+    NetworkInfo.State state = NetworkInfo.State.CONNECTED;
+    NetworkInfo.DetailedState detailedState = NetworkInfo.DetailedState.CONNECTED;
+    int type = ConnectivityManager.TYPE_WIFI;
+    int subType = ConnectivityManager.TYPE_WIMAX;
+    String typeName = TYPE_NAME_WIFI;
+    String subTypeName = "test subType";
+    String reason = "no reason";
+    String extraInfo = "extra info";
+
+    // when
+    Connectivity connectivity = new Connectivity.Builder().state(state)
+        .detailedState(detailedState)
+        .type(type)
+        .subType(subType)
+        .available(true)
+        .failover(false)
+        .roaming(true)
+        .typeName(typeName)
+        .subTypeName(subTypeName)
+        .reason(reason)
+        .extraInfo(extraInfo)
+        .build();
+
+    // then
+    assertThat(connectivity.getState()).isEqualTo(state);
+    assertThat(connectivity.getDetailedState()).isEqualTo(detailedState);
+    assertThat(connectivity.getType()).isEqualTo(type);
+    assertThat(connectivity.getSubType()).isEqualTo(subType);
+    assertThat(connectivity.isAvailable()).isTrue();
+    assertThat(connectivity.isFailover()).isFalse();
+    assertThat(connectivity.isRoaming()).isTrue();
+    assertThat(connectivity.getTypeName()).isEqualTo(typeName);
+    assertThat(connectivity.getSubTypeName()).isEqualTo(subTypeName);
+    assertThat(connectivity.getReason()).isEqualTo(reason);
+    assertThat(connectivity.getExtraInfo()).isEqualTo(extraInfo);
   }
 }

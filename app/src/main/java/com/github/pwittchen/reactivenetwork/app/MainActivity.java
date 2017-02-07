@@ -52,8 +52,8 @@ public class MainActivity extends Activity {
               @Override public void call(final Connectivity connectivity) {
                 Log.d(TAG, connectivity.toString());
                 final NetworkInfo.State state = connectivity.getState();
-                final String name = connectivity.getName();
-                tvConnectivityStatus.setText(String.format("state: %s, name: %s", state, name));
+                final String name = connectivity.getTypeName();
+                tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
               }
             });
 
