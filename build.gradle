@@ -1,8 +1,23 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-ext.minSdkVersion = 9
-ext.compileSdkVersion = 23
-ext.buildToolsVersion = '23.0.3'
+ext {
+  minSdkVersion = 9
+  compileSdkVersion = 23
+  buildToolsVersion = '23.0.3'
+  gradleVersion = '2.2.1'
+  kotlinVersion = '1.0.6'
+}
+
+ext.deps = [rxjava            : 'io.reactivex:rxjava:1.2.6',
+            rxandroid         : 'io.reactivex:rxandroid:1.2.1',
+            supportannotations: 'com.android.support:support-annotations:23.0.1',
+            appcompatv7       : 'com.android.support:appcompat-v7:23.2.1',
+            junit             : 'junit:junit:4.10',
+            truth             : 'com.google.truth:truth:0.28',
+            robolectric       : 'org.robolectric:robolectric:3.1.2',
+            mockitocore       : 'org.mockito:mockito-core:1.10.19',
+            kotlinstdlib      : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+            kotlingradleplugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"]
 
 buildscript {
   repositories {
@@ -21,4 +36,8 @@ allprojects {
   repositories {
     jcenter()
   }
+}
+
+task clean(type: Delete) {
+  delete rootProject.buildDir
 }
