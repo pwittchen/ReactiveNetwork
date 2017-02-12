@@ -1,6 +1,21 @@
 CHANGELOG
 =========
 
+v. 0.8.0
+--------
+*12 Feb 2017*
+
+- renamed `DefaultInternetObservingStrategy` to `SocketInternetObservingStrategy` class
+- added `observeInternetConnectivity(InternetObservingStrategy)` method to `ReactiveNetwork` class
+- removed `DefaultInternetObservingStrategy#ON_CLOSE_SOCKET_ERROR_MSG` static field
+- added permission annotations
+- updated `Connectivity` class. Now it contains the following fields with getters: `state, detailedState, type, subType, available, failover, roaming, typeName, subTypeName, reason, extraInfo` (it's wrapped data of `NetworkInfo` class from Android SDK)
+- added `Builder` to the `Connectivity` class
+- created `ConnectivityPredicate` class
+- methods `Func1<Connectivity, Boolean> hasState(final NetworkInfo.State... states)` and `Func1<Connectivity, Boolean> hasType(final int... types)` were moved from `Connectivity` class to `ConnectivityPredicate` class
+- updated Gradle and Travis configuration
+- updated project dependencies
+
 v. 0.7.0
 --------
 *11 Dec 2016*
