@@ -263,7 +263,7 @@ Who is using this library?
 - [Qiscus SDK for Android](https://github.com/qiscus/qiscus-sdk-android)
 - [Internet Radio](https://play.google.com/store/apps/details?id=com.stc.radio.player)
 - [Tachiyomi](https://github.com/inorichi/tachiyomi)
-- [V2Ray-Android](https://github.com/V2Ray-Android/)
+- [Actinium - V2Ray client for Android](https://github.com/V2Ray-Android/Actinium)
 - and more...
 
 Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail to piotr@wittchen.biz.pl
