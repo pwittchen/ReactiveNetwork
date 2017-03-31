@@ -46,11 +46,11 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
     filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
     return Observable.create(new ObservableOnSubscribe<Connectivity>() {
-      @Override public void subscribe(final ObservableEmitter<Connectivity> subscriber)
+      @Override public void subscribe(final ObservableEmitter<Connectivity> emitter)
           throws Exception {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
           @Override public void onReceive(Context context, Intent intent) {
-            subscriber.onNext(Connectivity.create(context));
+            emitter.onNext(Connectivity.create(context));
           }
         };
 
@@ -89,7 +89,7 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
               try {
                 unsubscribe.run();
               } catch (Exception e) {
-                onError(LOG_TAG, e);
+                onError("Could not unregister receiver in UI Thread", e);
               }
               inner.dispose();
             }

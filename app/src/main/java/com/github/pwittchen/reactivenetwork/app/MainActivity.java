@@ -47,8 +47,9 @@ public class MainActivity extends Activity {
     networkConnectivitySubscription =
         ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Connectivity>() {
-          @Override public void accept(final Connectivity connectivity) {
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<Connectivity>() {
+              @Override public void accept(final Connectivity connectivity) {
                 Log.d(TAG, connectivity.toString());
                 final NetworkInfo.State state = connectivity.getState();
                 final String name = connectivity.getTypeName();
@@ -58,7 +59,8 @@ public class MainActivity extends Activity {
 
     internetConnectivitySubscription = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Boolean>() {
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<Boolean>() {
           @Override public void accept(Boolean isConnectedToInternet) {
             tvInternetStatus.setText(isConnectedToInternet.toString());
           }

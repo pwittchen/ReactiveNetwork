@@ -58,7 +58,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
 
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Function<Long, Boolean>() {
-      @Override public Boolean apply(@NonNull Long aLong) throws Exception {
+      @Override public Boolean apply(@NonNull Long tick) throws Exception {
         return isConnected(host, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();
