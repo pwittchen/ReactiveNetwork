@@ -4,14 +4,14 @@ ext {
   minSdkVersion = 9
   compileSdkVersion = 25
   buildToolsVersion = '25.0.2'
-  gradleVersion = '2.2.1'
+  gradleVersion = '2.3.0'
   kotlinVersion = '1.1.0'
 }
 
-ext.deps = [rxjava            : 'io.reactivex:rxjava:1.2.7',
-            rxandroid         : 'io.reactivex:rxandroid:1.2.1',
-            supportannotations: 'com.android.support:support-annotations:25.2.0',
-            appcompatv7       : 'com.android.support:appcompat-v7:25.2.0',
+ext.deps = [rxjava            : 'io.reactivex.rxjava2:rxjava:2.0.7',
+            rxandroid         : 'io.reactivex.rxjava2:rxandroid:2.0.1',
+            supportannotations: 'com.android.support:support-annotations:25.3.0',
+            appcompatv7       : 'com.android.support:appcompat-v7:25.3.0',
             junit             : 'junit:junit:4.12',
             truth             : 'com.google.truth:truth:0.32',
             robolectric       : 'org.robolectric:robolectric:3.1.2',

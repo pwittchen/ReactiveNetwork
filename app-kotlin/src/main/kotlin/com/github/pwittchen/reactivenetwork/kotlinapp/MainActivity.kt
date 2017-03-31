@@ -19,14 +19,14 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
 class MainActivity : Activity() {
-  private var connectivitySub: Subscription? = null
-  private var internetSub: Subscription? = null
+  private var connectivitySub: Disposable? = null
+  private var internetSub: Disposable? = null
 
   companion object {
     private val TAG = "ReactiveNetwork"
@@ -64,9 +64,9 @@ class MainActivity : Activity() {
     safelyUnsubscribe(internetSub)
   }
 
-  private fun safelyUnsubscribe(subscription: Subscription?) {
-    if (subscription != null && !subscription.isUnsubscribed) {
-      subscription.unsubscribe()
+  private fun safelyUnsubscribe(subscription: Disposable?) {
+    if (subscription != null && !subscription.isDisposed) {
+      subscription.dispose()
     }
   }
 }

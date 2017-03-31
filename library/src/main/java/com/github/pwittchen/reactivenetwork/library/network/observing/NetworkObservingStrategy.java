@@ -17,7 +17,7 @@ package com.github.pwittchen.reactivenetwork.library.network.observing;
 
 import android.content.Context;
 import com.github.pwittchen.reactivenetwork.library.Connectivity;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Network observing strategy allows to implement different strategies for monitoring network

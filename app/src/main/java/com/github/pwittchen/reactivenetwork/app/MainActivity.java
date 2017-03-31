@@ -22,17 +22,17 @@ import android.util.Log;
 import android.widget.TextView;
 import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
   private static final String TAG = "ReactiveNetwork";
   private TextView tvConnectivityStatus;
   private TextView tvInternetStatus;
-  private Subscription networkConnectivitySubscription;
-  private Subscription internetConnectivitySubscription;
+  private Disposable networkConnectivitySubscription;
+  private Disposable internetConnectivitySubscription;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -47,9 +47,8 @@ public class MainActivity extends Activity {
     networkConnectivitySubscription =
         ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<Connectivity>() {
-              @Override public void call(final Connectivity connectivity) {
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Connectivity>() {
+          @Override public void accept(final Connectivity connectivity) {
                 Log.d(TAG, connectivity.toString());
                 final NetworkInfo.State state = connectivity.getState();
                 final String name = connectivity.getTypeName();
@@ -59,9 +58,8 @@ public class MainActivity extends Activity {
 
     internetConnectivitySubscription = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<Boolean>() {
-          @Override public void call(Boolean isConnectedToInternet) {
+        .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Boolean>() {
+          @Override public void accept(Boolean isConnectedToInternet) {
             tvInternetStatus.setText(isConnectedToInternet.toString());
           }
         });
@@ -72,10 +70,10 @@ public class MainActivity extends Activity {
     safelyUnsubscribe(networkConnectivitySubscription, internetConnectivitySubscription);
   }
 
-  private void safelyUnsubscribe(Subscription... subscriptions) {
-    for (Subscription subscription : subscriptions) {
-      if (subscription != null && !subscription.isUnsubscribed()) {
-        subscription.unsubscribe();
+  private void safelyUnsubscribe(Disposable... subscriptions) {
+    for (Disposable subscription : subscriptions) {
+      if (subscription != null && !subscription.isDisposed()) {
+        subscription.dispose();
       }
     }
   }

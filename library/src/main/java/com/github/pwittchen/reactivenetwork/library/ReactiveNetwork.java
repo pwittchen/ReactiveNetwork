@@ -26,7 +26,7 @@ import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObs
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.MarshmallowNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * ReactiveNetwork is an Android library

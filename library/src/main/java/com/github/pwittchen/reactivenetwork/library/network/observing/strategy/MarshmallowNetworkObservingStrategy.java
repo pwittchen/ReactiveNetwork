@@ -28,9 +28,10 @@ import android.os.PowerManager;
 import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
-import rx.Observable;
-import rx.functions.Action0;
-import rx.subjects.PublishSubject;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Observable;
+import io.reactivex.functions.Action;
+import io.reactivex.subjects.PublishSubject;
 
 import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
 
@@ -58,12 +59,12 @@ import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_T
 
     manager.registerNetworkCallback(request, networkCallback);
 
-    return connectivitySubject.asObservable().onBackpressureLatest().doOnUnsubscribe(new Action0() {
-      @Override public void call() {
+    return connectivitySubject.toFlowable(BackpressureStrategy.LATEST).doOnCancel(new Action() {
+      @Override public void run() {
         tryToUnregisterCallback(manager);
         tryToUnregisterReceiver(context);
       }
-    }).startWith(Connectivity.create(context)).distinctUntilChanged();
+    }).startWith(Connectivity.create(context)).distinctUntilChanged().toObservable();
   }
 
   private void registerIdleReceiver(final Context context) {

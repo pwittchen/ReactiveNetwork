@@ -18,11 +18,11 @@ package com.github.pwittchen.reactivenetwork.library;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import io.reactivex.functions.Function;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import rx.functions.Func1;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -31,7 +31,7 @@ public class ConnectivityTest {
   private static final String TYPE_NAME_WIFI = "WIFI";
   private static final String TYPE_NAME_MOBILE = "MOBILE";
 
-  @Test public void statusShouldBeEqualToGivenValue() {
+  @Test public void statusShouldBeEqualToGivenValue() throws Exception {
     // given
     final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
         .type(ConnectivityManager.TYPE_WIFI)
@@ -39,15 +39,15 @@ public class ConnectivityTest {
         .build();
 
     // when
-    final Func1<Connectivity, Boolean> equalTo =
+    final Function<Connectivity, Boolean> equalTo =
         ConnectivityPredicate.hasState(connectivity.getState());
-    final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
   }
 
-  @Test public void statusShouldBeEqualToOneOfGivenMultipleValues() {
+  @Test public void statusShouldBeEqualToOneOfGivenMultipleValues() throws Exception {
     // given
     final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTING)
         .type(ConnectivityManager.TYPE_WIFI)
@@ -58,14 +58,14 @@ public class ConnectivityTest {
         { NetworkInfo.State.CONNECTED, NetworkInfo.State.CONNECTING };
 
     // when
-    final Func1<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasState(states);
-    final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
+    final Function<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasState(states);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
   }
 
-  @Test public void typeShouldBeEqualToGivenValue() {
+  @Test public void typeShouldBeEqualToGivenValue() throws Exception {
     // given
     final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
         .type(ConnectivityManager.TYPE_WIFI)
@@ -73,15 +73,15 @@ public class ConnectivityTest {
         .build();
 
     // when
-    final Func1<Connectivity, Boolean> equalTo =
+    final Function<Connectivity, Boolean> equalTo =
         ConnectivityPredicate.hasType(connectivity.getType());
-    final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
   }
 
-  @Test public void typeShouldBeEqualToOneOfGivenMultipleValues() {
+  @Test public void typeShouldBeEqualToOneOfGivenMultipleValues() throws Exception {
     // given
     final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTING)
         .type(ConnectivityManager.TYPE_MOBILE)
@@ -91,8 +91,8 @@ public class ConnectivityTest {
     final int givenTypes[] = { ConnectivityManager.TYPE_WIFI, ConnectivityManager.TYPE_MOBILE };
 
     // when
-    final Func1<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasType(givenTypes);
-    final Boolean shouldBeEqualToGivenStatus = equalTo.call(connectivity);
+    final Function<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasType(givenTypes);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();

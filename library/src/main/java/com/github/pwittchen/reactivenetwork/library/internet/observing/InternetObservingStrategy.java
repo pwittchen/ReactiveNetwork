@@ -16,7 +16,7 @@
 package com.github.pwittchen.reactivenetwork.library.internet.observing;
 
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Internet observing strategy allows to implement different strategies for monitoring connectivity

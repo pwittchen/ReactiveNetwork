@@ -24,9 +24,10 @@ import android.net.NetworkRequest;
 import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action0;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.functions.Action;
 
 import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
 
@@ -41,14 +42,14 @@ import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_T
     final String service = Context.CONNECTIVITY_SERVICE;
     final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
 
-    return Observable.create(new Observable.OnSubscribe<Connectivity>() {
-      @Override public void call(final Subscriber<? super Connectivity> subscriber) {
+    return Observable.create(new ObservableOnSubscribe<Connectivity>() {
+      @Override public void subscribe(ObservableEmitter<Connectivity> subscriber) throws Exception {
         networkCallback = createNetworkCallback(subscriber, context);
         final NetworkRequest networkRequest = new NetworkRequest.Builder().build();
         manager.registerNetworkCallback(networkRequest, networkCallback);
       }
-    }).doOnUnsubscribe(new Action0() {
-      @Override public void call() {
+    }).doOnDispose(new Action() {
+      @Override public void run() {
         tryToUnregisterCallback(manager);
       }
     }).startWith(Connectivity.create(context)).distinctUntilChanged();
@@ -66,7 +67,7 @@ import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_T
     Log.e(LOG_TAG, message, exception);
   }
 
-  private NetworkCallback createNetworkCallback(final Subscriber<? super Connectivity> subscriber,
+  private NetworkCallback createNetworkCallback(final ObservableEmitter<Connectivity> subscriber,
       final Context context) {
     return new ConnectivityManager.NetworkCallback() {
       @Override public void onAvailable(Network network) {

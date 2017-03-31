@@ -18,13 +18,14 @@ package com.github.pwittchen.reactivenetwork.library.internet.observing.strategy
 import com.github.pwittchen.reactivenetwork.library.Preconditions;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
-import rx.Observable;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Default strategy for monitoring connectivity with the Internet
@@ -56,8 +57,8 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
     Preconditions.checkNotNull(errorHandler, "errorHandler is null");
 
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
-        Schedulers.io()).map(new Func1<Long, Boolean>() {
-      @Override public Boolean call(Long tick) {
+        Schedulers.io()).map(new Function<Long, Boolean>() {
+      @Override public Boolean apply(@NonNull Long aLong) throws Exception {
         return isConnected(host, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();

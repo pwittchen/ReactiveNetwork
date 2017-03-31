@@ -24,13 +24,14 @@ import android.os.Looper;
 import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
-import rx.Observable;
-import rx.Scheduler;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 
 import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
 
@@ -44,8 +45,9 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
     final IntentFilter filter = new IntentFilter();
     filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
-    return Observable.create(new Observable.OnSubscribe<Connectivity>() {
-      @Override public void call(final Subscriber<? super Connectivity> subscriber) {
+    return Observable.create(new ObservableOnSubscribe<Connectivity>() {
+      @Override public void subscribe(final ObservableEmitter<Connectivity> subscriber)
+          throws Exception {
         final BroadcastReceiver receiver = new BroadcastReceiver() {
           @Override public void onReceive(Context context, Intent intent) {
             subscriber.onNext(Connectivity.create(context));
@@ -54,11 +56,11 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
 
         context.registerReceiver(receiver, filter);
 
-        subscriber.add(unsubscribeInUiThread(new Action0() {
-          @Override public void call() {
+        unsubscribeInUiThread(new Action() {
+          @Override public void run() {
             tryToUnregisterReceiver(context, receiver);
           }
-        }));
+        });
       }
     }).defaultIfEmpty(Connectivity.create());
   }
@@ -75,17 +77,21 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
     Log.e(LOG_TAG, message, exception);
   }
 
-  private Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
-    return Subscriptions.create(new Action0() {
-      @Override public void call() {
+  private Disposable unsubscribeInUiThread(final Action unsubscribe) {
+    return Disposables.fromAction(new Action() {
+      @Override public void run() throws Exception {
         if (Looper.getMainLooper() == Looper.myLooper()) {
-          unsubscribe.call();
+          unsubscribe.run();
         } else {
           final Scheduler.Worker inner = AndroidSchedulers.mainThread().createWorker();
-          inner.schedule(new Action0() {
-            @Override public void call() {
-              unsubscribe.call();
-              inner.unsubscribe();
+          inner.schedule(new Runnable() {
+            @Override public void run() {
+              try {
+                unsubscribe.run();
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+              inner.dispose();
             }
           });
         }
