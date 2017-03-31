@@ -89,7 +89,7 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
               try {
                 unsubscribe.run();
               } catch (Exception e) {
-                e.printStackTrace();
+                onError(LOG_TAG, e);
               }
               inner.dispose();
             }
