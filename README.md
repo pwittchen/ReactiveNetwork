@@ -4,9 +4,9 @@
 
 ReactiveNetwork is an Android library listening **network connection state** and **Internet connectivity** with RxJava Observables. It's a successor of [Network Events](https://github.com/pwittchen/NetworkEvents) library rewritten with Reactive Programming approach. Library supports both new and legacy network monitoring strategies.
 
-| Current Branch | Branch  | Artifact Id | Build Status  | Test Coverage | Maven Central |
-|:--------------:|:-------:|:-----------:|:-------------:|:-------------:|:-------------:|
-| [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=RxJava1.x)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat) |
+| Current Branch | Branch  | Artifact Id | Build Status  | Coverage | Maven Central |
+|:--------------:|:-------:|:-----------:|:-------------:|:--------:|:-------------:|
+| | [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=RxJava1.x)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat) |
 | :ballot_box_with_check: | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=RxJava2.x)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat) |
 
 This is **RxJava2.x** branch. To see documentation for RxJava1.x, switch to [RxJava1.x](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) branch.
