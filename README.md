@@ -56,8 +56,8 @@ ReactiveNetwork.observeNetworkConnectivity(context)
     .subscribeOn(Schedulers.io())
     ... // anything else what you can do with RxJava
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Action1<Connectivity>() {
-      @Override public void call(Connectivity connectivity) {
+    .subscribe(new Consumer<Connectivity>() {
+      @Override public void accept(final Connectivity connectivity) {
         // do something with connectivity
         // you can call connectivity.getState();
         // connectivity.getType(); or connectivity.toString();
@@ -75,8 +75,8 @@ ReactiveNetwork.observeNetworkConnectivity(context)
     .filter(ConnectivityPredicate.hasState(NetworkInfo.State.CONNECTED))
     .filter(ConnectivityPredicate.hasType(ConnectivityManager.TYPE_WIFI))
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Action1<Connectivity>() {
-      @Override public void call(Connectivity connectivity) {
+    .subscribe(new Consumer<Connectivity>() {
+      @Override public void accept(final Connectivity connectivity) {
         // do something
       }
     });
@@ -124,8 +124,8 @@ We can observe connectivity with the Internet in the following way:
 ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<Boolean>() {
-          @Override public void call(Boolean isConnectedToInternet) {
+        .subscribe(new Consumer<Connectivity>() {
+          @Override public void accept(Boolean isConnectedToInternet) {
             // do something with isConnectedToInternet value
           }
         });
@@ -205,23 +205,7 @@ If you want to know, how to use this library with Kotlin, check `app-kotlin` dir
 Download
 --------
 
-You can depend on the library through Maven:
-
-```xml
-<dependency>
-    <groupId>com.github.pwittchen</groupId>
-    <artifactId>reactivenetwork</artifactId>
-    <version>0.8.0</version>
-</dependency>
-```
-
-or through Gradle:
-
-```groovy
-dependencies {
-  compile 'com.github.pwittchen:reactivenetwork:0.8.0'
-}
-```
+This section will be updated soon. Please, stay tuned.
 
 Tests
 -----
