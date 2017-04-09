@@ -24,13 +24,13 @@ import com.github.pwittchen.reactivenetwork.library.internet.observing.error.Err
 import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import rx.Observable;
-import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -126,9 +126,8 @@ public class ReactiveNetworkTest {
 
     final Application context = RuntimeEnvironment.application;
 
-    ReactiveNetwork.observeNetworkConnectivity(context)
-        .subscribe(new Action1<Connectivity>() {
-          @Override public void call(Connectivity connectivity) {
+    ReactiveNetwork.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
+      @Override public void accept(Connectivity connectivity) {
             assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
           }
         });

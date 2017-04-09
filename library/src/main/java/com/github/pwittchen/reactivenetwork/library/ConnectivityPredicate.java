@@ -16,7 +16,7 @@
 package com.github.pwittchen.reactivenetwork.library;
 
 import android.net.NetworkInfo;
-import rx.functions.Func1;
+import io.reactivex.functions.Function;
 
 /**
  * ConnectivityPredicate is a class containing predefined methods, which can be used for filtering
@@ -33,9 +33,9 @@ public class ConnectivityPredicate {
    * @param states NetworkInfo.State, which can have one or more states
    * @return true if at least one given state occurred
    */
-  public static Func1<Connectivity, Boolean> hasState(final NetworkInfo.State... states) {
-    return new Func1<Connectivity, Boolean>() {
-      @Override public Boolean call(Connectivity connectivity) {
+  public static Function<Connectivity, Boolean> hasState(final NetworkInfo.State... states) {
+    return new Function<Connectivity, Boolean>() {
+      @Override public Boolean apply(Connectivity connectivity) {
         for (NetworkInfo.State state : states) {
           if (connectivity.getState() == state) {
             return true;
@@ -52,9 +52,9 @@ public class ConnectivityPredicate {
    * @param types int, which can have one or more types
    * @return true if at least one given type occurred
    */
-  public static Func1<Connectivity, Boolean> hasType(final int... types) {
-    return new Func1<Connectivity, Boolean>() {
-      @Override public Boolean call(Connectivity connectivity) {
+  public static Function<Connectivity, Boolean> hasType(final int... types) {
+    return new Function<Connectivity, Boolean>() {
+      @Override public Boolean apply(Connectivity connectivity) {
         for (int type : types) {
           if (connectivity.getType() == type) {
             return true;

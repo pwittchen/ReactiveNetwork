@@ -48,8 +48,8 @@ jacocoAndroidUnitTestReport {
 }
 
 dependencies {
-  compile deps.rxjava
-  compile deps.rxandroid
+  compile deps.rxjava2
+  compile deps.rxandroid2
   compile deps.supportannotations
 
   testCompile deps.junit

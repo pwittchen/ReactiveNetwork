@@ -19,12 +19,12 @@ import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
+import io.reactivex.functions.Consumer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -49,8 +49,8 @@ public class NetworkObservingStrategyTest {
 
   private void assertThatIsConnected(NetworkObservingStrategy strategy) {
     strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
-        .subscribe(new Action1<Connectivity>() {
-          @Override public void call(Connectivity connectivity) {
+        .subscribe(new Consumer<Connectivity>() {
+          @Override public void accept(Connectivity connectivity) {
             // then
             assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
           }

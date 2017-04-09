@@ -19,6 +19,10 @@ import android.app.Application;
 import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +32,6 @@ import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.times;
@@ -48,9 +49,8 @@ public class LollipopNetworkObservingStrategyTest {
 
     // when
     strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
-        .subscribe(new Action1<Connectivity>() {
-          @Override public void call(Connectivity connectivity) {
-
+        .subscribe(new Consumer<Connectivity>() {
+          @Override public void accept(@NonNull Connectivity connectivity) throws Exception {
             // then
             assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
           }
@@ -64,11 +64,11 @@ public class LollipopNetworkObservingStrategyTest {
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
 
     // when
-    final Subscription subscription = observable.subscribe();
-    subscription.unsubscribe();
+    final Disposable disposable = observable.subscribe();
+    disposable.dispose();
 
     // then
-    assertThat(subscription.isUnsubscribed()).isTrue();
+    assertThat(disposable.isDisposed()).isTrue();
   }
 
   @Test public void shouldCallOnError() {

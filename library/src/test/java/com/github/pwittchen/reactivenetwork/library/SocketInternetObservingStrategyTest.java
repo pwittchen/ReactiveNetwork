@@ -15,8 +15,9 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
+import io.reactivex.Observable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -29,7 +30,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import rx.Observable;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.doThrow;
@@ -59,7 +59,7 @@ import static org.mockito.Mockito.when;
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, HOST, PORT,
             TIMEOUT_IN_MS, errorHandler);
 
-    boolean isConnected = observable.toBlocking().first();
+    boolean isConnected = observable.blockingFirst();
 
     // then
     assertThat(isConnected).isTrue();
@@ -74,7 +74,7 @@ import static org.mockito.Mockito.when;
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, HOST, PORT,
             TIMEOUT_IN_MS, errorHandler);
 
-    boolean isConnected = observable.toBlocking().first();
+    boolean isConnected = observable.blockingFirst();
 
     // then
     assertThat(isConnected).isFalse();
