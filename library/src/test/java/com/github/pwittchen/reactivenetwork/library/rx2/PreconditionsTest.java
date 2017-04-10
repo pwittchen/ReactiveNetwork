@@ -16,7 +16,6 @@
 package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import com.github.pwittchen.reactivenetwork.library.BuildConfig;
-import com.github.pwittchen.reactivenetwork.library.rx2.Preconditions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
