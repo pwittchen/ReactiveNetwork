@@ -1,6 +1,6 @@
-com.github.pwittchen.reactivenetwork.library
-com.github.pwittchen.reactivenetwork.library.internet.observing
-com.github.pwittchen.reactivenetwork.library.internet.observing.error
-com.github.pwittchen.reactivenetwork.library.internet.observing.strategy
-com.github.pwittchen.reactivenetwork.library.network.observing
-com.github.pwittchen.reactivenetwork.library.network.observing.strategy
+com.github.pwittchen.reactivenetwork.library.rx2
+com.github.pwittchen.reactivenetwork.library.rx2.internet.observing
+com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error
+com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy
+com.github.pwittchen.reactivenetwork.library.rx2.network.observing
+com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy
