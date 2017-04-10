@@ -34,6 +34,7 @@ Contents
 - [Static code analysis](#static-code-analysis)
 - [Who is using this library?](#who-is-using-this-library)
 - [Getting help](#getting-help)
+  - [Tutorials](#tutorials)
 - [Changelog](#changelog)
 - [Releasing](#releasing)
 - [License](#license)
@@ -260,6 +261,10 @@ You can do the following things:
 - [Create new GitHub issue](https://github.com/pwittchen/ReactiveNetwork/issues/new)
 
 Don't worry. Someone should help you with solving your problems.
+
+### Tutorials
+
+If you speak Spanish (Español), check out this tutorial: [ReactiveNetwork - Como funciona y como se integra en una app](https://www.youtube.com/watch?v=H7xGmQaKPsI) made by [Video Tutorials Android](https://www.youtube.com/channel/UC2q5P9JVoA6N8mE622gRP7w).
 
 Changelog
 ---------
