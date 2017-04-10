@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.app.Application;
 import android.net.NetworkInfo;
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.MarshmallowNetworkObservingStrategy;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -38,14 +39,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class PreLollipopNetworkObservingStrategyTest {
+public class MarshmallowNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+  @Spy private NetworkObservingStrategy strategy = new MarshmallowNetworkObservingStrategy();
 
   @Test public void shouldObserveConnectivity() {
     // given
-    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new MarshmallowNetworkObservingStrategy();
 
     // when
     strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
@@ -60,12 +61,12 @@ public class PreLollipopNetworkObservingStrategyTest {
 
   @Test public void shouldStopObservingConnectivity() {
     // given
-    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new MarshmallowNetworkObservingStrategy();
     final Application context = RuntimeEnvironment.application;
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
 
     // when
-    Disposable disposable = observable.subscribe();
+    final Disposable disposable = observable.subscribe();
     disposable.dispose();
 
     // then

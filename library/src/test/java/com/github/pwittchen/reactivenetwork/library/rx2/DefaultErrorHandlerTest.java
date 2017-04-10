@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.rx2;
 
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
 import org.junit.Rule;
 import org.junit.Test;

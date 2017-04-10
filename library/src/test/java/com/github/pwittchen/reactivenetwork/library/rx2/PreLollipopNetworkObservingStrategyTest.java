@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.app.Application;
 import android.net.NetworkInfo;
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import org.junit.Rule;
@@ -39,19 +39,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class LollipopNetworkObservingStrategyTest {
+public class PreLollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+  @Spy private NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
 
   @Test public void shouldObserveConnectivity() {
     // given
-    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
 
     // when
     strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
         .subscribe(new Consumer<Connectivity>() {
-          @Override public void accept(@NonNull Connectivity connectivity) throws Exception {
+          @Override public void accept(Connectivity connectivity) {
+
             // then
             assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
           }
@@ -60,12 +61,12 @@ public class LollipopNetworkObservingStrategyTest {
 
   @Test public void shouldStopObservingConnectivity() {
     // given
-    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
     final Application context = RuntimeEnvironment.application;
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
 
     // when
-    final Disposable disposable = observable.subscribe();
+    Disposable disposable = observable.subscribe();
     disposable.dispose();
 
     // then
