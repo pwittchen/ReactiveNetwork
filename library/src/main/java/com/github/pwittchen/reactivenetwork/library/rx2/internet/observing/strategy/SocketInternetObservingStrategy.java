@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library.internet.observing.strategy;
+package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy;
 
-import com.github.pwittchen.reactivenetwork.library.Preconditions;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.rx2.Preconditions;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;

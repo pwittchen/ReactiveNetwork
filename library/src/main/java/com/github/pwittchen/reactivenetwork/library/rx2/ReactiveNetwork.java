@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.Manifest;
 import android.content.Context;
 import android.support.annotation.RequiresPermission;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.MarshmallowNetworkObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.MarshmallowNetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
 import io.reactivex.Observable;
 
 /**

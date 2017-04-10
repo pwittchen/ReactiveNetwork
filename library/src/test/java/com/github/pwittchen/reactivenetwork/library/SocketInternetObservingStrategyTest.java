@@ -15,8 +15,8 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
 import io.reactivex.Observable;
 import java.io.IOException;
 import java.net.InetSocketAddress;

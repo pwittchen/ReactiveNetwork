@@ -15,7 +15,7 @@
  */
 package com.github.pwittchen.reactivenetwork.library;
 
-import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -18,7 +18,7 @@ package com.github.pwittchen.reactivenetwork.kotlinapp
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

@@ -13,14 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library.internet.observing.error;
+package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error;
 
-import android.util.Log;
-
-import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
-
-public class DefaultErrorHandler implements ErrorHandler {
-  @Override public void handleError(final Exception exception, final String message) {
-    Log.e(LOG_TAG, message, exception);
-  }
+public interface ErrorHandler {
+  void handleError(final Exception exception, final String message);
 }

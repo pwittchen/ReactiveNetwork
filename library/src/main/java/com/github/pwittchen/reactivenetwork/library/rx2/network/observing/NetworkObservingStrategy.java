@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library.network.observing;
+package com.github.pwittchen.reactivenetwork.library.rx2.network.observing;
 
 import android.content.Context;
-import com.github.pwittchen.reactivenetwork.library.Connectivity;
+import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import io.reactivex.Observable;
 
 /**

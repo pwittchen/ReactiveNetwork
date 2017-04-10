@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library.network.observing.strategy;
+package com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -26,14 +26,14 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.os.PowerManager;
 import android.util.Log;
-import com.github.pwittchen.reactivenetwork.library.Connectivity;
-import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
+import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.subjects.PublishSubject;
 
-import static com.github.pwittchen.reactivenetwork.library.ReactiveNetwork.LOG_TAG;
+import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.LOG_TAG;
 
 /**
  * Network observing strategy for devices with Android Marshmallow (API 23) or higher.
