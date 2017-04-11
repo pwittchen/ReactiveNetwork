@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+v. 0.9.0
+--------
+*11 Apr 2017*
+
+- migrated library to RxJava2.x on RxJava2.x branch and released it as `reactivenetwork-rx2` artifact
+- updated dependencies
+- updated documentation
+- updated sample apps
+
 v. 0.8.0
 --------
 *12 Feb 2017*
