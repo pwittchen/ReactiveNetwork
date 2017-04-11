@@ -204,7 +204,23 @@ If you want to know, how to use this library with Kotlin, check `app-kotlin` dir
 Download
 --------
 
-This section will be updated soon. Please, stay tuned.
+You can depend on the library through Maven:
+
+```xml
+<dependency>
+    <groupId>com.github.pwittchen</groupId>
+    <artifactId>reactivenetwork-rx2</artifactId>
+    <version>0.9.0</version>
+</dependency>
+```
+
+or through Gradle:
+
+```groovy
+dependencies {
+  compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.0'
+}
+```
 
 Tests
 -----
