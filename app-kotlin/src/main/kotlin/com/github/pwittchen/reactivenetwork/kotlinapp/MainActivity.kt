@@ -22,11 +22,12 @@ import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.connectivity_status
+import kotlinx.android.synthetic.main.activity_main.internet_status
 
 class MainActivity : Activity() {
-  private var connectivitySub: Disposable? = null
-  private var internetSub: Disposable? = null
+  private var connectivityDisposable: Disposable? = null
+  private var internetDisposable: Disposable? = null
 
   companion object {
     private val TAG = "ReactiveNetwork"
@@ -40,7 +41,7 @@ class MainActivity : Activity() {
   override fun onResume() {
     super.onResume()
 
-    connectivitySub = ReactiveNetwork.observeNetworkConnectivity(applicationContext)
+    connectivityDisposable = ReactiveNetwork.observeNetworkConnectivity(applicationContext)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { connectivity ->
@@ -50,7 +51,7 @@ class MainActivity : Activity() {
           connectivity_status.text = String.format("state: %s, typeName: %s", state, name)
         }
 
-    internetSub = ReactiveNetwork.observeInternetConnectivity()
+    internetDisposable = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { isConnectedToInternet ->
@@ -60,13 +61,13 @@ class MainActivity : Activity() {
 
   override fun onPause() {
     super.onPause()
-    safelyUnsubscribe(connectivitySub)
-    safelyUnsubscribe(internetSub)
+    safelyDispose(connectivityDisposable)
+    safelyDispose(internetDisposable)
   }
 
-  private fun safelyUnsubscribe(subscription: Disposable?) {
-    if (subscription != null && !subscription.isDisposed) {
-      subscription.dispose()
+  private fun safelyDispose(disposable: Disposable?) {
+    if (disposable != null && !disposable.isDisposed) {
+      disposable.dispose()
     }
   }
 }

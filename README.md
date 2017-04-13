@@ -130,11 +130,11 @@ ReactiveNetwork.observeInternetConnectivity()
         });
 ```
 
-An `Observable` will return `true` to the subscription if device is connected to the Internet and `false` if not.
+An `Observable` will return `true` to the subscription (disposable) if device is connected to the Internet and `false` if not.
 
 Internet connectivity will be checked _as soon as possible_.
 
-**Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it. Optionally, you can unsubscribe subcription right after you get notification that Internet is available and do the work you want in order to decrease network calls.
+**Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it. Optionally, you can dispose subscription (disposable) right after you get notification that Internet is available and do the work you want in order to decrease network calls.
 
 #### Customization of observing Internet connectivity
 

@@ -31,8 +31,8 @@ public class MainActivity extends Activity {
   private static final String TAG = "ReactiveNetwork";
   private TextView tvConnectivityStatus;
   private TextView tvInternetStatus;
-  private Disposable networkConnectivitySubscription;
-  private Disposable internetConnectivitySubscription;
+  private Disposable networkDisposable;
+  private Disposable internetDisposable;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -44,20 +44,19 @@ public class MainActivity extends Activity {
   @Override protected void onResume() {
     super.onResume();
 
-    networkConnectivitySubscription =
-        ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<Connectivity>() {
-              @Override public void accept(final Connectivity connectivity) {
-                Log.d(TAG, connectivity.toString());
-                final NetworkInfo.State state = connectivity.getState();
-                final String name = connectivity.getTypeName();
-                tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
-              }
-            });
+    networkDisposable = ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<Connectivity>() {
+          @Override public void accept(final Connectivity connectivity) {
+            Log.d(TAG, connectivity.toString());
+            final NetworkInfo.State state = connectivity.getState();
+            final String name = connectivity.getTypeName();
+            tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
+          }
+        });
 
-    internetConnectivitySubscription = ReactiveNetwork.observeInternetConnectivity()
+    internetDisposable = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Consumer<Boolean>() {
@@ -69,11 +68,11 @@ public class MainActivity extends Activity {
 
   @Override protected void onPause() {
     super.onPause();
-    safelyUnsubscribe(networkConnectivitySubscription, internetConnectivitySubscription);
+    safelyDispose(networkDisposable, internetDisposable);
   }
 
-  private void safelyUnsubscribe(Disposable... subscriptions) {
-    for (Disposable subscription : subscriptions) {
+  private void safelyDispose(Disposable... disposables) {
+    for (Disposable subscription : disposables) {
       if (subscription != null && !subscription.isDisposed()) {
         subscription.dispose();
       }
