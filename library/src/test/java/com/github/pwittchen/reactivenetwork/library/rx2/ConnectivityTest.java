@@ -18,12 +18,15 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
 import com.github.pwittchen.reactivenetwork.library.BuildConfig;
-import io.reactivex.functions.Function;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import io.reactivex.functions.Predicate;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -40,9 +43,9 @@ public class ConnectivityTest {
         .build();
 
     // when
-    final Function<Connectivity, Boolean> equalTo =
+    final Predicate<Connectivity> equalTo =
         ConnectivityPredicate.hasState(connectivity.getState());
-    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.test(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
@@ -59,8 +62,8 @@ public class ConnectivityTest {
         { NetworkInfo.State.CONNECTED, NetworkInfo.State.CONNECTING };
 
     // when
-    final Function<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasState(states);
-    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
+    final Predicate<Connectivity> equalTo = ConnectivityPredicate.hasState(states);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.test(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
@@ -74,9 +77,9 @@ public class ConnectivityTest {
         .build();
 
     // when
-    final Function<Connectivity, Boolean> equalTo =
+    final Predicate<Connectivity> equalTo =
         ConnectivityPredicate.hasType(connectivity.getType());
-    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.test(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
@@ -92,8 +95,8 @@ public class ConnectivityTest {
     final int givenTypes[] = { ConnectivityManager.TYPE_WIFI, ConnectivityManager.TYPE_MOBILE };
 
     // when
-    final Function<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasType(givenTypes);
-    final Boolean shouldBeEqualToGivenStatus = equalTo.apply(connectivity);
+    final Predicate<Connectivity> equalTo = ConnectivityPredicate.hasType(givenTypes);
+    final Boolean shouldBeEqualToGivenStatus = equalTo.test(connectivity);
 
     // then
     assertThat(shouldBeEqualToGivenStatus).isTrue();
