@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+v. 0.9.1
+--------
+*30 Apr 2017*
+
+- updated `ConnectivityPredicate` and replaced `io.reactivex.functions.Function` with `io.reactivex.functions.Predicate` to make it compatible with RxJava2 filtering methods #168 
+- bumped RxJava2.x version to 2.1.0
+
 v. 0.9.0
 --------
 *11 Apr 2017*
