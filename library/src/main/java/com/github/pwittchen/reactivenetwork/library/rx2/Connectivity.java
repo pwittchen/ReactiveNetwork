@@ -18,6 +18,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 
 /**
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.
@@ -39,7 +40,7 @@ public class Connectivity {
     return new Builder().build();
   }
 
-  public static Connectivity create(Context context) {
+  public static Connectivity create(@NonNull Context context) {
     Preconditions.checkNotNull(context, "context == null");
     final NetworkInfo networkInfo = getNetworkInfo(context);
     return (networkInfo == null) ? create() : create(networkInfo);
