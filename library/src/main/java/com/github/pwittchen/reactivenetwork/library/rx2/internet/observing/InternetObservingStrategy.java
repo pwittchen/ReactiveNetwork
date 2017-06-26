@@ -17,6 +17,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing;
 
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Internet observing strategy allows to implement different strategies for monitoring connectivity
@@ -24,7 +25,8 @@ import io.reactivex.Observable;
  */
 public interface InternetObservingStrategy {
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
+   * Observes connectivity with the Internet by opening socket connection with remote host in a
+   * given interval infinitely
    *
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
    * check
@@ -39,4 +41,17 @@ public interface InternetObservingStrategy {
   Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler);
+
+  /**
+   * Observes connectivity with the Internet by opening socket connection with remote host once
+   *
+   * @param host for checking Internet connectivity
+   * @param port for checking Internet connectivity
+   * @param timeoutInMs for pinging remote host in milliseconds
+   * @param errorHandler for handling errors while checking connectivity
+   * @return RxJava Single with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  Single<Boolean> observeInternetConnectivity(final String host, final int port,
+      final int timeoutInMs, final ErrorHandler errorHandler);
 }
