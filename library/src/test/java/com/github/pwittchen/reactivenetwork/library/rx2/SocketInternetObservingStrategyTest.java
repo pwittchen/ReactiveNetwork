@@ -19,6 +19,7 @@ import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -106,5 +107,33 @@ import static org.mockito.Mockito.when;
 
     // then
     verify(errorHandler, times(1)).handleError(givenException, errorMsg);
+  }
+
+  @Test public void shouldBeConnectedToTheInternetViaSingle() {
+    // given
+    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);
+
+    // when
+    final Single<Boolean> observable =
+        strategy.observeInternetConnectivity(HOST, PORT, TIMEOUT_IN_MS, errorHandler);
+
+    boolean isConnected = observable.blockingGet();
+
+    // then
+    assertThat(isConnected).isTrue();
+  }
+
+  @Test public void shouldNotBeConnectedToTheInternetViaSingle() {
+    // given
+    when(strategy.isConnected(HOST, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(false);
+
+    // when
+    final Single<Boolean> observable =
+        strategy.observeInternetConnectivity(HOST, PORT, TIMEOUT_IN_MS, errorHandler);
+
+    boolean isConnected = observable.blockingGet();
+
+    // then
+    assertThat(isConnected).isFalse();
   }
 }

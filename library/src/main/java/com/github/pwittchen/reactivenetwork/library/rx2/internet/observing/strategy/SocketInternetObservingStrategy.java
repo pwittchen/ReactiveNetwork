@@ -19,6 +19,9 @@ import com.github.pwittchen.reactivenetwork.library.rx2.Preconditions;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -32,29 +35,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class SocketInternetObservingStrategy implements InternetObservingStrategy {
 
-  /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
-   *
-   * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
-   * check
-   * @param intervalInMs in milliseconds determining how often we want to check connectivity
-   * @param host for checking Internet connectivity
-   * @param port for checking Internet connectivity
-   * @param timeoutInMs for pinging remote host in milliseconds
-   * @param errorHandler for handling errors while closing socket
-   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
-   * not
-   */
   @Override public Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
     Preconditions.checkGreaterOrEqualToZero(initialIntervalInMs,
         "initialIntervalInMs is not a positive number");
     Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
-    Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
-    Preconditions.checkGreaterThanZero(port, "port is not a positive number");
-    Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
-    Preconditions.checkNotNull(errorHandler, "errorHandler is null");
+    checkGeneralPreconditions(host, port, timeoutInMs, errorHandler);
 
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Function<Long, Boolean>() {
@@ -62,6 +49,25 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
         return isConnected(host, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();
+  }
+
+  @Override public Single<Boolean> observeInternetConnectivity(final String host, final int port,
+      final int timeoutInMs, final ErrorHandler errorHandler) {
+    checkGeneralPreconditions(host, port, timeoutInMs, errorHandler);
+
+    return Single.create(new SingleOnSubscribe<Boolean>() {
+      @Override public void subscribe(@NonNull SingleEmitter<Boolean> emitter) throws Exception {
+        emitter.onSuccess(isConnected(host, port, timeoutInMs, errorHandler));
+      }
+    });
+  }
+
+  private void checkGeneralPreconditions(String host, int port, int timeoutInMs,
+      ErrorHandler errorHandler) {
+    Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
+    Preconditions.checkGreaterThanZero(port, "port is not a positive number");
+    Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
+    Preconditions.checkNotNull(errorHandler, "errorHandler is null");
   }
 
   /**
