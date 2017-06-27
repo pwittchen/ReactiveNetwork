@@ -115,7 +115,7 @@ import static org.mockito.Mockito.when;
 
     // when
     final Single<Boolean> observable =
-        strategy.observeInternetConnectivity(HOST, PORT, TIMEOUT_IN_MS, errorHandler);
+        strategy.checkInternetConnectivity(HOST, PORT, TIMEOUT_IN_MS, errorHandler);
 
     boolean isConnected = observable.blockingGet();
 
@@ -129,7 +129,7 @@ import static org.mockito.Mockito.when;
 
     // when
     final Single<Boolean> observable =
-        strategy.observeInternetConnectivity(HOST, PORT, TIMEOUT_IN_MS, errorHandler);
+        strategy.checkInternetConnectivity(HOST, PORT, TIMEOUT_IN_MS, errorHandler);
 
     boolean isConnected = observable.blockingGet();
 

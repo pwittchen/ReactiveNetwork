@@ -51,7 +51,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
     }).distinctUntilChanged();
   }
 
-  @Override public Single<Boolean> observeInternetConnectivity(final String host, final int port,
+  @Override public Single<Boolean> checkInternetConnectivity(final String host, final int port,
       final int timeoutInMs, final ErrorHandler errorHandler) {
     checkGeneralPreconditions(host, port, timeoutInMs, errorHandler);
 

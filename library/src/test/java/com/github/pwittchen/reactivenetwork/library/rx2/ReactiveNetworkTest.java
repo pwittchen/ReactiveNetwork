@@ -26,6 +26,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strat
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -93,14 +94,14 @@ public class ReactiveNetworkTest {
 
   @Test public void observeInternetConnectivityWithConfigurationShouldNotBeNull() {
     // given
-    Observable<Boolean> observable;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
     final int port = TEST_VALID_PORT;
     final int timeout = TEST_VALID_TIMEOUT;
 
     // when
-    observable = ReactiveNetwork.observeInternetConnectivity(interval, host, port, timeout);
+    final Observable<Boolean> observable =
+        ReactiveNetwork.observeInternetConnectivity(interval, host, port, timeout);
 
     // then
     assertThat(observable).isNotNull();
@@ -108,7 +109,6 @@ public class ReactiveNetworkTest {
 
   @Test public void observeInternetConnectivityWithFullConfigurationShouldNotBeNull() {
     // given
-    Observable<Boolean> observable;
     final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
@@ -116,7 +116,7 @@ public class ReactiveNetworkTest {
     final int timeout = TEST_VALID_TIMEOUT;
 
     // when
-    observable =
+    final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(initialInterval, interval, host, port, timeout);
 
     // then
@@ -129,9 +129,9 @@ public class ReactiveNetworkTest {
 
     ReactiveNetwork.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
       @Override public void accept(Connectivity connectivity) {
-            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
-          }
-        });
+        assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
+      }
+    });
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -282,7 +282,6 @@ public class ReactiveNetworkTest {
 
   @Test public void observeInternetConnectivityShouldNotThrowAnExceptionForZeroInitialInterval() {
     // given
-    Observable<Boolean> observable;
     final int initialInterval = 0;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
@@ -290,7 +289,7 @@ public class ReactiveNetworkTest {
     final int timeout = TEST_VALID_TIMEOUT;
 
     // when
-    observable =
+    final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(initialInterval, interval, host, port, timeout);
 
     // then
@@ -316,7 +315,7 @@ public class ReactiveNetworkTest {
   @Test(expected = IllegalArgumentException.class)
   public void observeInternetConnectivityShouldThrowAnExceptionWhenSocketErrorHandlerIsNull() {
     // given
-    final int initialInterval = -1;
+    final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
     final int port = TEST_VALID_PORT;
@@ -335,7 +334,7 @@ public class ReactiveNetworkTest {
   public void observeInternetConnectivityShouldThrowAnExceptionWhenStrategyIsNull() {
     // given
     final InternetObservingStrategy strategy = null;
-    final int initialInterval = -1;
+    final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
     final int port = TEST_VALID_PORT;
@@ -350,11 +349,10 @@ public class ReactiveNetworkTest {
     // an exception is thrown
   }
 
-  @Test(expected = IllegalArgumentException.class)
   public void observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
     // given
     final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
-    final int initialInterval = -1;
+    final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
     final int port = TEST_VALID_PORT;
@@ -362,7 +360,7 @@ public class ReactiveNetworkTest {
     final ErrorHandler errorHandler = new DefaultErrorHandler();
 
     // when
-    Observable<Boolean> observable =
+    final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(strategy, initialInterval, interval, host, port,
             timeout, errorHandler);
 
@@ -385,14 +383,166 @@ public class ReactiveNetworkTest {
   @Test
   public void observeInternetConnectivityShouldNotThrowAnExceptionWhenJustStrategyIsNotNull() {
     // given
-    Observable<Boolean> observable;
     final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
 
     // when
-    observable =
-        ReactiveNetwork.observeInternetConnectivity(strategy);
+    final Observable<Boolean> observable = ReactiveNetwork.observeInternetConnectivity(strategy);
 
     // then
     assertThat(observable).isNotNull();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionForNullHost() {
+    // given
+    final String host = null;
+    final int port = TEST_VALID_PORT;
+    final int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(host, port, timeout);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionForEmptyHost() {
+    // given
+    final String host = "";
+    final int port = TEST_VALID_PORT;
+    final int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(host, port, timeout);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionForNegativePort() {
+    // given
+    final String host = TEST_VALID_HOST;
+    final int port = -1;
+    final int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(host, port, timeout);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionForZeroPort() {
+    // given
+    final String host = TEST_VALID_HOST;
+    final int port = 0;
+    final int timeout = TEST_VALID_TIMEOUT;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(host, port, timeout);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionForNegativeTimeout() {
+    // given
+    final String host = TEST_VALID_HOST;
+    final int port = TEST_VALID_PORT;
+    final int timeout = -1;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(host, port, timeout);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionForZeroTimeout() {
+    // given
+    final String host = TEST_VALID_HOST;
+    final int port = TEST_VALID_PORT;
+    final int timeout = 0;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(host, port, timeout);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionWhenSocketErrorHandlerIsNull() {
+    // given
+    final String host = TEST_VALID_HOST;
+    final int port = TEST_VALID_PORT;
+    final int timeout = TEST_VALID_TIMEOUT;
+    final ErrorHandler errorHandler = null;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(host, port, timeout, errorHandler);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionWhenStrategyIsNull() {
+    // given
+    final InternetObservingStrategy strategy = null;
+    final String host = TEST_VALID_HOST;
+    final int port = TEST_VALID_PORT;
+    final int timeout = TEST_VALID_TIMEOUT;
+    final ErrorHandler errorHandler = new DefaultErrorHandler();
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(strategy, host, port, timeout, errorHandler);
+
+    // then
+    // an exception is thrown
+  }
+
+  public void checkInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
+    // given
+    final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
+    final String host = TEST_VALID_HOST;
+    final int port = TEST_VALID_PORT;
+    final int timeout = TEST_VALID_TIMEOUT;
+    final ErrorHandler errorHandler = new DefaultErrorHandler();
+
+    // when
+    final Single<Boolean> single =
+        ReactiveNetwork.checkInternetConnectivity(strategy, host, port, timeout, errorHandler);
+
+    // then
+    assertThat(single).isNotNull();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void checkInternetConnectivityShouldThrowAnExceptionWhenJustStrategyIsNull() {
+    // given
+    final InternetObservingStrategy strategy = null;
+
+    // when
+    ReactiveNetwork.checkInternetConnectivity(strategy);
+
+    // then
+    // an exception is thrown
+  }
+
+  @Test public void checkInternetConnectivityShouldNotThrowAnExceptionWhenJustStrategyIsNotNull() {
+    // given
+    final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
+
+    // when
+    final Single<Boolean> single = ReactiveNetwork.checkInternetConnectivity(strategy);
+
+    // then
+    assertThat(single).isNotNull();
   }
 }
