@@ -316,7 +316,7 @@ public class ReactiveNetworkTest {
   @Test(expected = IllegalArgumentException.class)
   public void observeInternetConnectivityShouldThrowAnExceptionWhenSocketErrorHandlerIsNull() {
     // given
-    final int initialInterval = -1;
+    final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
     final int port = TEST_VALID_PORT;
@@ -335,7 +335,7 @@ public class ReactiveNetworkTest {
   public void observeInternetConnectivityShouldThrowAnExceptionWhenStrategyIsNull() {
     // given
     final InternetObservingStrategy strategy = null;
-    final int initialInterval = -1;
+    final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
     final int port = TEST_VALID_PORT;
@@ -350,11 +350,10 @@ public class ReactiveNetworkTest {
     // an exception is thrown
   }
 
-  @Test(expected = IllegalArgumentException.class)
   public void observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
     // given
     final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
-    final int initialInterval = -1;
+    final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
     final int port = TEST_VALID_PORT;
@@ -385,11 +384,10 @@ public class ReactiveNetworkTest {
   @Test
   public void observeInternetConnectivityShouldNotThrowAnExceptionWhenJustStrategyIsNotNull() {
     // given
-    Observable<Boolean> observable;
     final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
 
     // when
-    observable =
+    final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(strategy);
 
     // then
