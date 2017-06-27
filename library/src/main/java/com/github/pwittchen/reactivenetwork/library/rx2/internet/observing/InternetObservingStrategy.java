@@ -52,6 +52,6 @@ public interface InternetObservingStrategy {
    * @return RxJava Single with Boolean - true, when we have connection with host and false if
    * not
    */
-  Single<Boolean> observeInternetConnectivity(final String host, final int port,
+  Single<Boolean> checkInternetConnectivity(final String host, final int port,
       final int timeoutInMs, final ErrorHandler errorHandler);
 }

@@ -27,6 +27,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strate
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.MarshmallowNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * ReactiveNetwork is an Android library
@@ -54,7 +55,8 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes network connectivity. Information about network state, type and typeName are contained in
+   * Observes network connectivity. Information about network state, type and typeName are contained
+   * in
    * observed Connectivity object.
    *
    * @param context Context of the activity or an application
@@ -77,8 +79,8 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes network connectivity. Information about network state, type and typeName are contained in
-   * observed Connectivity object. Moreover, allows you to define NetworkObservingStrategy.
+   * Observes network connectivity. Information about network state, type and typeName are contained
+   * in observed Connectivity object. Moreover, allows you to define NetworkObservingStrategy.
    *
    * @param context Context of the activity or an application
    * @param strategy NetworkObserving strategy to be applied - you can use one of the existing
@@ -127,14 +129,14 @@ public class ReactiveNetwork {
   @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy) {
-    Preconditions.checkNotNull(strategy, "strategy == null");
+    checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
         DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST, DEFAULT_PING_PORT,
         DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
+   * Observes connectivity with the Internet in a given time interval.
    *
    * @param intervalInMs in milliseconds determining how often we want to check connectivity
    * @param host for checking Internet connectivity
@@ -151,7 +153,7 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
+   * Observes connectivity with the Internet in a given time interval.
    *
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
    * check
@@ -170,7 +172,7 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
+   * Observes connectivity with the Internet in a given time interval.
    *
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
    * check
@@ -191,8 +193,7 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host with
-   * custom strategy implementation
+   * Observes connectivity with the Internet in a given time interval.
    *
    * @param strategy for observing Internet connectivity
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
@@ -210,8 +211,99 @@ public class ReactiveNetwork {
       final InternetObservingStrategy strategy, final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
-    Preconditions.checkNotNull(strategy, "strategy == null");
+    checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
         timeoutInMs, errorHandler);
+  }
+
+  /**
+   * Checks connectivity with the Internet with default settings. It pings remote host
+   * (www.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * for determining if device is connected to the Internet or not. Please note that this method is
+   * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
+   * transfer, but it gives you actual information if device is connected to the Internet or not.
+   *
+   * @return RxJava Observable with Boolean - true, when we have an access to the Internet
+   * and false if not
+   */
+  @RequiresPermission(Manifest.permission.INTERNET)
+  public static Single<Boolean> checkInternetConnectivity() {
+    return checkInternetConnectivity(DEFAULT_PING_HOST, DEFAULT_PING_PORT,
+        DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
+  }
+
+  /**
+   * Checks connectivity with the Internet with default settings,
+   * but with custom InternetObservingStrategy. It pings remote host
+   * (www.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * for determining if device is connected to the Internet or not. Please note that this method is
+   * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
+   * transfer, but it gives you actual information if device is connected to the Internet or not.
+   *
+   * @param strategy which implements InternetObservingStrategy
+   * @return RxJava Observable with Boolean - true, when we have an access to the Internet
+   * and false if not
+   */
+  @RequiresPermission(Manifest.permission.INTERNET)
+  public static Single<Boolean> checkInternetConnectivity(
+      final InternetObservingStrategy strategy) {
+    checkStrategyIsNotNull(strategy);
+    return strategy.checkInternetConnectivity(DEFAULT_PING_HOST, DEFAULT_PING_PORT,
+        DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
+  }
+
+  /**
+   * Checks connectivity with the Internet. This operation is performed only once.
+   *
+   * @param host for checking Internet connectivity
+   * @param port for checking Internet connectivity
+   * @param timeoutInMs for pinging remote host in milliseconds
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  @RequiresPermission(Manifest.permission.INTERNET)
+  public static Single<Boolean> checkInternetConnectivity(final String host, final int port,
+      final int timeoutInMs) {
+    return checkInternetConnectivity(host, port, timeoutInMs, new DefaultErrorHandler());
+  }
+
+  /**
+   * Checks connectivity with the Internet. This operation is performed only once.
+   *
+   * @param host for checking Internet connectivity
+   * @param port for checking Internet connectivity
+   * @param timeoutInMs for pinging remote host in milliseconds
+   * @param errorHandler for handling errors during connectivity check
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  @RequiresPermission(Manifest.permission.INTERNET)
+  public static Single<Boolean> checkInternetConnectivity(final String host, final int port,
+      final int timeoutInMs, final ErrorHandler errorHandler) {
+    return checkInternetConnectivity(new SocketInternetObservingStrategy(), host, port, timeoutInMs,
+        errorHandler);
+  }
+
+  /**
+   * Checks connectivity with the Internet by opening socket connection with remote host with
+   * custom strategy implementation. This operation is performed only once.
+   *
+   * @param strategy for observing Internet connectivity
+   * @param host for checking Internet connectivity
+   * @param port for checking Internet connectivity
+   * @param timeoutInMs for pinging remote host in milliseconds
+   * @param errorHandler for handling errors during connectivity check
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  @RequiresPermission(Manifest.permission.INTERNET)
+  public static Single<Boolean> checkInternetConnectivity(final InternetObservingStrategy strategy,
+      final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler) {
+    checkStrategyIsNotNull(strategy);
+    return strategy.checkInternetConnectivity(host, port, timeoutInMs, errorHandler);
+  }
+
+  private static void checkStrategyIsNotNull(InternetObservingStrategy strategy) {
+    Preconditions.checkNotNull(strategy, "strategy == null");
   }
 }
