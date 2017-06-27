@@ -24,8 +24,9 @@ Contents
 - [Usage](#usage)
   - [Observing network connectivity](#observing-network-connectivity)
     - [Connectivity class](#connectivity-class)
-  - [Observing Internet connectivity](#observing-internet-connectivity)
+  - [Observing Internet connectivity with an interval](#observing-internet-connectivity-with-an-interval)
     - [Customization of observing Internet connectivity](#customization-of-observing-internet-connectivity)
+  - [Checking Internet connectivity once](#checking-internet-connectivity-once)
   - [ProGuard configuration](#proguard-configuration)
 - [Examples](#examples)
 - [Download](#download)
@@ -115,7 +116,7 @@ String getExtraInfo()
 class Builder
 ```
 
-### Observing Internet connectivity
+### Observing Internet connectivity with an interval
 
 We can observe connectivity with the Internet in the following way:
 
@@ -184,6 +185,36 @@ which allows you to implement custom `InternetObservingStrategy` in case you wan
 These methods are created to allow the users to fully customize the library and give them more control.
 
 For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
+
+### Checking Internet Connectivity once
+
+If you don't want to observe Internet connectivity in the interval with `Observable<Boolean> observeInternetConnectivity(...)` method,
+you can use `Single<Boolean> checkInternetConnectivity()`, which does the same thing, but *only once*.
+
+```java
+Single<Boolean> single = ReactiveNetwork.checkInternetConnectivity();
+
+single
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Consumer<Boolean>() {
+      @Override public void accept(@NonNull Boolean isConnectedToTheInternet) throws Exception {
+        // do something with isConnectedToTheInternet
+      }
+    });
+```
+
+As in the previous case, you can customize this feature with the following methods from `ReactiveNetwork` class:
+
+```java
+Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy)
+Single<Boolean> checkInternetConnectivity(String host,int port, int timeoutInMs)
+Single<Boolean> checkInternetConnectivity(String host, int port, int timeoutInMs, ErrorHandler errorHandler)
+Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy, String host, int port, int timeoutInMs, ErrorHandler errorHandler)
+```
+
+Basic idea is the same. With just have `Single<Boolean>` return type instead of `Observable<Boolean>`
+and we don't have `int initialIntervalInMs` and `int intervalInMs` parameters.
 
 ### ProGuard configuration
 
