@@ -59,8 +59,7 @@ public class ReactiveNetworkTest {
     final Context context = RuntimeEnvironment.application;
 
     // when
-    Observable<Connectivity> observable;
-    observable = ReactiveNetwork.observeNetworkConnectivity(context);
+    final Observable<Connectivity> observable = ReactiveNetwork.observeNetworkConnectivity(context);
 
     // then
     assertThat(observable).isNotNull();
@@ -72,8 +71,8 @@ public class ReactiveNetworkTest {
     NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
     // when
-    Observable<Connectivity> observable;
-    observable = ReactiveNetwork.observeNetworkConnectivity(context, strategy);
+    final Observable<Connectivity> observable =
+        ReactiveNetwork.observeNetworkConnectivity(context, strategy);
 
     // then
     assertThat(observable).isNotNull();
@@ -107,7 +106,6 @@ public class ReactiveNetworkTest {
 
   @Test public void observeInternetConnectivityWithFullConfigurationShouldNotBeNull() {
     // given
-    Observable<Boolean> observable;
     final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
@@ -115,7 +113,7 @@ public class ReactiveNetworkTest {
     final int timeout = TEST_VALID_TIMEOUT;
 
     // when
-    observable =
+    final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(initialInterval, interval, host, port, timeout);
 
     // then
@@ -126,12 +124,11 @@ public class ReactiveNetworkTest {
 
     final Application context = RuntimeEnvironment.application;
 
-    ReactiveNetwork.observeNetworkConnectivity(context)
-        .subscribe(new Action1<Connectivity>() {
-          @Override public void call(Connectivity connectivity) {
-            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
-          }
-        });
+    ReactiveNetwork.observeNetworkConnectivity(context).subscribe(new Action1<Connectivity>() {
+      @Override public void call(Connectivity connectivity) {
+        assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
+      }
+    });
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -282,7 +279,6 @@ public class ReactiveNetworkTest {
 
   @Test public void observeInternetConnectivityShouldNotThrowAnExceptionForZeroInitialInterval() {
     // given
-    Observable<Boolean> observable;
     final int initialInterval = 0;
     final int interval = TEST_VALID_INTERVAL;
     final String host = TEST_VALID_HOST;
@@ -290,7 +286,7 @@ public class ReactiveNetworkTest {
     final int timeout = TEST_VALID_TIMEOUT;
 
     // when
-    observable =
+    final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(initialInterval, interval, host, port, timeout);
 
     // then
@@ -361,7 +357,7 @@ public class ReactiveNetworkTest {
     final ErrorHandler errorHandler = new DefaultErrorHandler();
 
     // when
-    Observable<Boolean> observable =
+    final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(strategy, initialInterval, interval, host, port,
             timeout, errorHandler);
 
@@ -387,8 +383,7 @@ public class ReactiveNetworkTest {
     final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
 
     // when
-    final Observable<Boolean> observable =
-        ReactiveNetwork.observeInternetConnectivity(strategy);
+    final Observable<Boolean> observable = ReactiveNetwork.observeInternetConnectivity(strategy);
 
     // then
     assertThat(observable).isNotNull();
