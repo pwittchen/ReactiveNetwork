@@ -188,8 +188,9 @@ For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
 
 ### Checking Internet Connectivity once
 
-If you don't want to observe Internet connectivity in the interval with `Observable<Boolean> observeInternetConnectivity(...)` method,
-you can use `Single<Boolean> checkInternetConnectivity()`, which does the same thing, but *only once*.
+If we don't want to observe Internet connectivity in the interval with `Observable<Boolean> observeInternetConnectivity(...)` method,
+you can use `Single<Boolean> checkInternetConnectivity()`, which does the same thing, but **only once**.
+It may be helpful in the specific use cases.
 
 ```java
 Single<Boolean> single = ReactiveNetwork.checkInternetConnectivity();
