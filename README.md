@@ -24,9 +24,9 @@ Contents
 - [Usage](#usage)
   - [Observing network connectivity](#observing-network-connectivity)
     - [Connectivity class](#connectivity-class)
-  - [Observing Internet connectivity with an interval](#observing-internet-connectivity-with-an-interval)
-    - [Customization of observing Internet connectivity](#customization-of-observing-internet-connectivity)
-  - [Checking Internet connectivity once](#checking-internet-connectivity-once)
+  - [Observing Internet connectivity](#observing-internet-connectivity)
+    - [Observing Internet connectivity continuously](#observing-internet-connectivity-continuously)
+    - [Checking Internet connectivity once](#checking-internet-connectivity-once)
   - [ProGuard configuration](#proguard-configuration)
 - [Examples](#examples)
 - [Download](#download)
@@ -116,9 +116,11 @@ String getExtraInfo()
 class Builder
 ```
 
-### Observing Internet connectivity with an interval
+### Observing Internet connectivity
 
-We can observe connectivity with the Internet in the following way:
+#### Observing Internet connectivity continuously
+
+We can observe connectivity with the Internet continuously in the following way:
 
 ```java
 ReactiveNetwork.observeInternetConnectivity()
@@ -135,58 +137,26 @@ An `Observable` will return `true` to the subscription (disposable) if device is
 
 Internet connectivity will be checked _as soon as possible_.
 
-**Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it. Optionally, you can dispose subscription (disposable) right after you get notification that Internet is available and do the work you want in order to decrease network calls.
-
-#### Customization of observing Internet connectivity
+**Please note**: This method is less efficient than `observeNetworkConnectivity(context)` method, because in default observing strategy, it opens socket connection with remote host (default is www.google.com) every two seconds with two seconds of timeout and consumes data transfer. Use this method if you really need it. Optionally, you can dispose subscription (disposable) right after you get notification that Internet is available and do the work you want in order to decrease network calls.
 
 Methods in this section should be used if they are really needed due to specific use cases.
 
-If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
+If you want to customize observing of the Internet connectivity, you can use one of the methods below.
+They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, error handler or whole observing strategy.
 
 ```java
 Observable<Boolean> observeInternetConnectivity(int interval, String host, int port, int timeout)
-```
-
-It allows you to specify custom interval of checking connectivity in milliseconds, host, port and connection timeout in milliseconds.
-
-You can also use the following method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
-```
-
-It does the same thing as method above, but allows to define initial delay of the first Internet connectivity check. Default is equal to zero.
-
-You can use method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-```
-
-which allows you to define `ErrorHandler` implementation, which handle any errors which can occur during checking connectivity.
-By default library uses `DefaultErrorHandler`.
-
-You can also use method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-```
-
-which allows you to implement `ErrorHandler` and `InternetObservingStrategy` in case you want to have your own strategy for monitoring connectivity with the Internet.
-
-You can use method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy)
 ```
-
-which allows you to implement custom `InternetObservingStrategy` in case you want to have your own strategy. Remaining settings will be default.
 
 These methods are created to allow the users to fully customize the library and give them more control.
 
 For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
 
-### Checking Internet Connectivity once
+#### Checking Internet Connectivity once
 
 If we don't want to observe Internet connectivity in the interval with `Observable<Boolean> observeInternetConnectivity(...)` method,
 we can use `Single<Boolean> checkInternetConnectivity()`, which does the same thing, but **only once**.
@@ -216,6 +186,10 @@ Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy, St
 
 Basic idea is the same. With just have `Single<Boolean>` return type instead of `Observable<Boolean>`
 and we don't have `int initialIntervalInMs` and `int intervalInMs` parameters.
+
+As previously, these methods are created to allow the users to fully customize the library and give them more control.
+
+For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
 
 ### ProGuard configuration
 
