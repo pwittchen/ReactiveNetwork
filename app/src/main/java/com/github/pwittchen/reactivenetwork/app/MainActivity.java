@@ -20,11 +20,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
@@ -47,23 +45,17 @@ public class MainActivity extends Activity {
     networkDisposable = ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<Connectivity>() {
-          @Override public void accept(final Connectivity connectivity) {
-            Log.d(TAG, connectivity.toString());
-            final NetworkInfo.State state = connectivity.getState();
-            final String name = connectivity.getTypeName();
-            tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
-          }
+        .subscribe(connectivity -> {
+          Log.d(TAG, connectivity.toString());
+          final NetworkInfo.State state = connectivity.getState();
+          final String name = connectivity.getTypeName();
+          tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
         });
 
     internetDisposable = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<Boolean>() {
-          @Override public void accept(Boolean isConnectedToInternet) {
-            tvInternetStatus.setText(isConnectedToInternet.toString());
-          }
-        });
+        .subscribe(isConnected -> tvInternetStatus.setText(isConnected.toString()));
   }
 
   @Override protected void onPause() {
