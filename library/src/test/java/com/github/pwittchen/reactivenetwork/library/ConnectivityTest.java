@@ -88,7 +88,9 @@ public class ConnectivityTest {
         .typeName(TYPE_NAME_MOBILE)
         .build();
 
-    final int givenTypes[] = { ConnectivityManager.TYPE_WIFI, ConnectivityManager.TYPE_MOBILE };
+    final int givenTypes[] = {
+        ConnectivityManager.TYPE_WIFI, ConnectivityManager.TYPE_MOBILE, Connectivity.UNKNOWN_TYPE
+    };
 
     // when
     final Func1<Connectivity, Boolean> equalTo = ConnectivityPredicate.hasType(givenTypes);
@@ -154,6 +156,33 @@ public class ConnectivityTest {
 
     // then
     assertThat(hashCodesAreEqual).isTrue();
+  }
+
+  @Test public void shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicate() {
+    // given
+    int[] types = { ConnectivityManager.TYPE_MOBILE, ConnectivityManager.TYPE_WIFI };
+    int[] expectedOutputTypes = {
+        ConnectivityManager.TYPE_MOBILE, ConnectivityManager.TYPE_WIFI, Connectivity.UNKNOWN_TYPE
+    };
+
+    // when
+    int[] outputTypes = ConnectivityPredicate.appendUnknownNetworkTypeToTypes(types);
+
+    // then
+    assertThat(outputTypes).isEqualTo(expectedOutputTypes);
+  }
+
+  @Test
+  public void shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicateForEmptyArray() {
+    // given
+    int[] types = {};
+    int[] expectedOutputTypes = { Connectivity.UNKNOWN_TYPE };
+
+    // when
+    int[] outputTypes = ConnectivityPredicate.appendUnknownNetworkTypeToTypes(types);
+
+    // then
+    assertThat(outputTypes).isEqualTo(expectedOutputTypes);
   }
 
   @Test public void shouldCreateConnectivityWithBuilder() {
