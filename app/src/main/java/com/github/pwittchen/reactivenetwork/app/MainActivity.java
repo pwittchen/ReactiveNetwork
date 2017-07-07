@@ -48,23 +48,17 @@ public class MainActivity extends Activity {
         ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<Connectivity>() {
-              @Override public void call(final Connectivity connectivity) {
-                Log.d(TAG, connectivity.toString());
-                final NetworkInfo.State state = connectivity.getState();
-                final String name = connectivity.getTypeName();
-                tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
-              }
+            .subscribe(connectivity -> {
+              Log.d(TAG, connectivity.toString());
+              final NetworkInfo.State state = connectivity.getState();
+              final String name = connectivity.getTypeName();
+              tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
             });
 
     internetConnectivitySubscription = ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<Boolean>() {
-          @Override public void call(Boolean isConnectedToInternet) {
-            tvInternetStatus.setText(isConnectedToInternet.toString());
-          }
-        });
+        .subscribe(isConnected -> tvInternetStatus.setText(isConnected.toString()));
   }
 
   @Override protected void onPause() {
