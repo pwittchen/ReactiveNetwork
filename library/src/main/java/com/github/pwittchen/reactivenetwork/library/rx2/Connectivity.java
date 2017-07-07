@@ -24,6 +24,8 @@ import android.support.annotation.NonNull;
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.
  */
 public class Connectivity {
+  static final int UNKNOWN_TYPE = -1;
+  static final int UNKNOWN_SUB_TYPE = -1;
   private NetworkInfo.State state;
   private NetworkInfo.DetailedState detailedState;
   private int type;
@@ -225,8 +227,8 @@ public class Connectivity {
 
     private NetworkInfo.State state = NetworkInfo.State.DISCONNECTED; // NOPMD
     private NetworkInfo.DetailedState detailedState = NetworkInfo.DetailedState.IDLE; // NOPMD
-    private int type = -1; // NOPMD
-    private int subType = -1; // NOPMD
+    private int type = UNKNOWN_TYPE; // NOPMD
+    private int subType = UNKNOWN_SUB_TYPE; // NOPMD
     private boolean available = false; // NOPMD
     private boolean failover = false; // NOPMD
     private boolean roaming = false; // NOPMD
