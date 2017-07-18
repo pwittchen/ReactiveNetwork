@@ -216,7 +216,7 @@ You can depend on the library through Maven:
 <dependency>
     <groupId>com.github.pwittchen</groupId>
     <artifactId>reactivenetwork-rx2</artifactId>
-    <version>0.9.1</version>
+    <version>0.10.0</version>
 </dependency>
 ```
 
@@ -224,7 +224,7 @@ or through Gradle:
 
 ```groovy
 dependencies {
-  compile 'com.github.pwittchen:reactivenetwork-rx2:0.9.1'
+  compile 'com.github.pwittchen:reactivenetwork-rx2:0.10.0'
 }
 ```
 
