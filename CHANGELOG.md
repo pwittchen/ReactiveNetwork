@@ -1,9 +1,21 @@
 CHANGELOG
 =========
 
+v. 0.10.0
+--------
+*18 Jul 2017*
+
+- bumped RxJava1 version to 1.3.0
+- bumped test dependencies
+- created Code of Conduct
+- updated Kotlin version in sample apps
+- added retrolambda to the sample Java app - issue #163 
+- fixed behavior of network observing in disconnected state - issue #159 
+
 v. 0.9.1
 --------
 *30 Apr 2017*
+
 - bumped RxJava1.x to 1.2.10
 
 v. 0.9.0
