@@ -1,6 +1,25 @@
 CHANGELOG
 =========
 
+v. 0.10.0
+--------
+*18 Jul 2017*
+
+- bumped RxJava2 version to 2.1.1
+- bumped test dependencies
+- created Code of Conduct
+- updated unit tests
+- updated Kotlin version in sample apps
+- added retrolambda to the sample Java app - issue #163 
+- fixed behavior of network observing in disconnected state - issue #159 
+- added the following methods to `ReactiveNetwork` class:
+  - `Single<Boolean> checkInternetConnectivity()`
+  - `Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy)`
+  - `Single<Boolean> checkInternetConnectivity(String host, int port, int timeoutInMs)`
+  - `Single<Boolean> checkInternetConnectivity(String host, int port, int timeoutInMs, ErrorHandler errorHandler)`
+  - `Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy, String host, int port, int timeoutInMs, ErrorHandler errorHandler)`
+
+
 v. 0.9.1
 --------
 *30 Apr 2017*
