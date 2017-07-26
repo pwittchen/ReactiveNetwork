@@ -18,7 +18,6 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 import android.app.Application;
 import android.content.Context;
 import android.net.NetworkInfo;
-import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;

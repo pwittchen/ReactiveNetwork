@@ -15,7 +15,6 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2;
 
-import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
 import io.reactivex.Observable;

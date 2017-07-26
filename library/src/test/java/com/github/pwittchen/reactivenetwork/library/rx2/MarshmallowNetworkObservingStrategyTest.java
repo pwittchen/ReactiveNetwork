@@ -17,7 +17,6 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.app.Application;
 import android.net.NetworkInfo;
-import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.MarshmallowNetworkObservingStrategy;
 import io.reactivex.Observable;

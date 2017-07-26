@@ -18,15 +18,11 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import com.github.pwittchen.reactivenetwork.library.BuildConfig;
-
+import io.reactivex.functions.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import io.reactivex.functions.Predicate;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -178,7 +174,8 @@ public class ConnectivityTest {
     assertThat(outputTypes).isEqualTo(expectedOutputTypes);
   }
 
-  @Test public void shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicateForEmptyArray() {
+  @Test
+  public void shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicateForEmptyArray() {
     // given
     int[] types = {};
     int[] expectedOutputTypes = { Connectivity.UNKNOWN_TYPE };
