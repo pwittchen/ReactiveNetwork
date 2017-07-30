@@ -54,4 +54,11 @@ public interface InternetObservingStrategy {
    */
   Single<Boolean> checkInternetConnectivity(final String host, final int port,
       final int timeoutInMs, final ErrorHandler errorHandler);
+
+  /**
+   * Gets default remote ping host for a given Internet Observing Strategy
+   *
+   * @return String with a ping host used in the current strategy
+   */
+  String getDefaultPingHost();
 }
