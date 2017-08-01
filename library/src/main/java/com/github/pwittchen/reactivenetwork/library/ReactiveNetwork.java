@@ -21,7 +21,7 @@ import android.support.annotation.RequiresPermission;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.WalledGardenInternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.MarshmallowNetworkObservingStrategy;
@@ -35,7 +35,7 @@ import rx.Observable;
  */
 public class ReactiveNetwork {
   public final static String LOG_TAG = "ReactiveNetwork";
-  private static final String DEFAULT_PING_HOST = "www.google.com";
+  private static final String DEFAULT_PING_HOST = "http://clients3.google.com/generate_204";
   private static final int DEFAULT_PING_PORT = 80;
   private static final int DEFAULT_PING_INTERVAL_IN_MS = 2000;
   private static final int DEFAULT_INITIAL_PING_INTERVAL_IN_MS = 0;
@@ -54,7 +54,8 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes network connectivity. Information about network state, type and typeName are contained in
+   * Observes network connectivity. Information about network state, type and typeName are contained
+   * in
    * observed Connectivity object.
    *
    * @param context Context of the activity or an application
@@ -77,7 +78,8 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes network connectivity. Information about network state, type and typeName are contained in
+   * Observes network connectivity. Information about network state, type and typeName are contained
+   * in
    * observed Connectivity object. Moreover, allows you to define NetworkObservingStrategy.
    *
    * @param context Context of the activity or an application
@@ -97,7 +99,8 @@ public class ReactiveNetwork {
 
   /**
    * Observes connectivity with the Internet with default settings. It pings remote host
-   * (www.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * (clients3.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is
+   * used
    * for determining if device is connected to the Internet or not. Please note that this method is
    * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
    * transfer, but it gives you actual information if device is connected to the Internet or not.
@@ -115,7 +118,8 @@ public class ReactiveNetwork {
   /**
    * Observes connectivity with the Internet with default settings,
    * but with custom InternetObservingStrategy. It pings remote host
-   * (www.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * (clients3.google.com) at port 80 every 2 seconds with 2 seconds of timeout. This operation is
+   * used
    * for determining if device is connected to the Internet or not. Please note that this method is
    * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
    * transfer, but it gives you actual information if device is connected to the Internet or not.
@@ -129,7 +133,7 @@ public class ReactiveNetwork {
       final InternetObservingStrategy strategy) {
     Preconditions.checkNotNull(strategy, "strategy == null");
     return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
-        DEFAULT_PING_INTERVAL_IN_MS, DEFAULT_PING_HOST, DEFAULT_PING_PORT,
+        DEFAULT_PING_INTERVAL_IN_MS, strategy.getDefaultPingHost(), DEFAULT_PING_PORT,
         DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
   }
 
@@ -170,7 +174,7 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
+   * Observes connectivity with the Internet by opening connection with remote host
    *
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
    * check
@@ -186,13 +190,12 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
-    return observeInternetConnectivity(new SocketInternetObservingStrategy(), initialIntervalInMs,
-        intervalInMs, host, port, timeoutInMs, errorHandler);
+    return observeInternetConnectivity(new WalledGardenInternetObservingStrategy(),
+        initialIntervalInMs, intervalInMs, host, port, timeoutInMs, errorHandler);
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host with
-   * custom strategy implementation
+   * Observes connectivity with the Internet
    *
    * @param strategy for observing Internet connectivity
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity

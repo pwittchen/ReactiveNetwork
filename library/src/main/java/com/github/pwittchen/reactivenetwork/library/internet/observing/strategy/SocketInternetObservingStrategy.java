@@ -31,6 +31,8 @@ import rx.schedulers.Schedulers;
  */
 public class SocketInternetObservingStrategy implements InternetObservingStrategy {
 
+  private static final String DEFAULT_HOST = "www.google.com";
+
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host
    *
@@ -61,6 +63,10 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
         return isConnected(host, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();
+  }
+
+  @Override public String getDefaultPingHost() {
+    return DEFAULT_HOST;
   }
 
   /**
