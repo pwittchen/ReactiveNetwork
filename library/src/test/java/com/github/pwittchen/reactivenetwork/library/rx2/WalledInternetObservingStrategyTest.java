@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Piotr Wittchen
+ * Copyright (C) 2017 Piotr Wittchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.WalledGardenInternetObservingStrategy;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.net.HttpURLConnection;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,22 +32,19 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-@SuppressWarnings("PMD") public class SocketInternetObservingStrategyTest {
+public class WalledInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
   private static final int INTERVAL_IN_MS = 2000;
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private SocketInternetObservingStrategy strategy;
+  @Spy private WalledGardenInternetObservingStrategy strategy;
   @Mock private ErrorHandler errorHandler;
-  @Mock private Socket socket;
 
   private String getHost() {
     return strategy.getDefaultPingHost();
@@ -84,33 +80,6 @@ import static org.mockito.Mockito.when;
     assertThat(isConnected).isFalse();
   }
 
-  @Test public void shouldNotBeConnectedToTheInternetWhenSocketThrowsAnExceptionOnConnect()
-      throws IOException {
-    // given
-    final InetSocketAddress address = new InetSocketAddress(getHost(), PORT);
-    doThrow(new IOException()).when(socket).connect(address, TIMEOUT_IN_MS);
-
-    // when
-    final boolean isConnected =
-        strategy.isConnected(socket, getHost(), PORT, TIMEOUT_IN_MS, errorHandler);
-
-    // then
-    assertThat(isConnected).isFalse();
-  }
-
-  @Test public void shouldHandleAnExceptionThrownDuringClosingTheSocket() throws IOException {
-    // given
-    final String errorMsg = "Could not close the socket";
-    final IOException givenException = new IOException(errorMsg);
-    doThrow(givenException).when(socket).close();
-
-    // when
-    strategy.isConnected(socket, getHost(), PORT, TIMEOUT_IN_MS, errorHandler);
-
-    // then
-    verify(errorHandler, times(1)).handleError(givenException, errorMsg);
-  }
-
   @Test public void shouldBeConnectedToTheInternetViaSingle() {
     // given
     when(strategy.isConnected(getHost(), PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);
@@ -137,5 +106,36 @@ import static org.mockito.Mockito.when;
 
     // then
     assertThat(isConnected).isFalse();
+  }
+
+  @Test public void shouldCreateHttpUrlConnection() throws IOException {
+    // given
+    final String parsedDefaultHost = "clients3.google.com";
+
+    // when
+    HttpURLConnection connection = strategy.createHttpUrlConnection(getHost(), PORT, TIMEOUT_IN_MS);
+
+    // then
+    assertThat(connection).isNotNull();
+    assertThat(connection.getURL().getHost()).isEqualTo(parsedDefaultHost);
+    assertThat(connection.getURL().getPort()).isEqualTo(PORT);
+    assertThat(connection.getConnectTimeout()).isEqualTo(TIMEOUT_IN_MS);
+    assertThat(connection.getReadTimeout()).isEqualTo(TIMEOUT_IN_MS);
+    assertThat(connection.getInstanceFollowRedirects()).isFalse();
+    assertThat(connection.getUseCaches()).isFalse();
+  }
+
+  @Test public void shouldHandleAnExceptionWhileCreatingUrlConnection() throws IOException {
+    // given
+    final String errorMsg = "Could not establish connection with WalledGardenStrategy";
+    final IOException givenException = new IOException(errorMsg);
+    when(strategy.createHttpUrlConnection(getHost(), PORT, TIMEOUT_IN_MS)).thenThrow(
+        givenException);
+
+    // when
+    strategy.isConnected(getHost(), PORT, TIMEOUT_IN_MS, errorHandler);
+
+    // then
+    verify(errorHandler).handleError(givenException, errorMsg);
   }
 }

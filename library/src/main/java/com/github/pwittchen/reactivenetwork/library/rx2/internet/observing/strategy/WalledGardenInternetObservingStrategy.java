@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Piotr Wittchen
+ * Copyright (C) 2017 Piotr Wittchen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,19 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Socket strategy for monitoring connectivity with the Internet.
- * It monitors Internet connectivity via opening socket connection with the remote host.
+ * Walled Garden Strategy for monitoring connectivity with the Internet.
+ * This strategy handle use case of the countries behind Great Firewall (e.g. China),
+ * which does not has access to several websites like Google. It such case, different HTTP responses
+ * are generated. Instead HTTP 200 (OK), we got HTTP 204 (NO CONTENT), but it still can tell us
+ * if a device is connected to the Internet or not.
  */
-public class SocketInternetObservingStrategy implements InternetObservingStrategy {
-  private static final String DEFAULT_HOST = "www.google.com";
+public class WalledGardenInternetObservingStrategy implements InternetObservingStrategy {
+  private static final String DEFAULT_HOST = "http://clients3.google.com/generate_204";
 
   @Override public String getDefaultPingHost() {
     return DEFAULT_HOST;
@@ -44,6 +47,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
   @Override public Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
+
     Preconditions.checkGreaterOrEqualToZero(initialIntervalInMs,
         "initialIntervalInMs is not a positive number");
     Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
@@ -68,54 +72,39 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
     });
   }
 
-  private void checkGeneralPreconditions(String host, int port, int timeoutInMs,
-      ErrorHandler errorHandler) {
+  private void checkGeneralPreconditions(final String host, final int port, final int timeoutInMs,
+      final ErrorHandler errorHandler) {
     Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
     Preconditions.checkGreaterThanZero(port, "port is not a positive number");
     Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
     Preconditions.checkNotNull(errorHandler, "errorHandler is null");
   }
 
-  /**
-   * checks if device is connected to given host at given port
-   *
-   * @param host to connect
-   * @param port to connect
-   * @param timeoutInMs connection timeout
-   * @param errorHandler error handler for socket connection
-   * @return boolean true if connected and false if not
-   */
-  public boolean isConnected(final String host, final int port, final int timeoutInMs,
+  public Boolean isConnected(final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
-    final Socket socket = new Socket();
-    return isConnected(socket, host, port, timeoutInMs, errorHandler);
-  }
-
-  /**
-   * checks if device is connected to given host at given port
-   *
-   * @param socket to connect
-   * @param host to connect
-   * @param port to connect
-   * @param timeoutInMs connection timeout
-   * @param errorHandler error handler for socket connection
-   * @return boolean true if connected and false if not
-   */
-  public boolean isConnected(final Socket socket, final String host, final int port,
-      final int timeoutInMs, final ErrorHandler errorHandler) {
-    boolean isConnected;
+    HttpURLConnection urlConnection = null;
     try {
-      socket.connect(new InetSocketAddress(host, port), timeoutInMs);
-      isConnected = socket.isConnected();
+      urlConnection = createHttpUrlConnection(host, port, timeoutInMs);
+      return urlConnection.getResponseCode() == HttpURLConnection.HTTP_NO_CONTENT;
     } catch (IOException e) {
-      isConnected = Boolean.FALSE;
+      errorHandler.handleError(e, "Could not establish connection with WalledGardenStrategy");
+      return Boolean.FALSE;
     } finally {
-      try {
-        socket.close();
-      } catch (IOException exception) {
-        errorHandler.handleError(exception, "Could not close the socket");
+      if (urlConnection != null) {
+        urlConnection.disconnect();
       }
     }
-    return isConnected;
+  }
+
+  public HttpURLConnection createHttpUrlConnection(final String host, final int port,
+      final int timeoutInMs) throws IOException {
+    URL initialUrl = new URL(host);
+    URL url = new URL(initialUrl.getProtocol(), initialUrl.getHost(), port, initialUrl.getFile());
+    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+    urlConnection.setConnectTimeout(timeoutInMs);
+    urlConnection.setReadTimeout(timeoutInMs);
+    urlConnection.setInstanceFollowRedirects(false);
+    urlConnection.setUseCaches(false);
+    return urlConnection;
   }
 }
