@@ -210,8 +210,8 @@ Right now, we have the following strategies for observing Internet connectivity:
 - `SocketInternetObservingStrategy` -  monitors Internet connectivity via opening socket connection with the remote host
 - `WalledGardenInternetObservingStrategy` - opens connection with a remote host and respects countries in the Walled Garden (e.g. China)
 
-Default strategy used right now is `WalledGardenInternetObservingStrategy`, but with
-`checkInternetConnectivity(strategy)` method we can use one of these strategies explicitly.
+All of these strategies implements `NetworkObservingStrategy` interface. Default strategy used right now is `WalledGardenInternetObservingStrategy`,
+but with `checkInternetConnectivity(strategy)` method we can use one of these strategies explicitly.
 
 ### ProGuard configuration
 
