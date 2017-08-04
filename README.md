@@ -211,7 +211,7 @@ Right now, we have the following strategies for observing Internet connectivity:
 - `WalledGardenInternetObservingStrategy` - opens connection with a remote host and respects countries in the Walled Garden (e.g. China)
 
 All of these strategies implements `NetworkObservingStrategy` interface. Default strategy used right now is `WalledGardenInternetObservingStrategy`,
-but with `checkInternetConnectivity(strategy)` method we can use one of these strategies explicitly.
+but with `checkInternetConnectivity(strategy)` and `observeInternetConnectivity(strategy)` method we can use one of these strategies explicitly.
 
 ### ProGuard configuration
 
