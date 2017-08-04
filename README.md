@@ -24,8 +24,10 @@ Contents
 - [Usage](#usage)
   - [Observing network connectivity](#observing-network-connectivity)
     - [Connectivity class](#connectivity-class)
+    - [Network Observing Strategies](#network-observing-strategies)
   - [Observing Internet connectivity](#observing-internet-connectivity)
     - [Customization of observing Internet connectivity](#customization-of-observing-internet-connectivity)
+    - [Internet Observing Strategies](#internet-observing-strategies)
   - [ProGuard configuration](#proguard-configuration)
 - [Examples](#examples)
 - [Download](#download)
@@ -115,6 +117,18 @@ String getExtraInfo()
 class Builder
 ```
 
+#### Network Observing Strategies
+
+Right now, we have the following strategies for different Android versions:
+
+- `LollipopNetworkObservingStrategy`
+- `MarshmallowNetworkObservingStrategy`
+- `PreLollipopNetworkObservingStrategy`
+
+All of them implements `NetworkObservingStrategy` interface. Concrete strategy is chosen automatically
+depending on the Android version installed on the device.
+With `observeNetworkConnectivity(context, strategy)` method we can use one of these strategies explicitly.
+
 ### Observing Internet connectivity
 
 We can observe connectivity with the Internet in the following way:
@@ -140,50 +154,31 @@ Internet connectivity will be checked _as soon as possible_.
 
 Methods in this section should be used if they are really needed due to specific use cases.
 
-If you want to specify your own custom details for checking Internet connectivity, you can use the following method:
+If you want to adjust checking Internet connectivity to your needs (custom ping host, port, ping interval, timeout, strategy, etc.),
+you can use one of the following methods:
 
 ```java
 Observable<Boolean> observeInternetConnectivity(int interval, String host, int port, int timeout)
-```
-
-It allows you to specify custom interval of checking connectivity in milliseconds, host, port and connection timeout in milliseconds.
-
-You can also use the following method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
-```
-
-It does the same thing as method above, but allows to define initial delay of the first Internet connectivity check. Default is equal to zero.
-
-You can use method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-```
-
-which allows you to define `ErrorHandler` implementation, which handle any errors which can occur during checking connectivity.
-By default library uses `DefaultErrorHandler`.
-
-You can also use method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-```
-
-which allows you to implement `ErrorHandler` and `InternetObservingStrategy` in case you want to have your own strategy for monitoring connectivity with the Internet.
-
-You can use method:
-
-```java
 Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy)
 ```
-
-which allows you to implement custom `InternetObservingStrategy` in case you want to have your own strategy. Remaining settings will be default.
 
 These methods are created to allow the users to fully customize the library and give them more control.
 
 For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
+
+#### Internet Observing Strategies
+
+Right now, we have the following strategies for observing Internet connectivity:
+
+- `SocketInternetObservingStrategy` - monitors Internet connectivity via opening socket connection with the remote host
+- `WalledGardenInternetObservingStrategy` - opens connection with a remote host and respects countries in the Walled Garden (e.g. China)
+
+All of these strategies implements `NetworkObservingStrategy` interface.
+Default strategy used right now is `WalledGardenInternetObservingStrategy`,
+but with `observeInternetConnectivity(strategy)` method we can use one of these strategies explicitly.
 
 ### ProGuard configuration
 
