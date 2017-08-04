@@ -14,7 +14,7 @@ ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.1.2',
             appcompatv7       : 'com.android.support:appcompat-v7:25.3.0',
             junit             : 'junit:junit:4.12',
             truth             : 'com.google.truth:truth:0.34',
-            robolectric       : 'org.robolectric:robolectric:3.4.2',
+            robolectric       : 'org.robolectric:robolectric:3.1.2',
             mockitocore       : 'org.mockito:mockito-core:2.8.47',
             kotlinstdlib      : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             kotlingradleplugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"]
