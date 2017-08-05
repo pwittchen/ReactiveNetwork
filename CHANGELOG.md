@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+v. 0.11.0
+--------
+*05 Aug 2017*
+
+- added `WalledGardenInternetObservingStrategy` - fixes #116
+- made `WalledGardenInternetObservingStrategy` a default strategy for checking Internet connectivity
+- added documentation for NetworkObservingStrategy - solves #197 
+- added documentation for InternetObservingStrategy - solves #198
+- bumped Kotlin version to 1.1.3-2
+- bumped Gradle Android Tools version to 2.3.3
+- bumped Retrolambda to 3.7.0
+
 v. 0.10.0
 --------
 *18 Jul 2017*
