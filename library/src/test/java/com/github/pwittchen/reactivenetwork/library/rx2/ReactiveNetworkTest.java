@@ -57,6 +57,20 @@ public class ReactiveNetworkTest {
 
   @Test public void observeNetworkConnectivityShouldNotBeNull() {
     // given
+    networkConnectivityObservableShouldNotBeNull();
+  }
+
+  @Test @Config(sdk = 23) public void observeNetworkConnectivityShouldNotBeNullForMarshmallow() {
+    // given
+    networkConnectivityObservableShouldNotBeNull();
+  }
+
+  @Test @Config(sdk = 21) public void observeNetworkConnectivityShouldNotBeNullForLollipop() {
+    networkConnectivityObservableShouldNotBeNull();
+  }
+
+  private void networkConnectivityObservableShouldNotBeNull() {
+    // given
     final Context context = RuntimeEnvironment.application;
 
     // when

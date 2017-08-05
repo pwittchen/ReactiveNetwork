@@ -65,7 +65,7 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
     }).defaultIfEmpty(Connectivity.create());
   }
 
-  private void tryToUnregisterReceiver(final Context context, final BroadcastReceiver receiver) {
+  public void tryToUnregisterReceiver(final Context context, final BroadcastReceiver receiver) {
     try {
       context.unregisterReceiver(receiver);
     } catch (Exception exception) {

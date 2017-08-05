@@ -16,6 +16,7 @@
 package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
@@ -25,6 +26,7 @@ import io.reactivex.functions.Consumer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -33,6 +35,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -41,6 +44,7 @@ public class PreLollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+  @Mock private BroadcastReceiver broadcastReceiver;
 
   @Test public void shouldObserveConnectivity() {
     // given
@@ -81,5 +85,18 @@ public class PreLollipopNetworkObservingStrategyTest {
 
     // then
     verify(strategy, times(1)).onError(message, exception);
+  }
+
+  @Test public void shouldTryToUnregisterReceiver() {
+    // given
+    final PreLollipopNetworkObservingStrategy preLollipopNetworkObservingStrategy =
+        new PreLollipopNetworkObservingStrategy();
+    final Application context = spy(RuntimeEnvironment.application);
+
+    // when
+    preLollipopNetworkObservingStrategy.tryToUnregisterReceiver(context, broadcastReceiver);
+
+    // then
+    verify(context).unregisterReceiver(broadcastReceiver);
   }
 }
