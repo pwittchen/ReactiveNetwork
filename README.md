@@ -280,12 +280,12 @@ If you speak Spanish (Español), check out this tutorial: [ReactiveNetwork - Com
 Changelog
 ---------
 
-See [CHANGELOG.md](https://github.com/pwittchen/ReactiveNetwork/blob/master/CHANGELOG.md) file.
+See [CHANGELOG.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava1.x/CHANGELOG.md) file.
 
 Releasing
 ---------
 
-See [RELEASING.md](https://github.com/pwittchen/ReactiveNetwork/blob/master/RELEASING.md) file.
+See [RELEASING.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava1.x/RELEASING.md) file.
 
 License
 -------
