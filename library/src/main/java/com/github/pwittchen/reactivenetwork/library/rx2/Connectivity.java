@@ -47,7 +47,7 @@ public class Connectivity {
     return create(context, getConnectivityManager(context));
   }
 
-  public static Connectivity create(@NonNull Context context, ConnectivityManager manager) {
+  protected static Connectivity create(@NonNull Context context, ConnectivityManager manager) {
     Preconditions.checkNotNull(context, "context == null");
 
     if (manager == null) {
