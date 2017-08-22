@@ -44,7 +44,17 @@ public class Connectivity {
 
   public static Connectivity create(@NonNull Context context) {
     Preconditions.checkNotNull(context, "context == null");
-    final NetworkInfo networkInfo = getNetworkInfo(context);
+    return create(context, getConnectivityManager(context));
+  }
+
+  public static Connectivity create(@NonNull Context context, ConnectivityManager manager) {
+    Preconditions.checkNotNull(context, "context == null");
+
+    if (manager == null) {
+      return create();
+    }
+
+    final NetworkInfo networkInfo = manager.getActiveNetworkInfo();
     return (networkInfo == null) ? create() : create(networkInfo);
   }
 
@@ -80,10 +90,9 @@ public class Connectivity {
     extraInfo = builder.extraInfo;
   }
 
-  private static NetworkInfo getNetworkInfo(final Context context) {
+  private static ConnectivityManager getConnectivityManager(Context context) {
     final String service = Context.CONNECTIVITY_SERVICE;
-    final ConnectivityManager manager = (ConnectivityManager) context.getSystemService(service);
-    return manager.getActiveNetworkInfo();
+    return (ConnectivityManager) context.getSystemService(service);
   }
 
   public NetworkInfo.State getState() {
