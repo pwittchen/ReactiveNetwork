@@ -22,6 +22,7 @@ import io.reactivex.functions.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -66,13 +67,15 @@ public class ConnectivityTest {
 
   @Test public void stateShouldNotBeEqualToGivenValue() throws Exception {
     // given
-    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.DISCONNECTED)
-        .type(ConnectivityManager.TYPE_WIFI)
-        .typeName(TYPE_NAME_WIFI)
-        .build();
+    final Connectivity connectivity =
+        new Connectivity.Builder().state(NetworkInfo.State.DISCONNECTED)
+            .type(ConnectivityManager.TYPE_WIFI)
+            .typeName(TYPE_NAME_WIFI)
+            .build();
 
     // when
-    final Predicate<Connectivity> equalTo = ConnectivityPredicate.hasState(NetworkInfo.State.CONNECTED);
+    final Predicate<Connectivity> equalTo =
+        ConnectivityPredicate.hasState(NetworkInfo.State.CONNECTED);
     final Boolean shouldBeEqualToGivenStatus = equalTo.test(connectivity);
 
     // then
@@ -259,8 +262,7 @@ public class ConnectivityTest {
     assertThat(connectivity.getExtraInfo()).isEqualTo(extraInfo);
   }
 
-  @Test
-  public void connectivityShouldNotBeEqualToAnotherOne() {
+  @Test public void connectivityShouldNotBeEqualToAnotherOne() {
     // given
     Connectivity connectivityOne = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
         .detailedState(NetworkInfo.DetailedState.CONNECTED)
@@ -293,5 +295,27 @@ public class ConnectivityTest {
 
     // then
     assertThat(isAnotherConnectivityTheSame).isFalse();
+  }
+
+  @Test public void shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() {
+    // given
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final ConnectivityManager connectivityManager = null;
+
+    // when
+    Connectivity connectivity = Connectivity.create(context, connectivityManager);
+
+    // then
+    assertThat(connectivity.getType()).isEqualTo(Connectivity.UNKNOWN_TYPE);
+    assertThat(connectivity.getSubType()).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE);
+    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.DISCONNECTED);
+    assertThat(connectivity.getDetailedState()).isEqualTo(NetworkInfo.DetailedState.IDLE);
+    assertThat(connectivity.isAvailable()).isFalse();
+    assertThat(connectivity.isFailover()).isFalse();
+    assertThat(connectivity.isRoaming()).isFalse();
+    assertThat(connectivity.getTypeName()).isEqualTo("NONE");
+    assertThat(connectivity.getSubTypeName()).isEqualTo("NONE");
+    assertThat(connectivity.getReason()).isEmpty();
+    assertThat(connectivity.getExtraInfo()).isEmpty();
   }
 }
