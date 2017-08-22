@@ -26,7 +26,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
 public class ConnectivityTest {
