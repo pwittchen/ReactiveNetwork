@@ -21,6 +21,7 @@ import android.net.NetworkInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import rx.functions.Func1;
 
@@ -222,5 +223,27 @@ public class ConnectivityTest {
     assertThat(connectivity.getSubTypeName()).isEqualTo(subTypeName);
     assertThat(connectivity.getReason()).isEqualTo(reason);
     assertThat(connectivity.getExtraInfo()).isEqualTo(extraInfo);
+  }
+
+  @Test public void shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() {
+    // given
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final ConnectivityManager connectivityManager = null;
+
+    // when
+    Connectivity connectivity = Connectivity.create(context, connectivityManager);
+
+    // then
+    assertThat(connectivity.getType()).isEqualTo(Connectivity.UNKNOWN_TYPE);
+    assertThat(connectivity.getSubType()).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE);
+    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.DISCONNECTED);
+    assertThat(connectivity.getDetailedState()).isEqualTo(NetworkInfo.DetailedState.IDLE);
+    assertThat(connectivity.isAvailable()).isFalse();
+    assertThat(connectivity.isFailover()).isFalse();
+    assertThat(connectivity.isRoaming()).isFalse();
+    assertThat(connectivity.getTypeName()).isEqualTo("NONE");
+    assertThat(connectivity.getSubTypeName()).isEqualTo("NONE");
+    assertThat(connectivity.getReason()).isEmpty();
+    assertThat(connectivity.getExtraInfo()).isEmpty();
   }
 }
