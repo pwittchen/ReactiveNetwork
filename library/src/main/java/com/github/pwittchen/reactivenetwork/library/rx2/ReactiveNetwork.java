@@ -136,6 +136,27 @@ public class ReactiveNetwork {
   }
 
   /**
+   * Observes connectivity with the Internet with default settings,
+   * but with custom InternetObservingStrategy and host. It pings remote host
+   * at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * for determining if device is connected to the Internet or not. Please note that this method is
+   * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
+   * transfer, but it gives you actual information if device is connected to the Internet or not.
+   *
+   * @param strategy which implements InternetObservingStrategy
+   * @param host for checking Internet connectivity
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  public static Observable<Boolean> observeInternetConnectivity(
+      final InternetObservingStrategy strategy, final String host) {
+    checkStrategyIsNotNull(strategy);
+    return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
+        DEFAULT_PING_INTERVAL_IN_MS, host, DEFAULT_PING_PORT, DEFAULT_PING_TIMEOUT_IN_MS,
+        new DefaultErrorHandler());
+  }
+
+  /**
    * Observes connectivity with the Internet in a given time interval.
    *
    * @param intervalInMs in milliseconds determining how often we want to check connectivity
@@ -188,8 +209,8 @@ public class ReactiveNetwork {
   public static Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
-    return observeInternetConnectivity(new WalledGardenInternetObservingStrategy(), initialIntervalInMs,
-        intervalInMs, host, port, timeoutInMs, errorHandler);
+    return observeInternetConnectivity(new WalledGardenInternetObservingStrategy(),
+        initialIntervalInMs, intervalInMs, host, port, timeoutInMs, errorHandler);
   }
 
   /**
@@ -219,7 +240,7 @@ public class ReactiveNetwork {
   /**
    * Checks connectivity with the Internet. This operation is performed only once.
    *
-   * @return RxJava Observable with Boolean - true, when we have an access to the Internet
+   * @return RxJava Single with Boolean - true, when we have an access to the Internet
    * and false if not
    */
   @RequiresPermission(Manifest.permission.INTERNET)
@@ -232,7 +253,7 @@ public class ReactiveNetwork {
    * Checks connectivity with the Internet. This operation is performed only once.
    *
    * @param strategy which implements InternetObservingStrategy
-   * @return RxJava Observable with Boolean - true, when we have an access to the Internet
+   * @return RxJava Single with Boolean - true, when we have an access to the Internet
    * and false if not
    */
   @RequiresPermission(Manifest.permission.INTERNET)
@@ -246,10 +267,25 @@ public class ReactiveNetwork {
   /**
    * Checks connectivity with the Internet. This operation is performed only once.
    *
+   * @param strategy which implements InternetObservingStrategy
+   * @param host for checking Internet connectivity
+   * @return RxJava Single with Boolean - true, when we have an access to the Internet
+   * and false if not
+   */
+  public static Single<Boolean> checkInternetConnectivity(final InternetObservingStrategy strategy,
+      final String host) {
+    checkStrategyIsNotNull(strategy);
+    return strategy.checkInternetConnectivity(host, DEFAULT_PING_PORT,
+        DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
+  }
+
+  /**
+   * Checks connectivity with the Internet. This operation is performed only once.
+   *
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
-   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * @return RxJava Single with Boolean - true, when we have connection with host and false if
    * not
    */
   @RequiresPermission(Manifest.permission.INTERNET)
@@ -265,14 +301,14 @@ public class ReactiveNetwork {
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
    * @param errorHandler for handling errors during connectivity check
-   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * @return RxJava Single with Boolean - true, when we have connection with host and false if
    * not
    */
   @RequiresPermission(Manifest.permission.INTERNET)
   public static Single<Boolean> checkInternetConnectivity(final String host, final int port,
       final int timeoutInMs, final ErrorHandler errorHandler) {
-    return checkInternetConnectivity(new WalledGardenInternetObservingStrategy(), host, port, timeoutInMs,
-        errorHandler);
+    return checkInternetConnectivity(new WalledGardenInternetObservingStrategy(), host, port,
+        timeoutInMs, errorHandler);
   }
 
   /**
@@ -283,7 +319,7 @@ public class ReactiveNetwork {
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
    * @param errorHandler for handling errors during connectivity check
-   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * @return RxJava Single with Boolean - true, when we have connection with host and false if
    * not
    */
   @RequiresPermission(Manifest.permission.INTERNET)
