@@ -131,7 +131,7 @@ public class ReactiveNetwork {
   @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy) {
-    Preconditions.checkNotNull(strategy, "strategy == null");
+    checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
         DEFAULT_PING_INTERVAL_IN_MS, strategy.getDefaultPingHost(), DEFAULT_PING_PORT,
         DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
@@ -152,7 +152,7 @@ public class ReactiveNetwork {
    */
   public static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy, final String host) {
-    Preconditions.checkNotNull(strategy, "strategy == null");
+    checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
         DEFAULT_PING_INTERVAL_IN_MS, host, DEFAULT_PING_PORT, DEFAULT_PING_TIMEOUT_IN_MS,
         new DefaultErrorHandler());
@@ -235,8 +235,12 @@ public class ReactiveNetwork {
       final InternetObservingStrategy strategy, final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
-    Preconditions.checkNotNull(strategy, "strategy == null");
+    checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
         timeoutInMs, errorHandler);
+  }
+
+  private static void checkStrategyIsNotNull(InternetObservingStrategy strategy) {
+    Preconditions.checkNotNull(strategy, "strategy == null");
   }
 }
