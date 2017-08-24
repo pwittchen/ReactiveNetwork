@@ -29,6 +29,7 @@ Contents
     - [Observing Internet connectivity continuously](#observing-internet-connectivity-continuously)
     - [Checking Internet connectivity once](#checking-internet-connectivity-once)
     - [Internet Observing Strategies](#internet-observing-strategies)
+    - [Custom host](#custom-host)
   - [ProGuard configuration](#proguard-configuration)
 - [Examples](#examples)
 - [Download](#download)
@@ -214,6 +215,24 @@ Right now, we have the following strategies for observing Internet connectivity:
 
 All of these strategies implements `NetworkObservingStrategy` interface. Default strategy used right now is `WalledGardenInternetObservingStrategy`,
 but with `checkInternetConnectivity(strategy)` and `observeInternetConnectivity(strategy)` method we can use one of these strategies explicitly.
+
+#### Custom host
+
+If you want to ping custom host during checking Internet connectivity, it's recommended to use `SocketInternetObservingStrategy`.
+You can do it as follows:
+
+```java
+ReactiveNetwork.observeInternetConnectivity(new SocketInternetObservingStrategy(), "www.yourhost.com")
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Consumer<Boolean>() {
+      @Override public void accept(@NonNull Boolean isConnectedToHost) throws Exception {
+        // do something with isConnectedToHost
+      }
+    });
+```
+
+The same operation can be done with `checkInternetConnectivity(strategy, host)` method, which returns `Single` instead of `Observable`.
 
 ### ProGuard configuration
 
