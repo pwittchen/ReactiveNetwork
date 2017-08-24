@@ -131,14 +131,35 @@ public class ReactiveNetwork {
   @RequiresPermission(Manifest.permission.INTERNET)
   public static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy) {
-    Preconditions.checkNotNull(strategy, "strategy == null");
+    checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
         DEFAULT_PING_INTERVAL_IN_MS, strategy.getDefaultPingHost(), DEFAULT_PING_PORT,
         DEFAULT_PING_TIMEOUT_IN_MS, new DefaultErrorHandler());
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
+   * Observes connectivity with the Internet with default settings,
+   * but with custom InternetObservingStrategy and host. It pings remote host
+   * at port 80 every 2 seconds with 2 seconds of timeout. This operation is used
+   * for determining if device is connected to the Internet or not. Please note that this method is
+   * less efficient than {@link #observeNetworkConnectivity(Context)} method and consumes data
+   * transfer, but it gives you actual information if device is connected to the Internet or not.
+   *
+   * @param strategy which implements InternetObservingStrategy
+   * @param host for checking Internet connectivity
+   * @return RxJava Observable with Boolean - true, when we have connection with host and false if
+   * not
+   */
+  public static Observable<Boolean> observeInternetConnectivity(
+      final InternetObservingStrategy strategy, final String host) {
+    checkStrategyIsNotNull(strategy);
+    return strategy.observeInternetConnectivity(DEFAULT_INITIAL_PING_INTERVAL_IN_MS,
+        DEFAULT_PING_INTERVAL_IN_MS, host, DEFAULT_PING_PORT, DEFAULT_PING_TIMEOUT_IN_MS,
+        new DefaultErrorHandler());
+  }
+
+  /**
+   * Observes connectivity with the Internet in a given time interval.
    *
    * @param intervalInMs in milliseconds determining how often we want to check connectivity
    * @param host for checking Internet connectivity
@@ -155,7 +176,7 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes connectivity with the Internet by opening socket connection with remote host
+   * Observes connectivity with the Internet in a given time interval.
    *
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
    * check
@@ -174,7 +195,8 @@ public class ReactiveNetwork {
   }
 
   /**
-   * Observes connectivity with the Internet by opening connection with remote host
+   * Observes connectivity with the Internet by opening connection with remote host in a given time
+   * interval.
    *
    * @param initialIntervalInMs in milliseconds determining the delay of the first connectivity
    * check
@@ -213,8 +235,12 @@ public class ReactiveNetwork {
       final InternetObservingStrategy strategy, final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
-    Preconditions.checkNotNull(strategy, "strategy == null");
+    checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
         timeoutInMs, errorHandler);
+  }
+
+  private static void checkStrategyIsNotNull(InternetObservingStrategy strategy) {
+    Preconditions.checkNotNull(strategy, "strategy == null");
   }
 }
