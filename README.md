@@ -191,14 +191,12 @@ You can do it as follows:
 ReactiveNetwork.observeInternetConnectivity(new SocketInternetObservingStrategy(), "www.yourhost.com")
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer<Boolean>() {
-      @Override public void accept(@NonNull Boolean isConnectedToHost) throws Exception {
-        // do something with isConnectedToHost
-      }
-    });
+    .subscribe(new Action1<Boolean>() {
+        @Override public void call(Boolean isConnectedToHost) {
+            // do something with isConnectedToHost value
+        }
+     });
 ```
-
-The same operation can be done with `checkInternetConnectivity(strategy, host)` method, which returns `Single` instead of `Observable`.
 
 ### ProGuard configuration
 
