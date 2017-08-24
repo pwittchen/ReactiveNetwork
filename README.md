@@ -163,6 +163,7 @@ Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int int
 Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
 Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
 Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy)
+Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final String host)
 ```
 
 These methods are created to allow the users to fully customize the library and give them more control.
@@ -195,6 +196,7 @@ Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy)
 Single<Boolean> checkInternetConnectivity(String host,int port, int timeoutInMs)
 Single<Boolean> checkInternetConnectivity(String host, int port, int timeoutInMs, ErrorHandler errorHandler)
 Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy, String host, int port, int timeoutInMs, ErrorHandler errorHandler)
+Single<Boolean> checkInternetConnectivity(final InternetObservingStrategy strategy, final String host)
 ```
 
 Basic idea is the same. With just have `Single<Boolean>` return type instead of `Observable<Boolean>`
