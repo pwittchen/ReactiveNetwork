@@ -31,7 +31,10 @@ import rx.schedulers.Schedulers;
  */
 public class SocketInternetObservingStrategy implements InternetObservingStrategy {
 
+  private static final String EMPTY_STRING = "";
   private static final String DEFAULT_HOST = "www.google.com";
+  private static final String HTTP_PROTOCOL = "http://";
+  private static final String HTTPS_PROTOCOL = "https://";
 
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host
@@ -57,16 +60,27 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
     Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
     Preconditions.checkNotNull(errorHandler, "errorHandler is null");
 
+    final String adjustedHost = adjustHost(host);
+
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Func1<Long, Boolean>() {
       @Override public Boolean call(Long tick) {
-        return isConnected(host, port, timeoutInMs, errorHandler);
+        return isConnected(adjustedHost, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();
   }
 
   @Override public String getDefaultPingHost() {
     return DEFAULT_HOST;
+  }
+
+  protected String adjustHost(final String host) {
+    if (host.startsWith(HTTP_PROTOCOL)) {
+      return host.replace(HTTP_PROTOCOL, EMPTY_STRING);
+    } else if (host.startsWith(HTTPS_PROTOCOL)) {
+      return host.replace(HTTPS_PROTOCOL, EMPTY_STRING);
+    }
+    return host;
   }
 
   /**
