@@ -1,7 +1,7 @@
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.internet.observing.strategy;
 
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.WalledGardenInternetObservingStrategy;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import org.junit.Rule;
@@ -93,5 +93,52 @@ public class WalledGardenInternetObservingStrategyTest {
 
     // then
     verify(errorHandler).handleError(givenException, errorMsg);
+  }
+
+  @Test public void shouldNotTransformHttpHost() {
+    // given
+    final String givenHost = "http://www.website.com";
+
+    // when
+    String transformedHost = strategy.adjustHost(givenHost);
+
+    // then
+    assertThat(transformedHost).isEqualTo(givenHost);
+  }
+
+  @Test public void shouldNotTransformHttpsHost() {
+    // given
+    final String givenHost = "https://www.website.com";
+
+    // when
+    String transformedHost = strategy.adjustHost(givenHost);
+
+    // then
+    assertThat(transformedHost).isEqualTo(givenHost);
+  }
+
+  @Test public void shouldAddHttpProtocolToHost() {
+    // given
+    final String givenHost = "www.website.com";
+    final String expectedHost = "http://www.website.com";
+
+    // when
+    String transformedHost = strategy.adjustHost(givenHost);
+
+    // then
+    assertThat(transformedHost).isEqualTo(expectedHost);
+  }
+
+  @Test public void shouldAdjustHostWhileCheckingConnectivity() {
+    // given
+    final String host = getHost();
+    when(strategy.isConnected(host, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);
+
+    // when
+    strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, host, PORT,
+        TIMEOUT_IN_MS, errorHandler).toBlocking().first();
+
+    // then
+    verify(strategy).adjustHost(host);
   }
 }

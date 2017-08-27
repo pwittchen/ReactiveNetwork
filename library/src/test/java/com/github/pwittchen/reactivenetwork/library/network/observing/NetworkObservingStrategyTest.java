@@ -13,73 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.network.observing;
 
-import android.app.Application;
 import android.net.NetworkInfo;
-import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
+import com.github.pwittchen.reactivenetwork.library.Connectivity;
+import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.PreLollipopNetworkObservingStrategy;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import rx.Observable;
-import rx.Subscription;
 import rx.functions.Action1;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class PreLollipopNetworkObservingStrategyTest {
+public class NetworkObservingStrategyTest {
 
-  @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+  @Test public void lollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
+    // given
+    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
-  @Test public void shouldObserveConnectivity() {
+    // when
+    assertThatIsConnected(strategy);
+  }
+
+  @Test public void preLollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
     // given
     final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
 
     // when
+    assertThatIsConnected(strategy);
+  }
+
+  private void assertThatIsConnected(NetworkObservingStrategy strategy) {
     strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
         .subscribe(new Action1<Connectivity>() {
           @Override public void call(Connectivity connectivity) {
-
             // then
             assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
           }
         });
-  }
-
-  @Test public void shouldStopObservingConnectivity() {
-    // given
-    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
-    final Application context = RuntimeEnvironment.application;
-    final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
-
-    // when
-    Subscription subscription = observable.subscribe();
-    subscription.unsubscribe();
-
-    // then
-    assertThat(subscription.isUnsubscribed()).isTrue();
-  }
-
-  @Test public void shouldCallOnError() {
-    // given
-    final String message = "error message";
-    final Exception exception = new Exception();
-
-    // when
-    strategy.onError(message, exception);
-
-    // then
-    verify(strategy, times(1)).onError(message, exception);
   }
 }

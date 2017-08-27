@@ -14,6 +14,8 @@ import rx.schedulers.Schedulers;
 public class WalledGardenInternetObservingStrategy implements InternetObservingStrategy {
 
   private static final String DEFAULT_HOST = "http://clients3.google.com/generate_204";
+  private static final String HTTP_PROTOCOL = "http://";
+  private static final String HTTPS_PROTOCOL = "https://";
 
   @Override public Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
@@ -21,16 +23,26 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
 
     checkPreconditions(initialIntervalInMs, intervalInMs, host, port, timeoutInMs, errorHandler);
 
+    final String adjustedHost = adjustHost(host);
+
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Func1<Long, Boolean>() {
       @Override public Boolean call(Long aLong) {
-        return isConnected(host, port, timeoutInMs, errorHandler);
+        return isConnected(adjustedHost, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();
   }
 
   @Override public String getDefaultPingHost() {
     return DEFAULT_HOST;
+  }
+
+  protected String adjustHost(final String host) {
+    if (!host.startsWith(HTTP_PROTOCOL) && !host.startsWith(HTTPS_PROTOCOL)) {
+      return HTTP_PROTOCOL.concat(host);
+    }
+
+    return host;
   }
 
   private void checkPreconditions(final int initialIntervalInMs, final int intervalInMs,
@@ -44,7 +56,7 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
     Preconditions.checkNotNull(errorHandler, "errorHandler is null");
   }
 
-  public Boolean isConnected(final String host, final int port, final int timeoutInMs,
+  protected Boolean isConnected(final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
     HttpURLConnection urlConnection = null;
     try {
@@ -60,7 +72,7 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
     }
   }
 
-  public HttpURLConnection createHttpUrlConnection(final String host, final int port,
+  protected HttpURLConnection createHttpUrlConnection(final String host, final int port,
       final int timeoutInMs) throws IOException {
     URL initialUrl = new URL(host);
     URL url = new URL(initialUrl.getProtocol(), initialUrl.getHost(), port, initialUrl.getFile());
