@@ -35,7 +35,10 @@ import java.util.concurrent.TimeUnit;
  * It monitors Internet connectivity via opening socket connection with the remote host.
  */
 public class SocketInternetObservingStrategy implements InternetObservingStrategy {
+  private static final String EMPTY_STRING = "";
   private static final String DEFAULT_HOST = "www.google.com";
+  private static final String HTTP_PROTOCOL = "http://";
+  private static final String HTTPS_PROTOCOL = "https://";
 
   @Override public String getDefaultPingHost() {
     return DEFAULT_HOST;
@@ -49,10 +52,12 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
     Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
     checkGeneralPreconditions(host, port, timeoutInMs, errorHandler);
 
+    final String adjustedHost = adjustHost(host);
+
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Function<Long, Boolean>() {
       @Override public Boolean apply(@NonNull Long tick) throws Exception {
-        return isConnected(host, port, timeoutInMs, errorHandler);
+        return isConnected(adjustedHost, port, timeoutInMs, errorHandler);
       }
     }).distinctUntilChanged();
   }
@@ -66,6 +71,20 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
         emitter.onSuccess(isConnected(host, port, timeoutInMs, errorHandler));
       }
     });
+  }
+
+  /**
+   * adjusts host to needs of SocketInternetObservingStrategy
+   *
+   * @return transformed host
+   */
+  protected String adjustHost(final String host) {
+    if (host.startsWith(HTTP_PROTOCOL)) {
+      return host.replace(HTTP_PROTOCOL, EMPTY_STRING);
+    } else if (host.startsWith(HTTPS_PROTOCOL)) {
+      return host.replace(HTTPS_PROTOCOL, EMPTY_STRING);
+    }
+    return host;
   }
 
   private void checkGeneralPreconditions(String host, int port, int timeoutInMs,
@@ -85,7 +104,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
    * @param errorHandler error handler for socket connection
    * @return boolean true if connected and false if not
    */
-  public boolean isConnected(final String host, final int port, final int timeoutInMs,
+  protected boolean isConnected(final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
     final Socket socket = new Socket();
     return isConnected(socket, host, port, timeoutInMs, errorHandler);
@@ -101,7 +120,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
    * @param errorHandler error handler for socket connection
    * @return boolean true if connected and false if not
    */
-  public boolean isConnected(final Socket socket, final String host, final int port,
+  protected boolean isConnected(final Socket socket, final String host, final int port,
       final int timeoutInMs, final ErrorHandler errorHandler) {
     boolean isConnected;
     try {

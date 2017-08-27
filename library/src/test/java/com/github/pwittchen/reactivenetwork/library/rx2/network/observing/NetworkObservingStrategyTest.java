@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library.rx2;
+package com.github.pwittchen.reactivenetwork.library.rx2.network.observing;
 
 import android.net.NetworkInfo;
-import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
+import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
 import io.reactivex.functions.Consumer;
