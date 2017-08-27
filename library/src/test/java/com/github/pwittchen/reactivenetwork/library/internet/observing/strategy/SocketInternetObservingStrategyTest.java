@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.internet.observing.strategy;
 
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.SocketInternetObservingStrategy;
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;

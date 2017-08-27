@@ -1,7 +1,7 @@
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.internet.observing.strategy;
 
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.internet.observing.strategy.WalledGardenInternetObservingStrategy;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import org.junit.Rule;

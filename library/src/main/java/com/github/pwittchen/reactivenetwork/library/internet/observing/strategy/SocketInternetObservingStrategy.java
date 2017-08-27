@@ -78,7 +78,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
    * @param errorHandler error handler for socket connection
    * @return boolean true if connected and false if not
    */
-  public boolean isConnected(final String host, final int port, final int timeoutInMs,
+  protected boolean isConnected(final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
     final Socket socket = new Socket();
     return isConnected(socket, host, port, timeoutInMs, errorHandler);
@@ -94,7 +94,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
    * @param errorHandler error handler for socket connection
    * @return boolean true if connected and false if not
    */
-  public boolean isConnected(final Socket socket, final String host, final int port,
+  protected boolean isConnected(final Socket socket, final String host, final int port,
       final int timeoutInMs, final ErrorHandler errorHandler) {
     boolean isConnected;
     try {

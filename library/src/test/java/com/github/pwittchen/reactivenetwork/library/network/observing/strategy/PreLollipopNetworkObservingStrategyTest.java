@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library;
+package com.github.pwittchen.reactivenetwork.library.network.observing.strategy;
 
 import android.app.Application;
 import android.net.NetworkInfo;
+import com.github.pwittchen.reactivenetwork.library.BuildConfig;
+import com.github.pwittchen.reactivenetwork.library.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.network.observing.NetworkObservingStrategy;
-import com.github.pwittchen.reactivenetwork.library.network.observing.strategy.LollipopNetworkObservingStrategy;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,14 +38,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class LollipopNetworkObservingStrategyTest {
+public class PreLollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+  @Spy private NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
 
   @Test public void shouldObserveConnectivity() {
     // given
-    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
 
     // when
     strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
@@ -59,12 +60,12 @@ public class LollipopNetworkObservingStrategyTest {
 
   @Test public void shouldStopObservingConnectivity() {
     // given
-    final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
     final Application context = RuntimeEnvironment.application;
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
 
     // when
-    final Subscription subscription = observable.subscribe();
+    Subscription subscription = observable.subscribe();
     subscription.unsubscribe();
 
     // then

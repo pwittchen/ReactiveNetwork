@@ -44,7 +44,7 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
     Preconditions.checkNotNull(errorHandler, "errorHandler is null");
   }
 
-  public Boolean isConnected(final String host, final int port, final int timeoutInMs,
+  protected Boolean isConnected(final String host, final int port, final int timeoutInMs,
       final ErrorHandler errorHandler) {
     HttpURLConnection urlConnection = null;
     try {
@@ -60,7 +60,7 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
     }
   }
 
-  public HttpURLConnection createHttpUrlConnection(final String host, final int port,
+  protected HttpURLConnection createHttpUrlConnection(final String host, final int port,
       final int timeoutInMs) throws IOException {
     URL initialUrl = new URL(host);
     URL url = new URL(initialUrl.getProtocol(), initialUrl.getHost(), port, initialUrl.getFile());
