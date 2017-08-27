@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pwittchen.reactivenetwork.library.rx2;
+package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy;
 
+import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.io.IOException;
@@ -137,5 +137,53 @@ import static org.mockito.Mockito.when;
 
     // then
     assertThat(isConnected).isFalse();
+  }
+
+  @Test public void shouldNotTransformHost() {
+    // given
+    final String givenHost = "www.website.com";
+
+    // when
+    String transformedHost = strategy.adjustHost(givenHost);
+
+    // then
+    assertThat(transformedHost).isEqualTo(givenHost);
+  }
+
+  @Test public void shouldRemoveHttpProtocolFromHost() {
+    // given
+    final String givenHost = "http://www.website.com";
+    final String expectedHost = "www.website.com";
+
+    // when
+    String transformedHost = strategy.adjustHost(givenHost);
+
+    // then
+    assertThat(transformedHost).isEqualTo(expectedHost);
+  }
+
+  @Test public void shouldRemoveHttpsProtocolFromHost() {
+    // given
+    final String givenHost = "https://www.website.com";
+    final String expectedHost = "www.website.com";
+
+    // when
+    String transformedHost = strategy.adjustHost(givenHost);
+
+    // then
+    assertThat(transformedHost).isEqualTo(expectedHost);
+  }
+
+  @Test public void shouldAdjustHostDuringCheckingConnectivity() {
+    // given
+    final String host = getHost();
+    when(strategy.isConnected(host, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);
+
+    // when
+    strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, host, PORT,
+        TIMEOUT_IN_MS, errorHandler).blockingFirst();
+
+    // then
+    verify(strategy).adjustHost(host);
   }
 }
