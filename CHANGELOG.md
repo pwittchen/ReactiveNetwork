@@ -1,6 +1,24 @@
 CHANGELOG
 =========
 
+v. 0.12.0
+--------
+*30 Aug 2017*
+
+- Fixed NPE occuring when `ConnectivityManager` is `null` in `ReactiveNetwork.observeNetworkConnectivity()` method - issue #209
+- Added new methods to the API for checking Internet connectivity - issue #205 
+  - `Observable<Boolean> observeInternetConnectivity(strategy, host)`
+  - `Single<Boolean> checkInternetConnectivity(strategy, host)`
+- Added to documentation comment about monitoring Internet connectivity with custom host - issue #204 
+- Classes which implement InternetObservingStrategy handle custom hosts with and without `http://` or `https://` prefix gracefully - issue #206
+- organized packages with unit tests 
+- made the library more hermetic
+- changed visibility of `SocketInternetObservingStrategy#isConnected(String host, int port, int timeoutInMs, ErrorHandler handler)` method from `public` to `protected`
+- changed visibility of `SocketInternetObservingStrategy#isConnected(Socket socket, String host, int port, int timeoutInMs, ErrorHandler errorHandler)` method from `public` to `protected`
+- changed visibility of `Connectivity#create(Context, ConnectivityManager)` method from `public` to `protected`
+- changed visibility of `WalledGardenInternetObservingStrategy#isConnected(String host, int port, int timeoutInMs, ErrorHandler errorHandler)` method from `public` to `protected`
+- changed visibility of `WalledGardenInternetObservingStrategy#createHttpUrlConnection(String host, int port, int timeoutInMs)` method from `public` to `protected`
+
 v. 0.11.0
 --------
 *05 Aug 2017*
