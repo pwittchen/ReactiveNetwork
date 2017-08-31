@@ -56,11 +56,12 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
 
         context.registerReceiver(receiver, filter);
 
-        unsubscribeInUiThread(new Action() {
+        Disposable disposable = unsubscribeInUiThread(new Action() {
           @Override public void run() {
             tryToUnregisterReceiver(context, receiver);
           }
         });
+        emitter.setDisposable(disposable);
       }
     }).defaultIfEmpty(Connectivity.create());
   }
