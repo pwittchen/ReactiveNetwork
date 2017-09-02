@@ -43,8 +43,9 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class PreLollipopNetworkObservingStrategyTest {
+// We are suppressing PMD here because we want static imports in unit tests
+@SuppressWarnings("PMD") @RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class) public class PreLollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private PreLollipopNetworkObservingStrategy strategy =
