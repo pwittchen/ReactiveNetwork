@@ -17,6 +17,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strat
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
@@ -36,6 +37,8 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,28 +47,29 @@ import static org.mockito.Mockito.verify;
 public class PreLollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+  @Spy private PreLollipopNetworkObservingStrategy strategy =
+      new PreLollipopNetworkObservingStrategy();
   @Mock private BroadcastReceiver broadcastReceiver;
 
   @Test public void shouldObserveConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
 
     // when
-    strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
-        .subscribe(new Consumer<Connectivity>() {
-          @Override public void accept(Connectivity connectivity) {
+    strategy.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
+      @Override public void accept(Connectivity connectivity) {
 
-            // then
-            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
-          }
-        });
+        // then
+        assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
+      }
+    });
   }
 
   @Test public void shouldStopObservingConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
-    final Application context = RuntimeEnvironment.application;
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
 
     // when
@@ -99,5 +103,17 @@ public class PreLollipopNetworkObservingStrategyTest {
 
     // then
     verify(context).unregisterReceiver(broadcastReceiver);
+  }
+
+  @Test public void shouldTryToUnregisterReceiverAfterDispose() {
+    // given
+    Context context = RuntimeEnvironment.application.getApplicationContext();
+
+    // when
+    Disposable disposable = strategy.observeNetworkConnectivity(context).subscribe();
+    disposable.dispose();
+
+    // then
+    verify(strategy).tryToUnregisterReceiver(eq(context), any(BroadcastReceiver.class));
   }
 }

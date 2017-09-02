@@ -56,7 +56,7 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
 
         context.registerReceiver(receiver, filter);
 
-        Disposable disposable = unsubscribeInUiThread(new Action() {
+        Disposable disposable = disposeInUiThread(new Action() {
           @Override public void run() {
             tryToUnregisterReceiver(context, receiver);
           }
@@ -78,17 +78,17 @@ public class PreLollipopNetworkObservingStrategy implements NetworkObservingStra
     Log.e(LOG_TAG, message, exception);
   }
 
-  private Disposable unsubscribeInUiThread(final Action unsubscribe) {
+  private Disposable disposeInUiThread(final Action action) {
     return Disposables.fromAction(new Action() {
       @Override public void run() throws Exception {
         if (Looper.getMainLooper() == Looper.myLooper()) {
-          unsubscribe.run();
+          action.run();
         } else {
           final Scheduler.Worker inner = AndroidSchedulers.mainThread().createWorker();
           inner.schedule(new Runnable() {
             @Override public void run() {
               try {
-                unsubscribe.run();
+                action.run();
               } catch (Exception e) {
                 onError("Could not unregister receiver in UI Thread", e);
               }
