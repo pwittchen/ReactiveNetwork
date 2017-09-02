@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+v. 0.12.1
+--------
+*02 Sep 2017*
+
+Fixed memory leak in `PreLollipopNetworkObservingStrategy` during disposing of an `Observable` - issue #219.
+
 v. 0.12.0
 --------
 *30 Aug 2017*
