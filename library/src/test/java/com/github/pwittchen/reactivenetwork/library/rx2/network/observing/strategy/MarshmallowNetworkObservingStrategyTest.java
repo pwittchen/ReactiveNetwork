@@ -44,8 +44,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class MarshmallowNetworkObservingStrategyTest {
+// we're suppressing PMD warnings because we want static imports in tests
+@SuppressWarnings("PMD") @RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class) public class MarshmallowNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private MarshmallowNetworkObservingStrategy strategy =
@@ -119,7 +120,8 @@ public class MarshmallowNetworkObservingStrategyTest {
     verify(strategy).tryToUnregisterReceiver(context);
   }
 
-  @Test public void shouldNotBeInIdleModeWhenDeviceIsIdleAndIsIgnoringBatteryOptimizations() {
+  @Test
+  public void shouldNotBeInIdleModeWhenDeviceIsNotInIdleAndIsNotIgnoringBatteryOptimizations() {
     // given
     preparePowerManagerMocks(Boolean.FALSE, Boolean.FALSE);
 
@@ -130,7 +132,7 @@ public class MarshmallowNetworkObservingStrategyTest {
     assertThat(isIdleMode).isFalse();
   }
 
-  @Test public void shouldBeInIdleModeWhenDeviceIsIgnoringBatteryOptimizations() {
+  @Test public void shouldBeInIdleModeWhenDeviceIsNotIgnoringBatteryOptimizations() {
     // given
     preparePowerManagerMocks(Boolean.TRUE, Boolean.FALSE);
 
@@ -141,7 +143,18 @@ public class MarshmallowNetworkObservingStrategyTest {
     assertThat(isIdleMode).isTrue();
   }
 
-  @Test public void shouldNotBeInIdleModeWhenDeviceIsInIdleMode() {
+  @Test public void shouldNotBeInIdleModeWhenDeviceIsInIdleModeAndIgnoringBatteryOptimizations() {
+    // given
+    preparePowerManagerMocks(Boolean.TRUE, Boolean.TRUE);
+
+    // when
+    final boolean isIdleMode = strategy.isIdleMode(contextMock);
+
+    // then
+    assertThat(isIdleMode).isFalse();
+  }
+
+  @Test public void shouldNotBeInIdleModeWhenDeviceIsNotInIdleMode() {
     // given
     preparePowerManagerMocks(Boolean.FALSE, Boolean.TRUE);
 
