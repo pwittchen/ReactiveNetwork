@@ -16,8 +16,11 @@
 package com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.PowerManager;
@@ -40,6 +43,7 @@ import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -53,7 +57,10 @@ import static org.mockito.Mockito.when;
       new MarshmallowNetworkObservingStrategy();
 
   @Mock private PowerManager powerManager;
+  @Mock private ConnectivityManager connectivityManager;
   @Mock private Context contextMock;
+  @Mock private Intent intent;
+  @Mock private Network network;
   @Spy private Context context;
 
   @Before public void setUp() {
@@ -165,6 +172,30 @@ import static org.mockito.Mockito.when;
     assertThat(isIdleMode).isFalse();
   }
 
+  @Test public void shouldReceiveIntentInIdleMode() {
+    // given
+    preparePowerManagerMocks(Boolean.TRUE, Boolean.FALSE);
+    BroadcastReceiver broadcastReceiver = strategy.createBroadcastReceiver();
+
+    // when
+    broadcastReceiver.onReceive(contextMock, intent);
+
+    // then
+    verify(strategy).onNext(any(Connectivity.class));
+  }
+
+  @Test public void shouldReceiveIntentWhenIsNotInIdleMode() {
+    // given
+    preparePowerManagerMocks(Boolean.FALSE, Boolean.FALSE);
+    BroadcastReceiver broadcastReceiver = strategy.createBroadcastReceiver();
+
+    // when
+    broadcastReceiver.onReceive(contextMock, intent);
+
+    // then
+    verify(strategy).onNext(any(Connectivity.class));
+  }
+
   @TargetApi(Build.VERSION_CODES.M)
   private void preparePowerManagerMocks(final Boolean isDeviceInIdleMode,
       final Boolean isIgnoringBatteryOptimizations) {
@@ -174,5 +205,68 @@ import static org.mockito.Mockito.when;
     when(powerManager.isDeviceIdleMode()).thenReturn(isDeviceInIdleMode);
     when(powerManager.isIgnoringBatteryOptimizations(packageName)).thenReturn(
         isIgnoringBatteryOptimizations);
+  }
+
+  @Test public void shouldCreateNetworkCallbackOnSubscribe() {
+    // given
+    final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
+
+    // when
+    observable.subscribe();
+
+    // then
+    verify(strategy).createNetworkCallback(context);
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP) @Test
+  public void shouldInvokeOnNextOnNetworkAvailable() {
+    // given
+    ConnectivityManager.NetworkCallback networkCallback = strategy.createNetworkCallback(context);
+
+    // when
+    networkCallback.onAvailable(network);
+
+    // then
+    verify(strategy).onNext(any(Connectivity.class));
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP) @Test public void shouldInvokeOnNextOnNetworkLost() {
+    // given
+    ConnectivityManager.NetworkCallback networkCallback = strategy.createNetworkCallback(context);
+
+    // when
+    networkCallback.onLost(network);
+
+    // then
+    verify(strategy).onNext(any(Connectivity.class));
+  }
+
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP) @Test
+  public void shouldHandleErrorWhileTryingToUnregisterCallback() {
+    // given
+    strategy.observeNetworkConnectivity(context);
+    final IllegalArgumentException exception = new IllegalArgumentException();
+    doThrow(exception).when(connectivityManager)
+        .unregisterNetworkCallback(any(ConnectivityManager.NetworkCallback.class));
+
+    // when
+    strategy.tryToUnregisterCallback(connectivityManager);
+
+    // then
+    verify(strategy).onError(MarshmallowNetworkObservingStrategy.ERROR_MSG_NETWORK_CALLBACK,
+        exception);
+  }
+
+  @Test public void shouldHandleErrorWhileTryingToUnregisterReceiver() {
+    // given
+    strategy.observeNetworkConnectivity(context);
+    final RuntimeException exception = new RuntimeException();
+    doThrow(exception).when(contextMock).unregisterReceiver(any(BroadcastReceiver.class));
+
+    // when
+    strategy.tryToUnregisterReceiver(contextMock);
+
+    // then
+    verify(strategy).onError(MarshmallowNetworkObservingStrategy.ERROR_MSG_RECEIVER, exception);
   }
 }

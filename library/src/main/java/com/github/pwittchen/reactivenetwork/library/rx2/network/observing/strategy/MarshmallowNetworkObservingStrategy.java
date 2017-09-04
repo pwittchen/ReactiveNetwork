@@ -25,6 +25,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
@@ -41,6 +42,10 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
  */
 @TargetApi(23) public class MarshmallowNetworkObservingStrategy
     implements NetworkObservingStrategy {
+  protected static final String ERROR_MSG_NETWORK_CALLBACK =
+      "could not unregister network callback";
+  protected static final String ERROR_MSG_RECEIVER = "could not unregister receiver";
+
   private ConnectivityManager.NetworkCallback networkCallback;
   private PublishSubject<Connectivity> connectivitySubject = PublishSubject.create();
   private BroadcastReceiver idleReceiver;
@@ -69,16 +74,20 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
 
   protected void registerIdleReceiver(final Context context) {
     final IntentFilter filter = new IntentFilter(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED);
-    idleReceiver = new BroadcastReceiver() {
+    idleReceiver = createBroadcastReceiver();
+    context.registerReceiver(idleReceiver, filter);
+  }
+
+  @NonNull protected BroadcastReceiver createBroadcastReceiver() {
+    return new BroadcastReceiver() {
       @Override public void onReceive(final Context context, final Intent intent) {
         if (isIdleMode(context)) {
-          connectivitySubject.onNext(Connectivity.create());
+          onNext(Connectivity.create());
         } else {
-          connectivitySubject.onNext(Connectivity.create(context));
+          onNext(Connectivity.create(context));
         }
       }
     };
-    context.registerReceiver(idleReceiver, filter);
   }
 
   protected boolean isIdleMode(final Context context) {
@@ -92,7 +101,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     try {
       manager.unregisterNetworkCallback(networkCallback);
     } catch (Exception exception) {
-      onError("could not unregister network callback", exception);
+      onError(ERROR_MSG_NETWORK_CALLBACK, exception);
     }
   }
 
@@ -100,7 +109,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     try {
       context.unregisterReceiver(idleReceiver);
     } catch (Exception exception) {
-      onError("could not unregister receiver", exception);
+      onError(ERROR_MSG_RECEIVER, exception);
     }
   }
 
@@ -108,15 +117,19 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     Log.e(LOG_TAG, message, exception);
   }
 
-  private ConnectivityManager.NetworkCallback createNetworkCallback(final Context context) {
+  protected ConnectivityManager.NetworkCallback createNetworkCallback(final Context context) {
     return new ConnectivityManager.NetworkCallback() {
       @Override public void onAvailable(Network network) {
-        connectivitySubject.onNext(Connectivity.create(context));
+        onNext(Connectivity.create(context));
       }
 
       @Override public void onLost(Network network) {
-        connectivitySubject.onNext(Connectivity.create(context));
+        onNext(Connectivity.create(context));
       }
     };
+  }
+
+  protected void onNext(Connectivity connectivity) {
+    connectivitySubject.onNext(connectivity);
   }
 }
