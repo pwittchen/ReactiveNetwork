@@ -172,17 +172,6 @@ import static org.mockito.Mockito.when;
     assertThat(isIdleMode).isFalse();
   }
 
-  @TargetApi(Build.VERSION_CODES.M)
-  private void preparePowerManagerMocks(final Boolean isDeviceInIdleMode,
-      final Boolean isIgnoringBatteryOptimizations) {
-    final String packageName = "com.github.pwittchen.test";
-    when(contextMock.getPackageName()).thenReturn(packageName);
-    when(contextMock.getSystemService(Context.POWER_SERVICE)).thenReturn(powerManager);
-    when(powerManager.isDeviceIdleMode()).thenReturn(isDeviceInIdleMode);
-    when(powerManager.isIgnoringBatteryOptimizations(packageName)).thenReturn(
-        isIgnoringBatteryOptimizations);
-  }
-
   @Test public void shouldReceiveIntentInIdleMode() {
     // given
     preparePowerManagerMocks(Boolean.TRUE, Boolean.FALSE);
@@ -205,6 +194,17 @@ import static org.mockito.Mockito.when;
 
     // then
     verify(strategy).onNext(any(Connectivity.class));
+  }
+
+  @TargetApi(Build.VERSION_CODES.M)
+  private void preparePowerManagerMocks(final Boolean isDeviceInIdleMode,
+      final Boolean isIgnoringBatteryOptimizations) {
+    final String packageName = "com.github.pwittchen.test";
+    when(contextMock.getPackageName()).thenReturn(packageName);
+    when(contextMock.getSystemService(Context.POWER_SERVICE)).thenReturn(powerManager);
+    when(powerManager.isDeviceIdleMode()).thenReturn(isDeviceInIdleMode);
+    when(powerManager.isIgnoringBatteryOptimizations(packageName)).thenReturn(
+        isIgnoringBatteryOptimizations);
   }
 
   @Test public void shouldCreateNetworkCallbackOnSubscribe() {
