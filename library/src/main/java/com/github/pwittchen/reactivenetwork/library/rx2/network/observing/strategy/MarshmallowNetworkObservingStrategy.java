@@ -67,7 +67,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     }).startWith(Connectivity.create(context)).distinctUntilChanged().toObservable();
   }
 
-  private void registerIdleReceiver(final Context context) {
+  protected void registerIdleReceiver(final Context context) {
     final IntentFilter filter = new IntentFilter(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED);
     idleReceiver = new BroadcastReceiver() {
       @Override public void onReceive(final Context context, final Intent intent) {
@@ -81,14 +81,14 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     context.registerReceiver(idleReceiver, filter);
   }
 
-  private boolean isIdleMode(final Context context) {
+  protected boolean isIdleMode(final Context context) {
     final String packageName = context.getPackageName();
     final PowerManager manager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     boolean isIgnoringOptimizations = manager.isIgnoringBatteryOptimizations(packageName);
     return manager.isDeviceIdleMode() && !isIgnoringOptimizations;
   }
 
-  private void tryToUnregisterCallback(final ConnectivityManager manager) {
+  protected void tryToUnregisterCallback(final ConnectivityManager manager) {
     try {
       manager.unregisterNetworkCallback(networkCallback);
     } catch (Exception exception) {
@@ -96,7 +96,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     }
   }
 
-  private void tryToUnregisterReceiver(Context context) {
+  protected void tryToUnregisterReceiver(Context context) {
     try {
       context.unregisterReceiver(idleReceiver);
     } catch (Exception exception) {
