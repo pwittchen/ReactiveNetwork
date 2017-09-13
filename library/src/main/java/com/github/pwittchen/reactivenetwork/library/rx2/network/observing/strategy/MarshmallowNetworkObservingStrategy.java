@@ -53,7 +53,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
 
   @SuppressWarnings("NullAway") // networkCallback cannot be initialized here
   public MarshmallowNetworkObservingStrategy() {
-    this.idleReceiver = createBroadcastReceiver();
+    this.idleReceiver = createIdleBroadcastReceiver();
   }
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
@@ -83,7 +83,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     context.registerReceiver(idleReceiver, filter);
   }
 
-  @NonNull protected BroadcastReceiver createBroadcastReceiver() {
+  @NonNull protected BroadcastReceiver createIdleBroadcastReceiver() {
     return new BroadcastReceiver() {
       @Override public void onReceive(final Context context, final Intent intent) {
         if (isIdleMode(context)) {

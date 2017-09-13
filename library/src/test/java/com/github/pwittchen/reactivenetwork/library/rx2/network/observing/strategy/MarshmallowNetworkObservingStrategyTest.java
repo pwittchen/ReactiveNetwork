@@ -173,7 +173,7 @@ import static org.mockito.Mockito.when;
   @Test public void shouldReceiveIntentInIdleMode() {
     // given
     preparePowerManagerMocks(Boolean.TRUE, Boolean.FALSE);
-    BroadcastReceiver broadcastReceiver = strategy.createBroadcastReceiver();
+    BroadcastReceiver broadcastReceiver = strategy.createIdleBroadcastReceiver();
 
     // when
     broadcastReceiver.onReceive(contextMock, intent);
@@ -185,7 +185,7 @@ import static org.mockito.Mockito.when;
   @Test public void shouldReceiveIntentWhenIsNotInIdleMode() {
     // given
     preparePowerManagerMocks(Boolean.FALSE, Boolean.FALSE);
-    BroadcastReceiver broadcastReceiver = strategy.createBroadcastReceiver();
+    BroadcastReceiver broadcastReceiver = strategy.createIdleBroadcastReceiver();
 
     // when
     broadcastReceiver.onReceive(contextMock, intent);
