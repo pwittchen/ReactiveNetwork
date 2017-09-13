@@ -59,9 +59,9 @@ dependencies {
   testCompile deps.robolectric
   testCompile deps.mockitocore
 
-  annotationProcessor 'com.uber.nullaway:nullaway:0.1.2'
+  annotationProcessor deps.nullaway
 
-  errorprone 'com.google.errorprone:error_prone_core:2.1.1'
+  errorprone deps.errorprone
 }
 
 task wrapper(type: Wrapper) {
