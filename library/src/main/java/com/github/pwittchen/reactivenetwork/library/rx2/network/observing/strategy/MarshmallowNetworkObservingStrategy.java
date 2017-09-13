@@ -46,9 +46,15 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
       "could not unregister network callback";
   protected static final String ERROR_MSG_RECEIVER = "could not unregister receiver";
 
+  @SuppressWarnings("NullAway") // it has to be initialized in the Observable due to Context
   private ConnectivityManager.NetworkCallback networkCallback;
   private PublishSubject<Connectivity> connectivitySubject = PublishSubject.create();
   private BroadcastReceiver idleReceiver;
+
+  @SuppressWarnings("NullAway") // networkCallback cannot be initialized here
+  public MarshmallowNetworkObservingStrategy() {
+    this.idleReceiver = createBroadcastReceiver();
+  }
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final String service = Context.CONNECTIVITY_SERVICE;
@@ -74,7 +80,6 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
 
   protected void registerIdleReceiver(final Context context) {
     final IntentFilter filter = new IntentFilter(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED);
-    idleReceiver = createBroadcastReceiver();
     context.registerReceiver(idleReceiver, filter);
   }
 

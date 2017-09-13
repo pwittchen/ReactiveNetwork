@@ -36,6 +36,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
  * Uses Network Callback API.
  */
 @TargetApi(21) public class LollipopNetworkObservingStrategy implements NetworkObservingStrategy {
+  @SuppressWarnings("NullAway") // it has to be initialized in the Observable due to Context
   private NetworkCallback networkCallback;
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {

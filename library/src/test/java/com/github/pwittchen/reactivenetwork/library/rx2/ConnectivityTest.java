@@ -28,7 +28,7 @@ import org.robolectric.annotation.Config;
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class ConnectivityTest {
+@SuppressWarnings("NullAway") public class ConnectivityTest {
   private static final String TYPE_NAME_WIFI = "WIFI";
   private static final String TYPE_NAME_MOBILE = "MOBILE";
 

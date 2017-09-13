@@ -15,6 +15,7 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2.network.observing;
 
+import android.content.Context;
 import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
@@ -30,7 +31,7 @@ import org.robolectric.annotation.Config;
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class NetworkObservingStrategyTest {
+@SuppressWarnings("NullAway") public class NetworkObservingStrategyTest {
 
   @Test public void lollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
     // given
@@ -48,13 +49,17 @@ public class NetworkObservingStrategyTest {
     assertThatIsConnected(strategy);
   }
 
+  @SuppressWarnings("CheckReturnValue")
   private void assertThatIsConnected(NetworkObservingStrategy strategy) {
-    strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
-        .subscribe(new Consumer<Connectivity>() {
-          @Override public void accept(Connectivity connectivity) {
-            // then
-            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
-          }
-        });
+    // given
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
+
+    //when
+    strategy.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
+      @Override public void accept(Connectivity connectivity) throws Exception {
+        // then
+        assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
+      }
+    });
   }
 }

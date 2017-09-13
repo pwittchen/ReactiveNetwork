@@ -26,7 +26,6 @@ import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.Networ
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.functions.Consumer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -36,7 +35,7 @@ import org.robolectric.annotation.Config;
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class ReactiveNetworkTest {
+@SuppressWarnings("NullAway") public class ReactiveNetworkTest {
 
   private static final String TEST_VALID_HOST = "www.test.com";
   private static final int TEST_VALID_PORT = 80;
@@ -137,14 +136,14 @@ public class ReactiveNetworkTest {
   }
 
   @Test public void observeNetworkConnectivityShouldBeConnectedOnStartWhenNetworkIsAvailable() {
-
+    // given
     final Application context = RuntimeEnvironment.application;
 
-    ReactiveNetwork.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
-      @Override public void accept(Connectivity connectivity) {
-        assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
-      }
-    });
+    // when
+    Connectivity connectivity = ReactiveNetwork.observeNetworkConnectivity(context).blockingFirst();
+
+    // then
+    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -362,7 +361,7 @@ public class ReactiveNetworkTest {
     // an exception is thrown
   }
 
-  public void observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
+  @Test public void observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
     // given
     final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
     final int initialInterval = TEST_VALID_INITIAL_INTERVAL;
@@ -520,7 +519,7 @@ public class ReactiveNetworkTest {
     // an exception is thrown
   }
 
-  public void checkInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
+  @Test public void checkInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
     // given
     final InternetObservingStrategy strategy = new SocketInternetObservingStrategy();
     final String host = TEST_VALID_HOST;

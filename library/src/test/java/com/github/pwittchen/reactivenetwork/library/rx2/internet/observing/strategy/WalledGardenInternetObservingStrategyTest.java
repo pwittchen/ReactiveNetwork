@@ -36,7 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class WalledGardenInternetObservingStrategyTest {
+@SuppressWarnings("NullAway") public class WalledGardenInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
   private static final int INTERVAL_IN_MS = 2000;
@@ -173,7 +173,7 @@ public class WalledGardenInternetObservingStrategyTest {
     assertThat(transformedHost).isEqualTo(expectedHost);
   }
 
-  @Test public void shouldAdjustHostWhileCheckingConnectivity() {
+  @Test @SuppressWarnings("CheckReturnValue") public void shouldAdjustHostWhileCheckingConnectivity() {
     // given
     final String host = getHost();
     when(strategy.isConnected(host, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);

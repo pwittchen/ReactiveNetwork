@@ -28,7 +28,6 @@ import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,8 +48,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 // we're suppressing PMD warnings because we want static imports in tests
-@SuppressWarnings("PMD") @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class) public class MarshmallowNetworkObservingStrategyTest {
+@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@SuppressWarnings({ "PMD", "NullAway" }) public class MarshmallowNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private MarshmallowNetworkObservingStrategy strategy =
@@ -68,15 +67,14 @@ import static org.mockito.Mockito.when;
   }
 
   @Test public void shouldObserveConnectivity() {
-    // when
-    strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
-        .subscribe(new Consumer<Connectivity>() {
-          @Override public void accept(Connectivity connectivity) {
+    // given
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
 
-            // then
-            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
-          }
-        });
+    // when
+    Connectivity connectivity = strategy.observeNetworkConnectivity(context).blockingFirst();
+
+    // then
+    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
   }
 
   @Test public void shouldStopObservingConnectivity() {

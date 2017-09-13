@@ -44,23 +44,22 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 // We are suppressing PMD here because we want static imports in unit tests
-@SuppressWarnings("PMD") @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class) public class PreLollipopNetworkObservingStrategyTest {
+@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@SuppressWarnings({ "PMD", "NullAway" }) public class PreLollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private PreLollipopNetworkObservingStrategy strategy =
       new PreLollipopNetworkObservingStrategy();
   @Mock private BroadcastReceiver broadcastReceiver;
 
-  @Test public void shouldObserveConnectivity() {
+  @Test @SuppressWarnings("CheckReturnValue") public void shouldObserveConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
     final Context context = RuntimeEnvironment.application.getApplicationContext();
 
     // when
     strategy.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
-      @Override public void accept(Connectivity connectivity) {
-
+      @Override public void accept(Connectivity connectivity) throws Exception {
         // then
         assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
       }
