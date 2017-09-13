@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class DefaultErrorHandlerTest {
+@SuppressWarnings("NullAway") public class DefaultErrorHandlerTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private DefaultErrorHandler handler = new DefaultErrorHandler();

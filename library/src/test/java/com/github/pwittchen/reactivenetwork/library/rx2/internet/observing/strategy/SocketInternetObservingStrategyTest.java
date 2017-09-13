@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-@SuppressWarnings("PMD") public class SocketInternetObservingStrategyTest {
+@SuppressWarnings({ "PMD", "NullAway" }) public class SocketInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
   private static final int INTERVAL_IN_MS = 2000;
@@ -174,7 +174,8 @@ import static org.mockito.Mockito.when;
     assertThat(transformedHost).isEqualTo(expectedHost);
   }
 
-  @Test public void shouldAdjustHostDuringCheckingConnectivity() {
+  @Test @SuppressWarnings("CheckReturnValue")
+  public void shouldAdjustHostDuringCheckingConnectivity() {
     // given
     final String host = getHost();
     when(strategy.isConnected(host, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);

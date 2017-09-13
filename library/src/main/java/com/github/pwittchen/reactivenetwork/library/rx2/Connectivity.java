@@ -74,6 +74,17 @@ public class Connectivity {
   }
 
   protected Connectivity() {
+    this.state = NetworkInfo.State.DISCONNECTED; // NOPMD
+    this.detailedState = NetworkInfo.DetailedState.IDLE; // NOPMD
+    this.type = UNKNOWN_TYPE; // NOPMD
+    this.subType = UNKNOWN_SUB_TYPE; // NOPMD
+    this.available = false; // NOPMD
+    this.failover = false; // NOPMD
+    this.roaming = false; // NOPMD
+    this.typeName = "NONE"; // NOPMD
+    this.subTypeName = "NONE"; // NOPMD
+    this.reason = ""; // NOPMD
+    this.extraInfo = ""; // NOPMD
   }
 
   protected Connectivity(Builder builder) {

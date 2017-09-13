@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config;
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class PreconditionsTest {
+@SuppressWarnings("NullAway") public class PreconditionsTest {
 
   @Test @Config(sdk = 21) public void shouldBeAtLeastAndroidLollipop() {
     boolean isAtLeastAndroidLollipop = Preconditions.isAtLeastAndroidLollipop();

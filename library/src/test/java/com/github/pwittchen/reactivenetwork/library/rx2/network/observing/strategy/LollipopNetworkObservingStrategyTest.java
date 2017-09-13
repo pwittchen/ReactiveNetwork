@@ -16,14 +16,13 @@
 package com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy;
 
 import android.app.Application;
+import android.content.Context;
 import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +38,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
-public class LollipopNetworkObservingStrategyTest {
+@SuppressWarnings("NullAway") public class LollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
@@ -47,15 +46,13 @@ public class LollipopNetworkObservingStrategyTest {
   @Test public void shouldObserveConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
 
     // when
-    strategy.observeNetworkConnectivity(RuntimeEnvironment.application)
-        .subscribe(new Consumer<Connectivity>() {
-          @Override public void accept(@NonNull Connectivity connectivity) throws Exception {
-            // then
-            assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
-          }
-        });
+    Connectivity connectivity = strategy.observeNetworkConnectivity(context).blockingFirst();
+
+    // then
+    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
   }
 
   @Test public void shouldStopObservingConnectivity() {

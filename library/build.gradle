@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'jacoco'
 apply plugin: 'jacoco-android'
+apply plugin: 'net.ltgt.errorprone'
+apply plugin: 'net.ltgt.apt'
 apply from: '../config/quality.gradle'
 apply from: '../maven_push.gradle'
 
@@ -56,8 +58,18 @@ dependencies {
   testCompile deps.truth
   testCompile deps.robolectric
   testCompile deps.mockitocore
+
+  annotationProcessor deps.nullaway
+
+  errorprone deps.errorprone
 }
 
 task wrapper(type: Wrapper) {
   gradleVersion = rootProject.ext.gradleVersion
+}
+
+tasks.withType(JavaCompile) {
+  if (!name.toLowerCase().contains("test")) {
+    options.compilerArgs += ["-Xep:NullAway:ERROR", "-XepOpt:NullAway:AnnotatedPackages=com.github.pwittchen.reactivenetwork"]
+  }
 }
