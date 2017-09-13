@@ -22,12 +22,16 @@ ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.1.2',
 buildscript {
   repositories {
     jcenter()
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.3.3'
     classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
     classpath 'me.tatarka:gradle-retrolambda:3.7.0'
-
+    classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.11'
+    classpath 'net.ltgt.gradle:gradle-apt-plugin:0.11'
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
   }
