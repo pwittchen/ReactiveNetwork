@@ -31,6 +31,26 @@ import static com.google.common.truth.Truth.assertThat;
 @SuppressWarnings("NullAway") public class ConnectivityTest {
   private static final String TYPE_NAME_WIFI = "WIFI";
   private static final String TYPE_NAME_MOBILE = "MOBILE";
+  private static final String TYPE_NAME_NONE = "NONE";
+
+  @Test public void shouldCreateConnectivity() {
+    // when
+    Connectivity connectivity = new Connectivity();
+
+    // then
+    assertThat(connectivity).isNotNull();
+    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.DISCONNECTED);
+    assertThat(connectivity.getDetailedState()).isEqualTo(NetworkInfo.DetailedState.IDLE);
+    assertThat(connectivity.getType()).isEqualTo(Connectivity.UNKNOWN_TYPE);
+    assertThat(connectivity.getSubType()).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE);
+    assertThat(connectivity.isAvailable()).isFalse();
+    assertThat(connectivity.isFailover()).isFalse();
+    assertThat(connectivity.isRoaming()).isFalse();
+    assertThat(connectivity.getTypeName()).isEqualTo(TYPE_NAME_NONE);
+    assertThat(connectivity.getSubTypeName()).isEqualTo(TYPE_NAME_NONE);
+    assertThat(connectivity.getReason()).isEmpty();
+    assertThat(connectivity.getExtraInfo()).isEmpty();
+  }
 
   @Test public void stateShouldBeEqualToGivenValue() throws Exception {
     // given
@@ -313,8 +333,8 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(connectivity.isAvailable()).isFalse();
     assertThat(connectivity.isFailover()).isFalse();
     assertThat(connectivity.isRoaming()).isFalse();
-    assertThat(connectivity.getTypeName()).isEqualTo("NONE");
-    assertThat(connectivity.getSubTypeName()).isEqualTo("NONE");
+    assertThat(connectivity.getTypeName()).isEqualTo(TYPE_NAME_NONE);
+    assertThat(connectivity.getSubTypeName()).isEqualTo(TYPE_NAME_NONE);
     assertThat(connectivity.getReason()).isEmpty();
     assertThat(connectivity.getExtraInfo()).isEmpty();
   }
