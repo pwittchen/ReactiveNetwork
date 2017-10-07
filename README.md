@@ -140,7 +140,7 @@ We can observe connectivity with the Internet continuously in the following way:
 ReactiveNetwork.observeInternetConnectivity()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<Connectivity>() {
+        .subscribe(new Consumer<Boolean>() {
           @Override public void accept(Boolean isConnectedToInternet) {
             // do something with isConnectedToInternet value
           }
