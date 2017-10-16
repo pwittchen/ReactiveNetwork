@@ -41,6 +41,7 @@ Contents
   - [Tutorials](#tutorials)
 - [Changelog](#changelog)
 - [Releasing](#releasing)
+- [Contributors](#contributors)
 - [License](#license)
 
 Usage
@@ -341,6 +342,20 @@ Releasing
 ---------
 
 See [RELEASING.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava2.x/RELEASING.md) file.
+
+Contributors
+------------
+
+- [Piotr Wittchen](https://github.com/pwittchen) - project lead
+- [Tushar Acharya](https://github.com/tushar-acharya)
+- [Timothy Kist](https://github.com/Kisty)
+- [@dilongl](https://github.com/dilongl)
+- [@llp](https://github.com/llp)
+- [Adam Gabryś](https://github.com/agabrys)
+- [@lion4ik](https://github.com/lion4ik)
+- [@futtetennista](https://github.com/futtetennista)
+- [Manu Sridharan](https://github.com/msridhar)
+- [Alexander Perfilyev](https://github.com/aperfilyev)
 
 License
 -------
