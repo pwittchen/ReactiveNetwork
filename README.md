@@ -41,6 +41,7 @@ Contents
 - [Changelog](#changelog)
 - [Releasing](#releasing)
 - [Contributors](#contributors)
+- [References](#references)
 - [License](#license)
 
 Usage
@@ -320,6 +321,12 @@ Contributors
 - [@futtetennista](https://github.com/futtetennista)
 - [Manu Sridharan](https://github.com/msridhar)
 - [Alexander Perfilyev](https://github.com/aperfilyev)
+
+References
+----------
+- [Android Documentation - Detect network changes, then change app behavior](https://developer.android.com/develop/quality-guidelines/building-for-billions-connectivity.html#network-behavior)
+- [Android Documentation - Provide onboarding experiences for users' network choices](https://developer.android.com/develop/quality-guidelines/building-for-billions-data-cost.html#configurablenetwork-onboarding)
+- [RxJava](https://github.com/ReactiveX/RxJava)
 
 License
 -------
