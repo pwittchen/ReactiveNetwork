@@ -54,10 +54,10 @@ dependencies {
   api deps.rxandroid2
   implementation deps.supportannotations
 
-  testCompile deps.junit
-  testCompile deps.truth
-  testCompile deps.robolectric
-  testCompile deps.mockitocore
+  testImplementation deps.junit
+  testImplementation deps.truth
+  testImplementation deps.robolectric
+  testImplementation deps.mockitocore
 
   annotationProcessor deps.nullaway
 
