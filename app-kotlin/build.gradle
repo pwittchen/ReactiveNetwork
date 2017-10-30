@@ -35,9 +35,9 @@ android {
 }
 
 dependencies {
-  compile project(':library')
-  compile deps.kotlinstdlib
-  compile deps.appcompatv7
+  implementation project(':library')
+  implementation deps.kotlinstdlib
+  implementation deps.appcompatv7
 }
 
 repositories {

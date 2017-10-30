@@ -48,9 +48,9 @@ jacocoAndroidUnitTestReport {
 }
 
 dependencies {
-  compile deps.rxjava
-  compile deps.rxandroid
-  compile deps.supportannotations
+  api deps.rxjava
+  api deps.rxandroid
+  implementation deps.supportannotations
 
   testCompile deps.junit
   testCompile deps.truth
