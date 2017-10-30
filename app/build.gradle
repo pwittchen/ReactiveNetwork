@@ -35,6 +35,6 @@ android {
 }
 
 dependencies {
-  compile project(':library')
-  compile deps.appcompatv7
+  implementation project(':library')
+  implementation deps.appcompatv7
 }
