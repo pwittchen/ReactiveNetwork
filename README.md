@@ -11,8 +11,6 @@ ReactiveNetwork is an Android library listening **network connection state** and
 
 This is **RxJava1.x** branch. To see documentation for RxJava2.x, switch to [RxJava2.x](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) branch.
 
-JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/RxJava1.x
-
 **Important note**:exclamation:: Since version **0.4.0**, functionality releated to **observing WiFi Access Points** and **WiFi signal strength (level)** is removed in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library.
 If you want to use this functionality, check [**ReactiveWiFi**](https://github.com/pwittchen/ReactiveWiFi) project.
 
@@ -39,6 +37,7 @@ Contents
 - [Getting help](#getting-help)
   - [Tutorials](#tutorials)
 - [Changelog](#changelog)
+- [JavaDoc](#javadoc)
 - [Releasing](#releasing)
 - [Contributors](#contributors)
 - [References](#references)
@@ -302,6 +301,11 @@ Changelog
 ---------
 
 See [CHANGELOG.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava1.x/CHANGELOG.md) file.
+
+JavaDoc
+-------
+
+JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/RxJava1.x 
 
 Releasing
 ---------
