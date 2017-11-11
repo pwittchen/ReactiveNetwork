@@ -1,6 +1,34 @@
 CHANGELOG
 =========
 
+v. 0.12.2
+--------
+*11 Nov 2017*
+
+- updated API of `MarshmallowNetworkObservingStrategy`
+  - made `void registerIdleReceiver(context)` `protected` 
+  - made `boolean isIdleMode(context)` `protected`
+  - made `tryToUnregisterCallback(ConnectivityManager)` `protected`
+  - made `tryToUnregisterReceiver(context)` `protected`
+  - made `NetworkCallback createNetworkCallback(context)` `protected`
+  - added `BroadcastReceiver createIdleBroadcastReceiver()`
+  - added `onNext(Connectivity connectivity)`
+  - added `MarshmallowNetworkObservingStrategy()` constructor
+  - extracted `String` messages into `protected static final` fields
+- set min sdk version for sample apps to 14
+- updated Gradle v. 3.0.0.
+- updated compile sdk version: 25 -> 26
+- updated build tools version: 25.0.2 - > 26.0.2
+- updated kotlin version: 1.1.3-2 -> 1.1.51
+- updated project dependencies
+  - RxJava 2.1.2 -> 2.1.6
+  - support-annotations: 25.3.0 -> 27.0.1
+  - appcompat-v7: 25.3.0 -> 27.0.1
+  - truth: 0.34 -> 0.36
+  - mockito-core: 2.8.47 -> 2.12.0
+- added ErrorProne for static code analysis
+- added NullAway for static code analysis
+
 v. 0.12.1
 --------
 *02 Sep 2017*
