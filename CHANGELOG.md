@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+v. 0.12.2
+--------
+*12 Nov 2017*
+- updated project dependencies
+- updated Gradle to 3.0.0
+
 v. 0.12.0
 --------
 *30 Aug 2017*
