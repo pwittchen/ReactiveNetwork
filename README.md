@@ -9,13 +9,6 @@ ReactiveNetwork is an Android library listening **network connection state** and
 | | [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=RxJava1.x)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat) |
 | :ballot_box_with_check: | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=RxJava2.x)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat) |
 
-This is **RxJava2.x** branch. To see documentation for RxJava1.x, switch to [RxJava1.x](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) branch.
-
-**Important note**:exclamation:: Since version **0.4.0**, functionality releated to **observing WiFi Access Points** and **WiFi signal strength (level)** is removed in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library.
-If you want to use this functionality, check [**ReactiveWiFi**](https://github.com/pwittchen/ReactiveWiFi) project.
-
-If you want to see all changes in the public API, check [release notes](https://github.com/pwittchen/ReactiveNetwork/releases) and [JavaDoc](http://pwittchen.github.io/ReactiveNetwork/).
-
 Contents
 --------
 
@@ -37,6 +30,7 @@ Contents
 - [Who is using this library?](#who-is-using-this-library)
 - [Getting help](#getting-help)
   - [Tutorials](#tutorials)
+- [Caveats](#caveats)
 - [Changelog](#changelog)
 - [JavaDoc](#javadoc)
 - [Releasing](#releasing)
@@ -332,6 +326,12 @@ Don't worry. Someone should help you with solving your problems.
 ### Tutorials
 
 If you speak Spanish (Español), check out this tutorial: [ReactiveNetwork - Como funciona y como se integra en una app](https://www.youtube.com/watch?v=H7xGmQaKPsI) made by [Video Tutorials Android](https://www.youtube.com/channel/UC2q5P9JVoA6N8mE622gRP7w).
+
+Caveats
+-------
+
+Since version **0.4.0**, functionality releated to **observing WiFi Access Points** and **WiFi signal strength (level)** is removed in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library.
+If you want to use this functionality, check [**ReactiveWiFi**](https://github.com/pwittchen/ReactiveWiFi) project.
 
 Changelog
 ---------
