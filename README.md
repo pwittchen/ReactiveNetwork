@@ -23,7 +23,7 @@ Contents
     - [Custom host](#custom-host)
   - [Chaining network and Internet connectivity streams](#chaining-network-and-internet-connectivity-streams)
   - [Integration with other libraries](#integration-with-other-libraries)
-    - [Integration with OkHttp](#integration-with-Okhttp)
+    - [Integration with OkHttp](#integration-with-okhttp)
     - [Integration with Retrofit](#integration-with-retrofit)
   - [ProGuard configuration](#proguard-configuration)
 - [Examples](#examples)
