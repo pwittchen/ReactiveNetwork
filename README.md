@@ -491,6 +491,7 @@ References
 ----------
 - [Android Documentation - Detect network changes, then change app behavior](https://developer.android.com/develop/quality-guidelines/building-for-billions-connectivity.html#network-behavior)
 - [Android Documentation - Provide onboarding experiences for users' network choices](https://developer.android.com/develop/quality-guidelines/building-for-billions-data-cost.html#configurablenetwork-onboarding)
+- [Android Documentation - Managing Network Usage](https://developer.android.com/training/basics/network-ops/managing.html)
 - [RxJava](https://github.com/ReactiveX/RxJava)
 
 License
