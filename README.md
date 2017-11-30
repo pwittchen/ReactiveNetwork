@@ -21,6 +21,10 @@ Contents
     - [Checking Internet connectivity once](#checking-internet-connectivity-once)
     - [Internet Observing Strategies](#internet-observing-strategies)
     - [Custom host](#custom-host)
+  - [Chaining network and Internet connectivity streams](#chaining-network-and-internet-connectivity-streams)
+  - [Integration with other libraries](#integration-with-other-libraries)
+    - [Integration with OkHttp](#integration-with-Okhttp)
+    - [Integration with Retrofit](#integration-with-retrofit)
   - [ProGuard configuration](#proguard-configuration)
 - [Examples](#examples)
 - [Download](#download)
@@ -228,6 +232,127 @@ ReactiveNetwork.observeInternetConnectivity(new SocketInternetObservingStrategy(
 ```
 
 The same operation can be done with `checkInternetConnectivity(strategy, host)` method, which returns `Single` instead of `Observable`.
+
+### Chaining network and Internet connectivity streams
+
+Let's say we want to react on each network connectivity change and if we get connected to the network, then we want to check if that network is connected to the Internet. We can do it in the following way:
+
+```java
+ReactiveNetwork
+  .observeNetworkConnectivity(getApplicationContext())
+  .flatMapSingle(connectivity -> {
+    if (connectivity.getState() == NetworkInfo.State.CONNECTED) {
+        return ReactiveNetwork.checkInternetConnectivity();
+    }
+    return Single.fromCallable(() -> false);
+  })
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(isConnected -> {
+    // isConnected can be true or false
+});
+```
+
+### Integration with other libraries
+
+We can integrate ReactiveNetwork with other libraries. Especially those, which support RxJava2. In this section, we can find examples showing how to integrate this library with the OkHttp and Retrofit.
+
+#### Integration with OkHttp
+
+In order to integrate library with OkHttp, we need to wrap HTTP request with reactive type (e.g. `Observable`)
+
+```java
+private Observable<Response> getResponse(String url) {
+  OkHttpClient client = new OkHttpClient();
+  Request request = new Request.Builder().url(url).build();
+
+  return Observable.create(emitter -> {
+    try {
+        Response response = client.newCall(request).execute();
+        emitter.onNext(response);
+    } catch (IOException exception) {
+        emitter.onError(exception);
+    } finally {
+        emitter.onComplete();
+    }
+  });
+}
+```
+
+Next, we can chain two streams:
+
+```java
+ReactiveNetwork
+   .observeNetworkConnectivity(getApplicationContext())
+   .flatMap(connectivity -> {
+     if (connectivity.getState() == NetworkInfo.State.CONNECTED) {
+       return getResponse("http://github.com");
+     }
+     return Observable.error(() -> new RuntimeException("not connected"));
+   })
+   .subscribeOn(Schedulers.io())
+   .observeOn(AndroidSchedulers.mainThread())
+   .subscribe(
+       response  -> /* handle response here */,
+       throwable -> /* handle error here */)
+   );
+```
+
+In the example above, whenever we get connected to the network, then request will be performed.
+
+For more details regarding OkHttp, please visit its official website: http://square.github.io/okhttp/.
+
+#### Integration with Retrofit
+
+We can integrate ReactiveNetwork with the Retrofit.
+
+First, we need to configure Retrofit:
+
+```java
+Retrofit retrofit = new Retrofit.Builder()
+   .baseUrl("https://api.github.com/")
+   .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+   .addConverterFactory(GsonConverterFactory.create())
+   .build();
+```
+
+As you see, we need `RxJava2CallAdapterFactory` here.
+
+Next, we need to define appropriate interface with RxJava `Single` types:
+
+```java
+public interface GitHubService {
+ @GET("users/{user}/repos")
+ Single<List<Repo>> listRepos(@Path("user") String user);
+}
+```
+
+and instantiate the service:
+
+```java
+GitHubService service = retrofit.create(GitHubService.class);
+```
+
+Next, we want to call endpoint defined with the Retrofit whenever we get connected to the network. We can do it as follows:
+
+```java
+ReactiveNetwork
+   .observeNetworkConnectivity(getApplicationContext())
+   .flatMapSingle(connectivity -> {
+     if(connectivity.getState() == NetworkInfo.State.CONNECTED) {
+       return service.listRepos("pwittchen");
+     }
+     return Single.error(() -> new RuntimeException("not connected"));
+   })
+   .subscribeOn(Schedulers.io())
+   .observeOn(AndroidSchedulers.mainThread())
+   .subscribe(
+       repos     -> /* handle repos here */,
+       throwable -> /* handle error here */
+   );
+```
+
+For more details regarding Retrofit, please visit its official website: http://square.github.io/retrofit/
 
 ### ProGuard configuration
 
