@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+v. 0.12.3
+--------
+*03 Jan 2018*
+
+- updated project dependencies -> see: https://github.com/pwittchen/ReactiveNetwork/commit/abc1fd5e7f18e3fa504e071f000ae5067946c68f
+- updated gradle configuration in `config/quality.gradle` (replaced deprecated invocations with new ones)
+
 v. 0.12.2
 --------
 *11 Nov 2017*
