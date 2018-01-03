@@ -495,6 +495,11 @@ References
 - [RxJava](https://github.com/ReactiveX/RxJava)
 - [DroidCon Poland 2017 presentation slides - Is your app really connected?](https://speakerdeck.com/pwittchen/is-your-app-really-connected)
 
+### Mentions
+- [Android Weekly #166](http://androidweekly.net/issues/issue-166)
+- [Android Weekly #289](http://androidweekly.net/issues/issue-289)
+- [Android Weekly China #44](http://www.androidweekly.cn/android-dev-weekly-issue44/)
+
 License
 -------
 
