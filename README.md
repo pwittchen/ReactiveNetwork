@@ -40,6 +40,7 @@ Contents
 - [Releasing](#releasing)
 - [Contributors](#contributors)
 - [References](#references)
+  - [Mentions](#mentions)
 - [License](#license)
 
 Usage
