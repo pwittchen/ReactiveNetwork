@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
@@ -34,22 +35,33 @@ android {
   }
 }
 
+detekt {
+  version = "1.0.0.RC6-1"
+  profile("main") {
+    input = "$projectDir"
+    config = "$projectDir/detekt.yml"
+    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+  }
+}
+
 dependencies {
   implementation project(':library')
   implementation deps.kotlinstdlib
   implementation deps.appcompatv7
 }
 
-repositories {
-  mavenCentral()
-}
-
 buildscript {
   repositories {
     mavenCentral()
+    jcenter()
+    google()
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
   }
 
   dependencies {
     classpath deps.kotlingradleplugin
+    classpath deps.detekt
   }
 }
