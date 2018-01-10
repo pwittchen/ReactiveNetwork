@@ -508,6 +508,7 @@ References
 - [Android Weekly #166](http://androidweekly.net/issues/issue-166)
 - [Android Weekly #289](http://androidweekly.net/issues/issue-289)
 - [Android Weekly China #44](http://www.androidweekly.cn/android-dev-weekly-issue44/)
+- [Android Arsenal #2290](https://android-arsenal.com/details/1/2290)
 
 License
 -------
