@@ -12,10 +12,38 @@
   <div id="app"></div>
   <script>
     window.$docsify = {
-      name: '',
-      repo: ''
+      loadNavbar: true,
+
+      search: 'auto', // default
+
+      search : [
+        '/'           // => /README.md
+      ],
+
+      // complete configuration parameters
+      search: {
+        maxAge: 86400000, // Expiration time, the default one day
+        paths: [], // or 'auto'
+        placeholder: 'Type to search',
+
+        // Localization
+        placeholder: {
+          '/': 'Type to search'
+        },
+
+        noData: 'No Results!',
+
+        // Localization
+        noData: {
+          '/': 'No Results'
+        },
+
+        // Headline depth, 1 - 6
+        depth: 3
+      }
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
 </body>
 </html>
