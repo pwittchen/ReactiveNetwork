@@ -169,7 +169,7 @@ Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy 
 
 These methods are created to allow the users to fully customize the library and give them more control.
 
-For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
+For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/javadoc/RxJava2.x
 
 #### Checking Internet Connectivity once
 
@@ -205,7 +205,7 @@ and we don't have `int initialIntervalInMs` and `int intervalInMs` parameters.
 
 As previously, these methods are created to allow the users to fully customize the library and give them more control.
 
-For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/
+For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/javadoc/RxJava2.x
 
 #### Internet Observing Strategies
 
@@ -473,7 +473,7 @@ See [CHANGELOG.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava2.x/C
 JavaDoc
 -------
 
-JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/RxJava2.x
+JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/javadoc/RxJava2.x
 
 Releasing
 ---------
