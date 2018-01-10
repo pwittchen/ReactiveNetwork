@@ -35,9 +35,9 @@ Contents
 - [Getting help](#getting-help)
   - [Tutorials](#tutorials)
 - [Caveats](#caveats)
-- [Changelog](#changelog)
-- [JavaDoc](#javadoc)
-- [Releasing](#releasing)
+- [Changelog](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava2.x/CHANGELOG.md)
+- [JavaDoc](http://pwittchen.github.io/ReactiveNetwork/RxJava2.x)
+- [Releasing](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava2.x/RELEASING.md)
 - [Contributors](#contributors)
 - [References](#references)
   - [Mentions](#mentions)
@@ -464,21 +464,6 @@ Caveats
 
 Since version **0.4.0**, functionality releated to **observing WiFi Access Points** and **WiFi signal strength (level)** is removed in favor of [ReactiveWiFi](https://github.com/pwittchen/ReactiveWiFi) library.
 If you want to use this functionality, check [**ReactiveWiFi**](https://github.com/pwittchen/ReactiveWiFi) project.
-
-Changelog
----------
-
-See [CHANGELOG.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava2.x/CHANGELOG.md) file.
-
-JavaDoc
--------
-
-JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/RxJava2.x
-
-Releasing
----------
-
-See [RELEASING.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava2.x/RELEASING.md) file.
 
 Contributors
 ------------
