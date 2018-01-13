@@ -38,3 +38,18 @@ dependencies {
   implementation project(':library')
   implementation deps.appcompatv7
 }
+
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+    google()
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+    }
+  }
+
+  dependencies {
+    classpath deps.retrolambda
+  }
+}
