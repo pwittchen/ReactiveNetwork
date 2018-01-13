@@ -390,9 +390,11 @@ or through Gradle:
 
 ```groovy
 dependencies {
-  compile 'com.github.pwittchen:reactivenetwork-rx2:0.12.3'
+  implementation 'com.github.pwittchen:reactivenetwork-rx2:0.12.3'
 }
 ```
+
+**Note**: If you are using Gradle version lower than 3.0, replace `implementation` with `compile`
 
 Tests
 -----
