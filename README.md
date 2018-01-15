@@ -511,6 +511,7 @@ References
 - [Android Weekly #289](http://androidweekly.net/issues/issue-289)
 - [Android Weekly China #44](http://www.androidweekly.cn/android-dev-weekly-issue44/)
 - [Android Arsenal #2290](https://android-arsenal.com/details/1/2290)
+- [GitHub Trending, 14th of Aug 2015](https://twitter.com/TrendingGithub/status/632117206801891328)
 
 License
 -------
