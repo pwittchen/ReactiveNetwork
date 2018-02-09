@@ -34,6 +34,7 @@ Contents
 - [Caveats](#caveats)
 - [Changelog](#changelog)
 - [JavaDoc](#javadoc)
+- [Website with documentation](#website-with-documentation)
 - [Releasing](#releasing)
 - [Contributors](#contributors)
 - [References](#references)
@@ -309,6 +310,38 @@ JavaDoc
 -------
 
 JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/javadoc/RxJava1.x
+
+It can be generated as follows:
+
+```
+./gradlew androidJavadocs
+```
+
+Website with documentation
+--------------------------
+
+view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [**RxJava2.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/)
+
+It can be generated as follows:
+
+Copy the latest `README.md` file from `RxJava1.x` or `RxJava2.x` branch. Then checkout to `gh-pages` branch and put it into appropriate directory inside `docs/` directory.
+
+Install docsify with the following command:
+
+```
+npm i docsify-cli -g
+```
+
+Go into appropriate directory and type:
+
+```
+docsify init .
+```
+
+Right now it's already generated, so we can just update the `README.md` file and adjust generated files manually.
+
+Next, we can just save changes, commit and push them to remote repository.
+
 
 Releasing
 ---------
