@@ -310,6 +310,12 @@ JavaDoc
 
 JavaDoc is available at: http://pwittchen.github.io/ReactiveNetwork/javadoc/RxJava1.x
 
+It can be generated as follows:
+
+```
+./gradlew androidJavadocs
+```
+
 Releasing
 ---------
 
