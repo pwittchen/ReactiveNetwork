@@ -530,6 +530,7 @@ Contributors
 - [@futtetennista](https://github.com/futtetennista)
 - [Manu Sridharan](https://github.com/msridhar)
 - [Alexander Perfilyev](https://github.com/aperfilyev)
+- [Vishesh Vadhera](https://github.com/VisheshVadhera)
 
 References
 ----------
