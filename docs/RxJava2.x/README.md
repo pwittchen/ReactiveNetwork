@@ -486,6 +486,14 @@ It can be generated as follows:
 ./gradlew androidJavadocs
 ```
 
+In order to update JavaDoc on GitHub pages, use the following bash script:
+
+```
+./update_javadocs.sh
+```
+
+Then commit and push your changes to `gh-pages` branch.
+
 Documentation
 --------------------------
 
