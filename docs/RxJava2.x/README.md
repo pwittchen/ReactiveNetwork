@@ -495,6 +495,16 @@ It can be generated as follows:
 
 Copy the latest `README.md` file from `RxJava1.x` or `RxJava2.x` branch. Then checkout to `gh-pages` branch and put it into appropriate directory inside `docs/` directory.
 
+You can do it as follows:
+
+```
+git checkout gh-pages
+git show RxJava1.x:README.md >docs/RxJava1.x/README.md
+git show RxJava2.x:README.md >docs/RxJava2.x/README.md
+git commit -m "updating docs"
+git push
+```
+
 Install docsify with the following command:
 
 ```
