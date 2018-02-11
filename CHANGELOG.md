@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+v. 0.12.3
+--------
+*11 Feb 2018*
+- bumped RxJava: 1.3.3 -> 1.3.5
+- updated Gradle Build Tools: 3.0.0 -> 3.0.1
+- added script for publishing JavaDoc on gh-pages
+- added script for publishing documentation on gh-pages
+
 v. 0.12.2
 --------
 *12 Nov 2017*
