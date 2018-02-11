@@ -39,7 +39,7 @@ Contents
 - [Caveats](#caveats)
 - [Changelog](#changelog)
 - [JavaDoc](#javadoc)
-- [Website with documentation](#website-with-documentation)
+- [Documentation](#documentation)
 - [Releasing](#releasing)
 - [Contributors](#contributors)
 - [References](#references)
@@ -486,7 +486,7 @@ It can be generated as follows:
 ./gradlew androidJavadocs
 ```
 
-Website with documentation
+Documentation
 --------------------------
 
 view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [**RxJava2.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/)
