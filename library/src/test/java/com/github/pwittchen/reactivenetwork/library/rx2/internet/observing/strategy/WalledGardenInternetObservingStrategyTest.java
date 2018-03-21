@@ -42,6 +42,9 @@ import static org.mockito.Mockito.when;
   private static final int INTERVAL_IN_MS = 2000;
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
+  private static final String HOST_WITH_HTTP = "http://www.website.com";
+  private static final String HOST_WITHOUT_HTTP = "www.website.com";
+
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private WalledGardenInternetObservingStrategy strategy;
   @Mock private ErrorHandler errorHandler;
@@ -140,40 +143,31 @@ import static org.mockito.Mockito.when;
   }
 
   @Test public void shouldNotTransformHttpHost() {
-    // given
-    final String givenHost = "http://www.website.com";
-
     // when
-    String transformedHost = strategy.adjustHost(givenHost);
+    String transformedHost = strategy.adjustHost(HOST_WITH_HTTP);
 
     // then
-    assertThat(transformedHost).isEqualTo(givenHost);
+    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTP);
   }
 
   @Test public void shouldNotTransformHttpsHost() {
-    // given
-    final String givenHost = "https://www.website.com";
-
     // when
-    String transformedHost = strategy.adjustHost(givenHost);
+    String transformedHost = strategy.adjustHost(HOST_WITH_HTTP);
 
     // then
-    assertThat(transformedHost).isEqualTo(givenHost);
+    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTP);
   }
 
   @Test public void shouldAddHttpProtocolToHost() {
-    // given
-    final String givenHost = "www.website.com";
-    final String expectedHost = "http://www.website.com";
-
     // when
-    String transformedHost = strategy.adjustHost(givenHost);
+    String transformedHost = strategy.adjustHost(HOST_WITHOUT_HTTP);
 
     // then
-    assertThat(transformedHost).isEqualTo(expectedHost);
+    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTP);
   }
 
-  @Test @SuppressWarnings("CheckReturnValue") public void shouldAdjustHostWhileCheckingConnectivity() {
+  @Test @SuppressWarnings("CheckReturnValue")
+  public void shouldAdjustHostWhileCheckingConnectivity() {
     // given
     final String host = getHost();
     when(strategy.isConnected(host, PORT, TIMEOUT_IN_MS, errorHandler)).thenReturn(true);

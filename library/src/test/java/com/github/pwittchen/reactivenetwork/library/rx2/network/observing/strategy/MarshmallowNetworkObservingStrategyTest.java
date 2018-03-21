@@ -28,6 +28,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.TestObserver;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -104,10 +105,11 @@ import static org.mockito.Mockito.when;
   @Test public void shouldTryToUnregisterCallbackOnDispose() {
     // given
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
+    final TestObserver<Connectivity> observer = new TestObserver<>();
 
     // when
-    final Disposable disposable = observable.subscribe();
-    disposable.dispose();
+    observable.subscribe(observer);
+    observer.dispose();
 
     // then
     verify(strategy).tryToUnregisterCallback(any(ConnectivityManager.class));
@@ -116,10 +118,11 @@ import static org.mockito.Mockito.when;
   @Test public void shouldTryToUnregisterReceiverOnDispose() {
     // given
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
+    final TestObserver<Connectivity> observer = new TestObserver<>();
 
     // when
-    final Disposable disposable = observable.subscribe();
-    disposable.dispose();
+    observable.subscribe(observer);
+    observer.dispose();
 
     // then
     verify(strategy).tryToUnregisterReceiver(context);
@@ -195,14 +198,12 @@ import static org.mockito.Mockito.when;
   }
 
   @TargetApi(Build.VERSION_CODES.M)
-  private void preparePowerManagerMocks(final Boolean isDeviceInIdleMode,
-      final Boolean isIgnoringBatteryOptimizations) {
+  private void preparePowerManagerMocks(final Boolean idleMode, final Boolean ignoreOptimizations) {
     final String packageName = "com.github.pwittchen.test";
     when(contextMock.getPackageName()).thenReturn(packageName);
     when(contextMock.getSystemService(Context.POWER_SERVICE)).thenReturn(powerManager);
-    when(powerManager.isDeviceIdleMode()).thenReturn(isDeviceInIdleMode);
-    when(powerManager.isIgnoringBatteryOptimizations(packageName)).thenReturn(
-        isIgnoringBatteryOptimizations);
+    when(powerManager.isDeviceIdleMode()).thenReturn(idleMode);
+    when(powerManager.isIgnoringBatteryOptimizations(packageName)).thenReturn(ignoreOptimizations);
   }
 
   @Test public void shouldCreateNetworkCallbackOnSubscribe() {
