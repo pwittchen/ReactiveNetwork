@@ -22,7 +22,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.TestObserver;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,13 +60,14 @@ import static org.mockito.Mockito.verify;
     final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
     final Application context = RuntimeEnvironment.application;
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
+    final TestObserver<Connectivity> observer = new TestObserver<>();
 
     // when
-    final Disposable disposable = observable.subscribe();
-    disposable.dispose();
+    observable.subscribe(observer);
+    observer.dispose();
 
     // then
-    assertThat(disposable.isDisposed()).isTrue();
+    assertThat(observer.isDisposed()).isTrue();
   }
 
   @Test public void shouldCallOnError() {

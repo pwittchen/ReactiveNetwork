@@ -45,6 +45,9 @@ import static org.mockito.Mockito.when;
   private static final int INTERVAL_IN_MS = 2000;
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
+  private static final String HOST_WITH_HTTP = "http://www.website.com";
+  private static final String HOST_WITHOUT_HTTP = "www.website.com";
+
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private SocketInternetObservingStrategy strategy;
   @Mock private ErrorHandler errorHandler;
@@ -140,38 +143,27 @@ import static org.mockito.Mockito.when;
   }
 
   @Test public void shouldNotTransformHost() {
-    // given
-    final String givenHost = "www.website.com";
-
     // when
-    String transformedHost = strategy.adjustHost(givenHost);
+    String transformedHost = strategy.adjustHost(HOST_WITHOUT_HTTP);
 
     // then
-    assertThat(transformedHost).isEqualTo(givenHost);
+    assertThat(transformedHost).isEqualTo(HOST_WITHOUT_HTTP);
   }
 
   @Test public void shouldRemoveHttpProtocolFromHost() {
-    // given
-    final String givenHost = "http://www.website.com";
-    final String expectedHost = "www.website.com";
-
     // when
-    String transformedHost = strategy.adjustHost(givenHost);
+    String transformedHost = strategy.adjustHost(HOST_WITH_HTTP);
 
     // then
-    assertThat(transformedHost).isEqualTo(expectedHost);
+    assertThat(transformedHost).isEqualTo(HOST_WITHOUT_HTTP);
   }
 
   @Test public void shouldRemoveHttpsProtocolFromHost() {
-    // given
-    final String givenHost = "https://www.website.com";
-    final String expectedHost = "www.website.com";
-
     // when
-    String transformedHost = strategy.adjustHost(givenHost);
+    String transformedHost = strategy.adjustHost(HOST_WITH_HTTP);
 
     // then
-    assertThat(transformedHost).isEqualTo(expectedHost);
+    assertThat(transformedHost).isEqualTo(HOST_WITHOUT_HTTP);
   }
 
   @Test @SuppressWarnings("CheckReturnValue")

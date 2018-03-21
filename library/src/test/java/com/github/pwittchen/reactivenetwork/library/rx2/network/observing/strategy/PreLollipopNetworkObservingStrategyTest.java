@@ -23,8 +23,8 @@ import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.TestObserver;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,13 +71,14 @@ import static org.mockito.Mockito.verify;
     final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
     final Context context = RuntimeEnvironment.application.getApplicationContext();
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
+    final TestObserver<Connectivity> observer = new TestObserver<>();
 
     // when
-    Disposable disposable = observable.subscribe();
-    disposable.dispose();
+    observable.subscribe(observer);
+    observer.dispose();
 
     // then
-    assertThat(disposable.isDisposed()).isTrue();
+    assertThat(observer.isDisposed()).isTrue();
   }
 
   @Test public void shouldCallOnError() {
@@ -94,12 +95,11 @@ import static org.mockito.Mockito.verify;
 
   @Test public void shouldTryToUnregisterReceiver() {
     // given
-    final PreLollipopNetworkObservingStrategy preLollipopNetworkObservingStrategy =
-        new PreLollipopNetworkObservingStrategy();
+    final PreLollipopNetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
     final Application context = spy(RuntimeEnvironment.application);
 
     // when
-    preLollipopNetworkObservingStrategy.tryToUnregisterReceiver(context, broadcastReceiver);
+    strategy.tryToUnregisterReceiver(context, broadcastReceiver);
 
     // then
     verify(context).unregisterReceiver(broadcastReceiver);
@@ -107,11 +107,12 @@ import static org.mockito.Mockito.verify;
 
   @Test public void shouldTryToUnregisterReceiverAfterDispose() {
     // given
-    Context context = RuntimeEnvironment.application.getApplicationContext();
+    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final TestObserver<Connectivity> observer = new TestObserver<>();
 
     // when
-    Disposable disposable = strategy.observeNetworkConnectivity(context).subscribe();
-    disposable.dispose();
+    strategy.observeNetworkConnectivity(context).subscribe(observer);
+    observer.dispose();
 
     // then
     verify(strategy).tryToUnregisterReceiver(eq(context), any(BroadcastReceiver.class));
