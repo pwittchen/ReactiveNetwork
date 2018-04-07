@@ -64,10 +64,6 @@ dependencies {
   errorprone deps.errorprone
 }
 
-task wrapper(type: Wrapper) {
-  gradleVersion = rootProject.ext.gradleVersion
-}
-
 tasks.withType(JavaCompile) {
   if (!name.toLowerCase().contains("test")) {
     options.compilerArgs += ["-Xep:NullAway:ERROR", "-XepOpt:NullAway:AnnotatedPackages=com.github.pwittchen.reactivenetwork"]
