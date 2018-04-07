@@ -32,12 +32,9 @@ task findbugs(type: FindBugs) {
     reports {
         xml.enabled = false
         html.enabled = true
-        xml {
-            destination "$project.buildDir/reports/findbugs/findbugs.xml"
-        }
-        html {
-            destination "$project.buildDir/reports/findbugs/findbugs.html"
-        }
+
+        xml.destination file("$project.buildDir/reports/findbugs/findbugs.xml")
+        html.destination file("$project.buildDir/reports/findbugs/findbugs.html")
     }
 
     classpath = files()
@@ -55,12 +52,9 @@ task pmd(type: Pmd) {
     reports {
         xml.enabled = false
         html.enabled = true
-        xml {
-            destination "$project.buildDir/reports/pmd/pmd.xml"
-        }
-        html {
-            destination "$project.buildDir/reports/pmd/pmd.html"
-        }
+
+        xml.destination file("$project.buildDir/reports/pmd/pmd.xml")
+        html.destination file("$project.buildDir/reports/pmd/pmd.html")
     }
 }
 
