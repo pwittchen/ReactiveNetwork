@@ -57,7 +57,3 @@ dependencies {
   testImplementation deps.robolectric
   testImplementation deps.mockitocore
 }
-
-task wrapper(type: Wrapper) {
-  gradleVersion = rootProject.ext.gradleVersion
-}
