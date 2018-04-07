@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
@@ -47,9 +46,5 @@ buildscript {
     maven {
       url 'https://plugins.gradle.org/m2/'
     }
-  }
-
-  dependencies {
-    classpath deps.retrolambda
   }
 }
