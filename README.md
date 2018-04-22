@@ -581,8 +581,3 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-## Support on Beerpay
-Hey dude! Help me out for a couple of :beers:!
-
-[![Beerpay](https://beerpay.io/pwittchen/ReactiveNetwork/badge.svg?style=beer-square)](https://beerpay.io/pwittchen/ReactiveNetwork)  [![Beerpay](https://beerpay.io/pwittchen/ReactiveNetwork/make-wish.svg?style=flat-square)](https://beerpay.io/pwittchen/ReactiveNetwork?focus=wish)
