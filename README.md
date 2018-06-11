@@ -244,12 +244,7 @@ Let's say we want to react on each network connectivity change and if we get con
 ```java
 ReactiveNetwork
   .observeNetworkConnectivity(getApplicationContext())
-  .flatMapSingle(connectivity -> {
-    if (connectivity.getState() == NetworkInfo.State.CONNECTED) {
-        return ReactiveNetwork.checkInternetConnectivity();
-    }
-    return Single.fromCallable(() -> false);
-  })
+  .flatMapSingle(connectivity -> ReactiveNetwork.checkInternetConnectivity())
   .subscribeOn(Schedulers.io())
   .observeOn(AndroidSchedulers.mainThread())
   .subscribe(isConnected -> {
@@ -342,12 +337,7 @@ Next, we want to call endpoint defined with the Retrofit whenever we get connect
 ```java
 ReactiveNetwork
    .observeNetworkConnectivity(getApplicationContext())
-   .flatMapSingle(connectivity -> {
-     if(connectivity.getState() == NetworkInfo.State.CONNECTED) {
-       return service.listRepos("pwittchen");
-     }
-     return Single.error(() -> new RuntimeException("not connected"));
-   })
+   .flatMapSingle(connectivity -> service.listRepos("pwittchen"))
    .subscribeOn(Schedulers.io())
    .observeOn(AndroidSchedulers.mainThread())
    .subscribe(
