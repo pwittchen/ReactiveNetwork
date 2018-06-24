@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+v. 0.12.4
+--------
+*? Jun 2018*
+- updated project dependencies - PR #268, PR #269, commit 02449af2f38ac463e1aa8824beee46ea823fd83b
+
 v. 0.12.3
 --------
 *11 Feb 2018*
