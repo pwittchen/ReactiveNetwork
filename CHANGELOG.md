@@ -1,6 +1,35 @@
 CHANGELOG
 =========
 
+v. 1.0.0
+--------
+*? Jun 2018*
+
+- updated project dependencies - PR #269, commit 02449af2f38ac463e1aa8824beee46ea823fd83b
+- refactored `ReactiveNetwork` class with Builder pattern - PR #279 
+- removed the following methods from the `ReactiveNetwork` class:
+
+```java
+Observable<Boolean> observeInternetConnectivity(int interval, String host, int port, int timeout)
+Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
+Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
+Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy)
+Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final String host)
+
+Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy)
+Single<Boolean> checkInternetConnectivity(String host,int port, int timeoutInMs)
+Single<Boolean> checkInternetConnectivity(String host, int port, int timeoutInMs, ErrorHandler errorHandler)
+Single<Boolean> checkInternetConnectivity(final InternetObservingStrategy strategy, final String host)
+```
+
+- added `InternetObservingSettings` class
+- added the following methods to the `ReactiveNetwork` class:
+
+```java
+Observable<Boolean> observeInternetConnectivity(InternetObservingSettings settings)
+Single<Boolean> checkInternetConnectivity(InternetObservingSettings settings)
+```
+
 v. 0.12.3
 --------
 *03 Jan 2018*
