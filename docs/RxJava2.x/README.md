@@ -158,16 +158,28 @@ Internet connectivity will be checked _as soon as possible_.
 
 Methods in this section should be used if they are really needed due to specific use cases.
 
-If you want to customize observing of the Internet connectivity, you can use one of the methods below.
+If you want to customize observing of the Internet connectivity, you can use `InternetObservingSettings` class and its builder.
 They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, error handler or whole observing strategy.
 
 ```java
-Observable<Boolean> observeInternetConnectivity(int interval, String host, int port, int timeout)
-Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
-Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy)
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final String host)
+InternetObservingSettings settings = InternetObservingSettings
+    .initialInterval(initialInterval)
+    .interval(interval)
+    .host(host)
+    .port(port)
+    .timeout(timeout)
+    .errorHandler(testErrorHandler)
+    .strategy(strategy)
+    .build();
+
+ReactiveNetwork.observeInternetConnectivity(settings)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<Boolean>() {
+          @Override public void accept(Boolean isConnectedToInternet) {
+            // do something with isConnectedToInternet value
+          }
+        });
 ```
 
 These methods are created to allow the users to fully customize the library and give them more control.
@@ -193,14 +205,29 @@ single
     });
 ```
 
-As in the previous case, you can customize this feature with the following methods from `ReactiveNetwork` class:
+As in the previous case, you can customize this feature with the `InternetObservingSettings` class and its builder.
 
 ```java
-Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy)
-Single<Boolean> checkInternetConnectivity(String host,int port, int timeoutInMs)
-Single<Boolean> checkInternetConnectivity(String host, int port, int timeoutInMs, ErrorHandler errorHandler)
-Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy, String host, int port, int timeoutInMs, ErrorHandler errorHandler)
-Single<Boolean> checkInternetConnectivity(final InternetObservingStrategy strategy, final String host)
+InternetObservingSettings settings = InternetObservingSettings
+    .initialInterval(initialInterval)
+    .interval(interval)
+    .host(host)
+    .port(port)
+    .timeout(timeout)
+    .errorHandler(testErrorHandler)
+    .strategy(strategy)
+    .build();
+
+Single<Boolean> single = ReactiveNetwork.checkInternetConnectivity(settings);
+
+single
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Consumer<Boolean>() {
+      @Override public void accept(@NonNull Boolean isConnectedToTheInternet) throws Exception {
+        // do something with isConnectedToTheInternet
+      }
+    });
 ```
 
 Basic idea is the same. With just have `Single<Boolean>` return type instead of `Observable<Boolean>`
@@ -225,7 +252,12 @@ If you want to ping custom host during checking Internet connectivity, it's reco
 You can do it as follows:
 
 ```java
-ReactiveNetwork.observeInternetConnectivity(new SocketInternetObservingStrategy(), "www.yourhost.com")
+InternetObservingSettings settings = InternetObservingSettings
+    .host("www.yourhost.com")
+    .strategy(new SocketInternetObservingStrategy())
+    .build();
+
+ReactiveNetwork.observeInternetConnectivity(settings)
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
     .subscribe(new Consumer<Boolean>() {
@@ -244,12 +276,7 @@ Let's say we want to react on each network connectivity change and if we get con
 ```java
 ReactiveNetwork
   .observeNetworkConnectivity(getApplicationContext())
-  .flatMapSingle(connectivity -> {
-    if (connectivity.getState() == NetworkInfo.State.CONNECTED) {
-        return ReactiveNetwork.checkInternetConnectivity();
-    }
-    return Single.fromCallable(() -> false);
-  })
+  .flatMapSingle(connectivity -> ReactiveNetwork.checkInternetConnectivity())
   .subscribeOn(Schedulers.io())
   .observeOn(AndroidSchedulers.mainThread())
   .subscribe(isConnected -> {
@@ -342,12 +369,7 @@ Next, we want to call endpoint defined with the Retrofit whenever we get connect
 ```java
 ReactiveNetwork
    .observeNetworkConnectivity(getApplicationContext())
-   .flatMapSingle(connectivity -> {
-     if(connectivity.getState() == NetworkInfo.State.CONNECTED) {
-       return service.listRepos("pwittchen");
-     }
-     return Single.error(() -> new RuntimeException("not connected"));
-   })
+   .flatMapSingle(connectivity -> service.listRepos("pwittchen"))
    .subscribeOn(Schedulers.io())
    .observeOn(AndroidSchedulers.mainThread())
    .subscribe(
@@ -436,6 +458,7 @@ Reports from analysis are generated in `library/build/reports/` directory.
 
 Who is using this library?
 --------------------------
+- [SkyScanner Android app](https://play.google.com/store/apps/details?id=net.skyscanner.android.main)
 - [Slack Android app](https://play.google.com/store/apps/details?id=com.Slack)
 - [PAT Track - realtime Tracker for the public transit in Pittsburgh, PA](https://play.google.com/store/apps/details?id=rectangledbmi.com.pittsburghrealtimetracker)
 - [Eero - Home WiFi System](https://play.google.com/store/apps/details?id=com.eero.android)
