@@ -3,7 +3,7 @@ CHANGELOG
 
 v. 1.0.0
 --------
-*? Jun 2018*
+*24 Jun 2018*
 
 - fixed docs in https://github.com/pwittchen/ReactiveNetwork/commit/76ab2b23210207d83250da5d8fd0cd6e275e3f08 after reporting problem in #276 (returning false-positive connectivity results in one edge-case)
 - updated project dependencies - PR #269, commit 02449af2f38ac463e1aa8824beee46ea823fd83b
