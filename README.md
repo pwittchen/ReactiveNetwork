@@ -158,16 +158,28 @@ Internet connectivity will be checked _as soon as possible_.
 
 Methods in this section should be used if they are really needed due to specific use cases.
 
-If you want to customize observing of the Internet connectivity, you can use one of the methods below.
+If you want to customize observing of the Internet connectivity, you can use `InternetObservingSettings` class and its builder.
 They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, error handler or whole observing strategy.
 
 ```java
-Observable<Boolean> observeInternetConnectivity(int interval, String host, int port, int timeout)
-Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs, int intervalInMs, String host, int port, int timeout)
-Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final int initialIntervalInMs, final int intervalInMs, final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler)
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy)
-Observable<Boolean> observeInternetConnectivity(final InternetObservingStrategy strategy, final String host)
+InternetObservingSettings settings = InternetObservingSettings
+    .initialInterval(initialInterval)
+    .interval(interval)
+    .host(host)
+    .port(port)
+    .timeout(timeout)
+    .errorHandler(testErrorHandler)
+    .strategy(strategy)
+    .build();
+
+ReactiveNetwork.observeInternetConnectivity(settings)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<Boolean>() {
+          @Override public void accept(Boolean isConnectedToInternet) {
+            // do something with isConnectedToInternet value
+          }
+        });
 ```
 
 These methods are created to allow the users to fully customize the library and give them more control.
@@ -193,14 +205,29 @@ single
     });
 ```
 
-As in the previous case, you can customize this feature with the following methods from `ReactiveNetwork` class:
+As in the previous case, you can customize this feature with the `InternetObservingSettings` class and its builder.
 
 ```java
-Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy)
-Single<Boolean> checkInternetConnectivity(String host,int port, int timeoutInMs)
-Single<Boolean> checkInternetConnectivity(String host, int port, int timeoutInMs, ErrorHandler errorHandler)
-Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy, String host, int port, int timeoutInMs, ErrorHandler errorHandler)
-Single<Boolean> checkInternetConnectivity(final InternetObservingStrategy strategy, final String host)
+InternetObservingSettings settings = InternetObservingSettings
+    .initialInterval(initialInterval)
+    .interval(interval)
+    .host(host)
+    .port(port)
+    .timeout(timeout)
+    .errorHandler(testErrorHandler)
+    .strategy(strategy)
+    .build();
+
+Single<Boolean> single = ReactiveNetwork.checkInternetConnectivity(settings);
+
+single
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Consumer<Boolean>() {
+      @Override public void accept(@NonNull Boolean isConnectedToTheInternet) throws Exception {
+        // do something with isConnectedToTheInternet
+      }
+    });
 ```
 
 Basic idea is the same. With just have `Single<Boolean>` return type instead of `Observable<Boolean>`
