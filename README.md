@@ -252,7 +252,12 @@ If you want to ping custom host during checking Internet connectivity, it's reco
 You can do it as follows:
 
 ```java
-ReactiveNetwork.observeInternetConnectivity(new SocketInternetObservingStrategy(), "www.yourhost.com")
+InternetObservingSettings settings = InternetObservingSettings
+    .host("www.yourhost.com")
+    .strategy(new SocketInternetObservingStrategy())
+    .build();
+
+ReactiveNetwork.observeInternetConnectivity(settings)
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread())
     .subscribe(new Consumer<Boolean>() {
