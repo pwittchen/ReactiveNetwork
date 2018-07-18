@@ -49,7 +49,7 @@ public final class InternetObservingSettings {
    * @return settings with default parameters
    */
   public static InternetObservingSettings create() {
-    return new InternetObservingSettings.Builder().build();
+    return new Builder().build();
   }
 
   private InternetObservingSettings(Builder builder) {

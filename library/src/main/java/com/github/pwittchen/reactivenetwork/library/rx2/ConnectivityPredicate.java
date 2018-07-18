@@ -39,7 +39,7 @@ public class ConnectivityPredicate {
     return new Predicate<Connectivity>() {
       @Override public boolean test(@NonNull Connectivity connectivity) throws Exception {
         for (NetworkInfo.State state : states) {
-          if (connectivity.getState() == state) {
+          if (connectivity.state() == state) {
             return true;
           }
         }
@@ -59,7 +59,7 @@ public class ConnectivityPredicate {
     return new Predicate<Connectivity>() {
       @Override public boolean test(@NonNull Connectivity connectivity) throws Exception {
         for (int type : extendedTypes) {
-          if (connectivity.getType() == type) {
+          if (connectivity.type() == type) {
             return true;
           }
         }

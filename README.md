@@ -65,8 +65,8 @@ ReactiveNetwork.observeNetworkConnectivity(context)
     .subscribe(new Consumer<Connectivity>() {
       @Override public void accept(final Connectivity connectivity) {
         // do something with connectivity
-        // you can call connectivity.getState();
-        // connectivity.getType(); or connectivity.toString();
+        // you can call connectivity.state();
+        // connectivity.type(); or connectivity.toString();
       }
     });
 ```
@@ -107,17 +107,19 @@ This method allows you to apply your own network observing strategy and is used 
 Connectivity create()
 Connectivity create(Context context)
 
-NetworkInfo.State getState()
-NetworkInfo.DetailedState getDetailedState()
-int getType()
-int getSubType()
-boolean isAvailable()
-boolean isFailover()
-boolean isRoaming()
-String getTypeName()
-String getSubTypeName()
-String getReason()
-String getExtraInfo()
+NetworkInfo.State state()
+NetworkInfo.DetailedState detailedState()
+int type()
+int subType()
+boolean available()
+boolean failover()
+boolean roaming()
+String typeName()
+String subTypeName()
+String reason()
+String extraInfo()
+
+// and respective setters
 
 class Builder
 ```
@@ -316,7 +318,7 @@ Next, we can chain two streams:
 ReactiveNetwork
    .observeNetworkConnectivity(getApplicationContext())
    .flatMap(connectivity -> {
-     if (connectivity.getState() == NetworkInfo.State.CONNECTED) {
+     if (connectivity.state() == NetworkInfo.State.CONNECTED) {
        return getResponse("http://github.com");
      }
      return Observable.error(() -> new RuntimeException("not connected"));

@@ -35,21 +35,21 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void shouldCreateConnectivity() {
     // when
-    Connectivity connectivity = new Connectivity();
+    Connectivity connectivity = Connectivity.create();
 
     // then
     assertThat(connectivity).isNotNull();
-    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.DISCONNECTED);
-    assertThat(connectivity.getDetailedState()).isEqualTo(NetworkInfo.DetailedState.IDLE);
-    assertThat(connectivity.getType()).isEqualTo(Connectivity.UNKNOWN_TYPE);
-    assertThat(connectivity.getSubType()).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE);
-    assertThat(connectivity.isAvailable()).isFalse();
-    assertThat(connectivity.isFailover()).isFalse();
-    assertThat(connectivity.isRoaming()).isFalse();
-    assertThat(connectivity.getTypeName()).isEqualTo(TYPE_NAME_NONE);
-    assertThat(connectivity.getSubTypeName()).isEqualTo(TYPE_NAME_NONE);
-    assertThat(connectivity.getReason()).isEmpty();
-    assertThat(connectivity.getExtraInfo()).isEmpty();
+    assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.DISCONNECTED);
+    assertThat(connectivity.detailedState()).isEqualTo(NetworkInfo.DetailedState.IDLE);
+    assertThat(connectivity.type()).isEqualTo(Connectivity.UNKNOWN_TYPE);
+    assertThat(connectivity.subType()).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE);
+    assertThat(connectivity.available()).isFalse();
+    assertThat(connectivity.failover()).isFalse();
+    assertThat(connectivity.roaming()).isFalse();
+    assertThat(connectivity.typeName()).isEqualTo(TYPE_NAME_NONE);
+    assertThat(connectivity.subTypeName()).isEqualTo(TYPE_NAME_NONE);
+    assertThat(connectivity.reason()).isEmpty();
+    assertThat(connectivity.extraInfo()).isEmpty();
   }
 
   @Test public void stateShouldBeEqualToGivenValue() throws Exception {
@@ -60,7 +60,7 @@ import static com.google.common.truth.Truth.assertThat;
         .build();
 
     // when
-    final Predicate<Connectivity> equalTo = ConnectivityPredicate.hasState(connectivity.getState());
+    final Predicate<Connectivity> equalTo = ConnectivityPredicate.hasState(connectivity.state());
     final Boolean shouldBeEqualToGivenStatus = equalTo.test(connectivity);
 
     // then
@@ -110,7 +110,7 @@ import static com.google.common.truth.Truth.assertThat;
         .build();
 
     // note that unknown type is added initially by the ConnectivityPredicate#hasType method
-    final int givenTypes[] = { connectivity.getType(), Connectivity.UNKNOWN_TYPE };
+    final int givenTypes[] = { connectivity.type(), Connectivity.UNKNOWN_TYPE };
 
     // when
     final Predicate<Connectivity> equalTo = ConnectivityPredicate.hasType(givenTypes);
@@ -269,17 +269,17 @@ import static com.google.common.truth.Truth.assertThat;
         .build();
 
     // then
-    assertThat(connectivity.getState()).isEqualTo(state);
-    assertThat(connectivity.getDetailedState()).isEqualTo(detailedState);
-    assertThat(connectivity.getType()).isEqualTo(type);
-    assertThat(connectivity.getSubType()).isEqualTo(subType);
-    assertThat(connectivity.isAvailable()).isTrue();
-    assertThat(connectivity.isFailover()).isFalse();
-    assertThat(connectivity.isRoaming()).isTrue();
-    assertThat(connectivity.getTypeName()).isEqualTo(typeName);
-    assertThat(connectivity.getSubTypeName()).isEqualTo(subTypeName);
-    assertThat(connectivity.getReason()).isEqualTo(reason);
-    assertThat(connectivity.getExtraInfo()).isEqualTo(extraInfo);
+    assertThat(connectivity.state()).isEqualTo(state);
+    assertThat(connectivity.detailedState()).isEqualTo(detailedState);
+    assertThat(connectivity.type()).isEqualTo(type);
+    assertThat(connectivity.subType()).isEqualTo(subType);
+    assertThat(connectivity.available()).isTrue();
+    assertThat(connectivity.failover()).isFalse();
+    assertThat(connectivity.roaming()).isTrue();
+    assertThat(connectivity.typeName()).isEqualTo(typeName);
+    assertThat(connectivity.subTypeName()).isEqualTo(subTypeName);
+    assertThat(connectivity.reason()).isEqualTo(reason);
+    assertThat(connectivity.extraInfo()).isEqualTo(extraInfo);
   }
 
   @Test public void connectivityShouldNotBeEqualToAnotherOne() {
@@ -326,16 +326,16 @@ import static com.google.common.truth.Truth.assertThat;
     Connectivity connectivity = Connectivity.create(context, connectivityManager);
 
     // then
-    assertThat(connectivity.getType()).isEqualTo(Connectivity.UNKNOWN_TYPE);
-    assertThat(connectivity.getSubType()).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE);
-    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.DISCONNECTED);
-    assertThat(connectivity.getDetailedState()).isEqualTo(NetworkInfo.DetailedState.IDLE);
-    assertThat(connectivity.isAvailable()).isFalse();
-    assertThat(connectivity.isFailover()).isFalse();
-    assertThat(connectivity.isRoaming()).isFalse();
-    assertThat(connectivity.getTypeName()).isEqualTo(TYPE_NAME_NONE);
-    assertThat(connectivity.getSubTypeName()).isEqualTo(TYPE_NAME_NONE);
-    assertThat(connectivity.getReason()).isEmpty();
-    assertThat(connectivity.getExtraInfo()).isEmpty();
+    assertThat(connectivity.type()).isEqualTo(Connectivity.UNKNOWN_TYPE);
+    assertThat(connectivity.subType()).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE);
+    assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.DISCONNECTED);
+    assertThat(connectivity.detailedState()).isEqualTo(NetworkInfo.DetailedState.IDLE);
+    assertThat(connectivity.available()).isFalse();
+    assertThat(connectivity.failover()).isFalse();
+    assertThat(connectivity.roaming()).isFalse();
+    assertThat(connectivity.typeName()).isEqualTo(TYPE_NAME_NONE);
+    assertThat(connectivity.subTypeName()).isEqualTo(TYPE_NAME_NONE);
+    assertThat(connectivity.reason()).isEmpty();
+    assertThat(connectivity.extraInfo()).isEmpty();
   }
 }

@@ -47,8 +47,8 @@ public class MainActivity extends Activity {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(connectivity -> {
           Log.d(TAG, connectivity.toString());
-          final NetworkInfo.State state = connectivity.getState();
-          final String name = connectivity.getTypeName();
+          final NetworkInfo.State state = connectivity.state();
+          final String name = connectivity.typeName();
           tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
         });
 

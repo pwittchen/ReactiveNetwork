@@ -75,7 +75,7 @@ import static org.mockito.Mockito.when;
     Connectivity connectivity = strategy.observeNetworkConnectivity(context).blockingFirst();
 
     // then
-    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
+    assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
   }
 
   @Test public void shouldStopObservingConnectivity() {
