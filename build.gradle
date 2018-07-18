@@ -6,7 +6,7 @@ ext {
   compileSdkVersion = 27
   buildToolsVersion = '27.0.3'
   gradleVersion = '4.4.1'
-  kotlinVersion = '1.2.41'
+  kotlinVersion = '1.2.51'
 }
 
 ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.1.16',
@@ -14,10 +14,10 @@ ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.1.16',
             supportannotations: 'com.android.support:support-annotations:27.1.1',
             appcompatv7       : 'com.android.support:appcompat-v7:27.1.1',
             junit             : 'junit:junit:4.12',
-            truth             : 'com.google.truth:truth:0.40',
+            truth             : 'com.google.truth:truth:0.42',
             robolectric       : 'org.robolectric:robolectric:3.1.2',
-            mockitocore       : 'org.mockito:mockito-core:2.18.3',
-            nullaway          : 'com.uber.nullaway:nullaway:0.4.6',
+            mockitocore       : 'org.mockito:mockito-core:2.19.1',
+            nullaway          : 'com.uber.nullaway:nullaway:0.4.7',
             errorprone        : 'com.google.errorprone:error_prone_core:2.3.1',
             kotlinstdlib      : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             kotlingradleplugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
