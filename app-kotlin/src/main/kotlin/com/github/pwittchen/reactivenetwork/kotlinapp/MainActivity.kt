@@ -46,8 +46,8 @@ class MainActivity : Activity() {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { connectivity ->
           Log.d(TAG, connectivity.toString())
-          val state = connectivity.state
-          val name = connectivity.typeName
+          val state = connectivity.state()
+          val name = connectivity.typeName()
           connectivity_status.text = String.format("state: %s, typeName: %s", state, name)
         }
 

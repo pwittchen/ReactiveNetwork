@@ -61,7 +61,7 @@ import static org.mockito.Mockito.verify;
     strategy.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
       @Override public void accept(Connectivity connectivity) throws Exception {
         // then
-        assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
+        assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
       }
     });
   }

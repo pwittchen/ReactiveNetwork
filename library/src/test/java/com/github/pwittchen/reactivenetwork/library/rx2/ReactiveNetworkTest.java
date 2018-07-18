@@ -116,7 +116,7 @@ import static com.google.common.truth.Truth.assertThat;
     Connectivity connectivity = ReactiveNetwork.observeNetworkConnectivity(context).blockingFirst();
 
     // then
-    assertThat(connectivity.getState()).isEqualTo(NetworkInfo.State.CONNECTED);
+    assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
   }
 
   @Test(expected = IllegalArgumentException.class)

@@ -26,25 +26,30 @@ import android.support.annotation.NonNull;
 public class Connectivity {
   static final int UNKNOWN_TYPE = -1;
   static final int UNKNOWN_SUB_TYPE = -1;
-  private NetworkInfo.State state;
-  private NetworkInfo.DetailedState detailedState;
-  private int type;
-  private int subType;
-  private boolean available;
-  private boolean failover;
-  private boolean roaming;
-  private String typeName;
-  private String subTypeName;
-  private String reason;
-  private String extraInfo;
+  private NetworkInfo.State state; // NOPMD
+  private NetworkInfo.DetailedState detailedState; // NOPMD
+  private int type; // NOPMD
+  private int subType; // NOPMD
+  private boolean available; // NOPMD
+  private boolean failover; // NOPMD
+  private boolean roaming; // NOPMD
+  private String typeName; // NOPMD
+  private String subTypeName; // NOPMD
+  private String reason; // NOPMD
+  private String extraInfo; // NOPMD
 
   public static Connectivity create() {
-    return new Builder().build();
+    return builder().build();
   }
 
   public static Connectivity create(@NonNull Context context) {
     Preconditions.checkNotNull(context, "context == null");
     return create(context, getConnectivityManager(context));
+  }
+
+  private static ConnectivityManager getConnectivityManager(Context context) {
+    final String service = Context.CONNECTIVITY_SERVICE;
+    return (ConnectivityManager) context.getSystemService(service);
   }
 
   protected static Connectivity create(@NonNull Context context, ConnectivityManager manager) {
@@ -59,7 +64,8 @@ public class Connectivity {
   }
 
   private static Connectivity create(NetworkInfo networkInfo) {
-    return new Builder().state(networkInfo.getState())
+    return new Builder()
+        .state(networkInfo.getState())
         .detailedState(networkInfo.getDetailedState())
         .type(networkInfo.getType())
         .subType(networkInfo.getSubtype())
@@ -73,21 +79,7 @@ public class Connectivity {
         .build();
   }
 
-  protected Connectivity() {
-    this.state = NetworkInfo.State.DISCONNECTED; // NOPMD
-    this.detailedState = NetworkInfo.DetailedState.IDLE; // NOPMD
-    this.type = UNKNOWN_TYPE; // NOPMD
-    this.subType = UNKNOWN_SUB_TYPE; // NOPMD
-    this.available = false; // NOPMD
-    this.failover = false; // NOPMD
-    this.roaming = false; // NOPMD
-    this.typeName = "NONE"; // NOPMD
-    this.subTypeName = "NONE"; // NOPMD
-    this.reason = ""; // NOPMD
-    this.extraInfo = ""; // NOPMD
-  }
-
-  protected Connectivity(Builder builder) {
+  private Connectivity(Builder builder) {
     state = builder.state;
     detailedState = builder.detailedState;
     type = builder.type;
@@ -101,53 +93,100 @@ public class Connectivity {
     extraInfo = builder.extraInfo;
   }
 
-  private static ConnectivityManager getConnectivityManager(Context context) {
-    final String service = Context.CONNECTIVITY_SERVICE;
-    return (ConnectivityManager) context.getSystemService(service);
+  private Connectivity() {
+    this(builder());
   }
 
-  public NetworkInfo.State getState() {
+  private static Builder builder() {
+    return new Connectivity.Builder();
+  }
+
+  public NetworkInfo.State state() {
     return state;
   }
 
-  public NetworkInfo.DetailedState getDetailedState() {
+  public static Builder state(NetworkInfo.State state) {
+    return builder().state(state);
+  }
+
+  public NetworkInfo.DetailedState detailedState() {
     return detailedState;
   }
 
-  public int getType() {
+  public static Builder state(NetworkInfo.DetailedState detailedState) {
+    return builder().detailedState(detailedState);
+  }
+
+  public int type() {
     return type;
   }
 
-  public int getSubType() {
+  public static Builder type(int type) {
+    return builder().type(type);
+  }
+
+  public int subType() {
     return subType;
   }
 
-  public boolean isAvailable() {
+  public static Builder subType(int subType) {
+    return builder().subType(subType);
+  }
+
+  public boolean available() {
     return available;
   }
 
-  public boolean isFailover() {
+  public static Builder available(boolean available) {
+    return builder().available(available);
+  }
+
+  public boolean failover() {
     return failover;
   }
 
-  public boolean isRoaming() {
+  public static Builder failover(boolean failover) {
+    return builder().failover(failover);
+  }
+
+  public boolean roaming() {
     return roaming;
   }
 
-  public String getTypeName() {
+  public static Builder roaming(boolean roaming) {
+    return builder().roaming(roaming);
+  }
+
+  public String typeName() {
     return typeName;
   }
 
-  public String getSubTypeName() {
+  public static Builder typeName(String typeName) {
+    return builder().typeName(typeName);
+  }
+
+  public String subTypeName() {
     return subTypeName;
   }
 
-  public String getReason() {
+  public static Builder subTypeName(String subTypeName) {
+    return builder().subTypeName(subTypeName);
+  }
+
+  public String reason() {
     return reason;
   }
 
-  public String getExtraInfo() {
+  public static Builder reason(String reason) {
+    return builder().reason(reason);
+  }
+
+  public String extraInfo() {
     return extraInfo;
+  }
+
+  public static Builder extraInfo(String extraInfo) {
+    return builder().extraInfo(extraInfo);
   }
 
   @Override public boolean equals(Object o) {
