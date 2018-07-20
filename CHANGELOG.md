@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+v. 2.0.0
+--------
+*?*
+
+- bumped project dependencies -> RxJava: https://github.com/pwittchen/ReactiveNetwork/commit/1d1a301a72d0128548ccf4b9b2cef24c07d38118, others: https://github.com/pwittchen/ReactiveNetwork/commit/597dc03c1c18fb73849c7b0bc4a52d46524bd02b
+- refactored `Connectivity` class to better builder pattern to improve code consistency (breaking API of the `Connectivity` class) - PR #283 
+- improved unit tests coverage - PR #287
+
 v. 1.0.0
 --------
 *24 Jun 2018*
