@@ -25,6 +25,9 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
 @SuppressWarnings("NullAway") public class PreconditionsTest {
 
+  private static final String MSG_STRING_IS_NULL = "String is null";
+  private static final String MSG_VALUE_IS_NOT_GREATER_THAN_ZERO = "value is not greater than zero";
+
   @Test @Config(sdk = 21) public void shouldBeAtLeastAndroidLollipop() {
     boolean isAtLeastAndroidLollipop = Preconditions.isAtLeastAndroidLollipop();
     assertThat(isAtLeastAndroidLollipop).isTrue();
@@ -44,4 +47,50 @@ import static com.google.common.truth.Truth.assertThat;
     boolean isAtLeastAndroidMarshmallow = Preconditions.isAtLeastAndroidMarshmallow();
     assertThat(isAtLeastAndroidMarshmallow).isTrue();
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionWhenStringIsNull() {
+    Preconditions.checkNotNullOrEmpty(null, MSG_STRING_IS_NULL);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionWhenStringIsEmpty() {
+    Preconditions.checkNotNullOrEmpty("", MSG_STRING_IS_NULL);
+  }
+
+  @Test
+  public void shouldNotThrowAnythingWhenStringIsNotEmpty() {
+    Preconditions.checkNotNullOrEmpty("notEmpty", MSG_STRING_IS_NULL);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionWhenValueIsZero() {
+    Preconditions.checkGreaterThanZero(0, MSG_VALUE_IS_NOT_GREATER_THAN_ZERO);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionWhenValueLowerThanZero() {
+    Preconditions.checkGreaterThanZero(-1, MSG_VALUE_IS_NOT_GREATER_THAN_ZERO);
+  }
+
+  @Test
+  public void shouldNotThrowAnythingWhenValueIsGreaterThanZero() {
+    Preconditions.checkGreaterThanZero(1, MSG_VALUE_IS_NOT_GREATER_THAN_ZERO);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionWhenValueLowerThanZeroForGreaterOrEqualCheck() {
+    Preconditions.checkGreaterOrEqualToZero(-1, MSG_VALUE_IS_NOT_GREATER_THAN_ZERO);
+  }
+
+  @Test
+  public void shouldNotThrowAnythingWhenValueIsGreaterThanZeroForGreaterOrEqualCheck() {
+    Preconditions.checkGreaterOrEqualToZero(1, MSG_VALUE_IS_NOT_GREATER_THAN_ZERO);
+  }
+
+  @Test
+  public void shouldNotThrowAnythingWhenValueIsEqualToZero() {
+    Preconditions.checkGreaterOrEqualToZero(0, MSG_VALUE_IS_NOT_GREATER_THAN_ZERO);
+  }
+
 }

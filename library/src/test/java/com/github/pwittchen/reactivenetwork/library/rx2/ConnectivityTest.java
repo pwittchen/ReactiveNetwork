@@ -54,7 +54,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void stateShouldBeEqualToGivenValue() throws Exception {
     // given
-    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
+    final Connectivity connectivity = Connectivity.state(NetworkInfo.State.CONNECTED)
         .type(ConnectivityManager.TYPE_WIFI)
         .typeName(TYPE_NAME_WIFI)
         .build();
@@ -69,7 +69,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void stateShouldBeEqualToOneOfGivenMultipleValues() throws Exception {
     // given
-    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTING)
+    final Connectivity connectivity = Connectivity.state(NetworkInfo.State.CONNECTING)
         .type(ConnectivityManager.TYPE_WIFI)
         .typeName(TYPE_NAME_WIFI)
         .build();
@@ -88,7 +88,7 @@ import static com.google.common.truth.Truth.assertThat;
   @Test public void stateShouldNotBeEqualToGivenValue() throws Exception {
     // given
     final Connectivity connectivity =
-        new Connectivity.Builder().state(NetworkInfo.State.DISCONNECTED)
+        Connectivity.state(NetworkInfo.State.DISCONNECTED)
             .type(ConnectivityManager.TYPE_WIFI)
             .typeName(TYPE_NAME_WIFI)
             .build();
@@ -104,7 +104,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void typeShouldBeEqualToGivenValue() throws Exception {
     // given
-    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
+    final Connectivity connectivity = Connectivity.state(NetworkInfo.State.CONNECTED)
         .type(ConnectivityManager.TYPE_WIFI)
         .typeName(TYPE_NAME_WIFI)
         .build();
@@ -122,7 +122,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void typeShouldBeEqualToOneOfGivenMultipleValues() throws Exception {
     // given
-    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTING)
+    final Connectivity connectivity = Connectivity.state(NetworkInfo.State.CONNECTING)
         .type(ConnectivityManager.TYPE_MOBILE)
         .typeName(TYPE_NAME_MOBILE)
         .build();
@@ -142,7 +142,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void typeShouldNotBeEqualToGivenValue() throws Exception {
     // given
-    final Connectivity connectivity = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
+    final Connectivity connectivity = Connectivity.state(NetworkInfo.State.CONNECTED)
         .type(ConnectivityManager.TYPE_WIFI)
         .typeName(TYPE_NAME_WIFI)
         .build();
@@ -255,7 +255,7 @@ import static com.google.common.truth.Truth.assertThat;
     String extraInfo = "extra info";
 
     // when
-    Connectivity connectivity = new Connectivity.Builder().state(state)
+    Connectivity connectivity = Connectivity.state(state)
         .detailedState(detailedState)
         .type(type)
         .subType(subType)
@@ -284,7 +284,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void connectivityShouldNotBeEqualToAnotherOne() {
     // given
-    Connectivity connectivityOne = new Connectivity.Builder().state(NetworkInfo.State.CONNECTED)
+    Connectivity connectivityOne = Connectivity.state(NetworkInfo.State.CONNECTED)
         .detailedState(NetworkInfo.DetailedState.CONNECTED)
         .type(ConnectivityManager.TYPE_WIFI)
         .subType(1)
@@ -297,7 +297,7 @@ import static com.google.common.truth.Truth.assertThat;
         .extraInfo("extraInfoOne")
         .build();
 
-    Connectivity connectivityTwo = new Connectivity.Builder().state(NetworkInfo.State.DISCONNECTED)
+    Connectivity connectivityTwo = Connectivity.state(NetworkInfo.State.DISCONNECTED)
         .detailedState(NetworkInfo.DetailedState.DISCONNECTED)
         .type(ConnectivityManager.TYPE_MOBILE)
         .subType(2)
