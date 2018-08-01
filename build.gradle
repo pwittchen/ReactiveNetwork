@@ -9,15 +9,15 @@ ext {
   kotlinVersion = '1.2.51'
 }
 
-ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.1.16',
+ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.0',
             rxandroid2        : 'io.reactivex.rxjava2:rxandroid:2.0.2',
             supportannotations: 'com.android.support:support-annotations:27.1.1',
             appcompatv7       : 'com.android.support:appcompat-v7:27.1.1',
             junit             : 'junit:junit:4.12',
             truth             : 'com.google.truth:truth:0.42',
             robolectric       : 'org.robolectric:robolectric:3.1.2',
-            mockitocore       : 'org.mockito:mockito-core:2.19.1',
-            nullaway          : 'com.uber.nullaway:nullaway:0.4.7',
+            mockitocore       : 'org.mockito:mockito-core:2.21.0',
+            nullaway          : 'com.uber.nullaway:nullaway:0.5.1',
             errorprone        : 'com.google.errorprone:error_prone_core:2.3.1',
             kotlinstdlib      : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             kotlingradleplugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
