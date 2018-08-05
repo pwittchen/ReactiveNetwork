@@ -3,7 +3,7 @@ CHANGELOG
 
 v. 2.1.0
 --------
-*?*
+*5 Aug 2018*
 
 - bumped project dependencies - PR #292, Commit: https://github.com/pwittchen/ReactiveNetwork/commit/7e4cd4b7e39931d6cceeb0b674ccb506d38f91e4
   - RxJava: 2.1.16 -> 2.2.0
