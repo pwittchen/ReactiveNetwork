@@ -15,7 +15,6 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy;
 
-import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -29,13 +28,12 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("NullAway") public class WalledGardenInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
