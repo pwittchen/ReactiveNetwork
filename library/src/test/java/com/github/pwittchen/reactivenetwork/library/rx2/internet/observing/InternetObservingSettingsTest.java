@@ -16,7 +16,6 @@
 package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing;
 
 import android.support.annotation.NonNull;
-import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
@@ -24,11 +23,10 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strat
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@RunWith(RobolectricTestRunner.class)
 public class InternetObservingSettingsTest {
 
   @Test

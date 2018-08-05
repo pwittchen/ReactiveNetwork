@@ -38,7 +38,7 @@ import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("NullAway") public class ReactiveNetworkTest {
 
   private static final String TEST_VALID_HOST = "www.test.com";

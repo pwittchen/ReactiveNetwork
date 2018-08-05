@@ -18,7 +18,6 @@ package com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strat
 import android.app.Application;
 import android.content.Context;
 import android.net.NetworkInfo;
-import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.Observable;
@@ -31,13 +30,12 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("NullAway") public class LollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();

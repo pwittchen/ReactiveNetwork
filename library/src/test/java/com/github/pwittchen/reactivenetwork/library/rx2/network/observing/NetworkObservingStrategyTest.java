@@ -17,7 +17,6 @@ package com.github.pwittchen.reactivenetwork.library.rx2.network.observing;
 
 import android.content.Context;
 import android.net.NetworkInfo;
-import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
@@ -26,11 +25,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("NullAway") public class NetworkObservingStrategyTest {
 
   @Test public void lollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {

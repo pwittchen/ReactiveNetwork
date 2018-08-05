@@ -15,7 +15,6 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error;
 
-import com.github.pwittchen.reactivenetwork.library.rx2.BuildConfig;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,12 +22,11 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(RobolectricTestRunner.class) @Config(constants = BuildConfig.class)
+@RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("NullAway") public class DefaultErrorHandlerTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
