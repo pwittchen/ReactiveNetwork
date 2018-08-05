@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+v. 2.1.0
+--------
+*?*
+
+- bumped project dependencies - PR #292, Commit: https://github.com/pwittchen/ReactiveNetwork/commit/7e4cd4b7e39931d6cceeb0b674ccb506d38f91e4
+  - RxJava: 2.1.16 -> 2.2.0
+  - Mockito Core: 2.19.1 -> 2.21.0
+  - NullAway: 0.4.7 -> 0.5.1
+  - Robolectric: 3.1.2 -> 4.0-alpha-3
+
 v. 2.0.0
 --------
 *20 Jul 2018*
