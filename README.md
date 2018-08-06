@@ -58,34 +58,45 @@ it's recommended to use Application Context instead of Activity Context.
 We can observe `Connectivity` with `observeNetworkConnectivity(context)` method in the following way:
 
 ```java
-ReactiveNetwork.observeNetworkConnectivity(context)
-    .subscribeOn(Schedulers.io())
-    ... // anything else what you can do with RxJava
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer<Connectivity>() {
-      @Override public void accept(final Connectivity connectivity) {
-        // do something with connectivity
-        // you can call connectivity.state();
-        // connectivity.type(); or connectivity.toString();
-      }
-    });
+ReactiveNetwork
+  .observeNetworkConnectivity(context)
+  .subscribeOn(Schedulers.io())
+  ... // anything else what you can do with RxJava
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(connectivity -> {
+      // do something with connectivity
+      // you can call connectivity.state();
+      // connectivity.type(); or connectivity.toString();
+  });
 ```
 
 When `Connectivity` changes, subscriber will be notified. `Connectivity` can change its state or type.
 
+**Errors** can be handled in the same manner as in all RxJava observables. For example:
+
+```java
+ReactiveNetwork
+  .observeNetworkConnectivity(context)
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(
+       repos     -> /* handle repos here */,
+       throwable -> /* handle error here */
+   );
+```
+
 We can react on a concrete state, states, type or types changes with the `filter(...)` method from RxJava, `hasState(NetworkInfo.State... states)` and `hasType(int... types)` methods located in `ConnectivityPredicate` class.
 
 ```java
-ReactiveNetwork.observeNetworkConnectivity(context)
-    .subscribeOn(Schedulers.io())
-    .filter(ConnectivityPredicate.hasState(NetworkInfo.State.CONNECTED))
-    .filter(ConnectivityPredicate.hasType(ConnectivityManager.TYPE_WIFI))
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer<Connectivity>() {
-      @Override public void accept(final Connectivity connectivity) {
-        // do something
-      }
-    });
+ReactiveNetwork
+  .observeNetworkConnectivity(context)
+  .subscribeOn(Schedulers.io())
+  .filter(ConnectivityPredicate.hasState(NetworkInfo.State.CONNECTED))
+  .filter(ConnectivityPredicate.hasType(ConnectivityManager.TYPE_WIFI))
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(connectivity -> {
+      // do something
+  });
 ```
 
 `observeNetworkConnectivity(context)` checks only connectivity with the network (not Internet) as it's based on `BroadcastReceiver` for API 20 and lower and uses `NetworkCallback` for API 21 and higher.
@@ -142,14 +153,13 @@ With `observeNetworkConnectivity(context, strategy)` method we can use one of th
 We can observe connectivity with the Internet continuously in the following way:
 
 ```java
-ReactiveNetwork.observeInternetConnectivity()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<Boolean>() {
-          @Override public void accept(Boolean isConnectedToInternet) {
-            // do something with isConnectedToInternet value
-          }
-        });
+ReactiveNetwork
+  .observeInternetConnectivity()
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(isConnectedToInternet -> {
+      // do something with isConnectedToInternet value
+  });
 ```
 
 An `Observable` will return `true` to the subscription (disposable) if device is connected to the Internet and `false` if not.
@@ -165,23 +175,22 @@ They allow to customize monitoring interval in milliseconds, host, port, timeout
 
 ```java
 InternetObservingSettings settings = InternetObservingSettings
-    .initialInterval(initialInterval)
-    .interval(interval)
-    .host(host)
-    .port(port)
-    .timeout(timeout)
-    .errorHandler(testErrorHandler)
-    .strategy(strategy)
-    .build();
+  .initialInterval(initialInterval)
+  .interval(interval)
+  .host(host)
+  .port(port)
+  .timeout(timeout)
+  .errorHandler(testErrorHandler)
+  .strategy(strategy)
+  .build();
 
-ReactiveNetwork.observeInternetConnectivity(settings)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<Boolean>() {
-          @Override public void accept(Boolean isConnectedToInternet) {
-            // do something with isConnectedToInternet value
-          }
-        });
+ReactiveNetwork
+  .observeInternetConnectivity(settings)
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(isConnectedToInternet -> {
+      // do something with isConnectedToInternet value
+  });
 ```
 
 These methods are created to allow the users to fully customize the library and give them more control.
@@ -198,38 +207,34 @@ It may be helpful in the specific use cases.
 Single<Boolean> single = ReactiveNetwork.checkInternetConnectivity();
 
 single
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer<Boolean>() {
-      @Override public void accept(@NonNull Boolean isConnectedToTheInternet) throws Exception {
-        // do something with isConnectedToTheInternet
-      }
-    });
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(isConnectedToInternet -> {
+      // do something with isConnectedToTheInternet
+  });
 ```
 
 As in the previous case, you can customize this feature with the `InternetObservingSettings` class and its builder.
 
 ```java
 InternetObservingSettings settings = InternetObservingSettings
-    .initialInterval(initialInterval)
-    .interval(interval)
-    .host(host)
-    .port(port)
-    .timeout(timeout)
-    .errorHandler(testErrorHandler)
-    .strategy(strategy)
-    .build();
+  .initialInterval(initialInterval)
+  .interval(interval)
+  .host(host)
+  .port(port)
+  .timeout(timeout)
+  .errorHandler(testErrorHandler)
+  .strategy(strategy)
+  .build();
 
 Single<Boolean> single = ReactiveNetwork.checkInternetConnectivity(settings);
 
 single
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer<Boolean>() {
-      @Override public void accept(@NonNull Boolean isConnectedToTheInternet) throws Exception {
-        // do something with isConnectedToTheInternet
-      }
-    });
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(isConnectedToInternet -> {
+      // do something with isConnectedToTheInternet
+  });
 ```
 
 Basic idea is the same. With just have `Single<Boolean>` return type instead of `Observable<Boolean>`
@@ -255,18 +260,17 @@ You can do it as follows:
 
 ```java
 InternetObservingSettings settings = InternetObservingSettings
-    .host("www.yourhost.com")
-    .strategy(new SocketInternetObservingStrategy())
-    .build();
+  .host("www.yourhost.com")
+  .strategy(new SocketInternetObservingStrategy())
+  .build();
 
-ReactiveNetwork.observeInternetConnectivity(settings)
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer<Boolean>() {
-      @Override public void accept(@NonNull Boolean isConnectedToHost) throws Exception {
-        // do something with isConnectedToHost
-      }
-    });
+ReactiveNetwork
+  .observeInternetConnectivity(settings)
+  .subscribeOn(Schedulers.io())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscribe(isConnectedToHost -> {
+      // do something with isConnectedToHost
+  });
 ```
 
 The same operation can be done with `checkInternetConnectivity(strategy, host)` method, which returns `Single` instead of `Observable`.
