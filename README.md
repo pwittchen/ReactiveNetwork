@@ -80,8 +80,8 @@ ReactiveNetwork
   .subscribeOn(Schedulers.io())
   .observeOn(AndroidSchedulers.mainThread())
   .subscribe(
-       repos     -> /* handle repos here */,
-       throwable -> /* handle error here */
+       connectivity -> /* handle connectivity here */,
+       throwable    -> /* handle error here */
    );
 ```
 
