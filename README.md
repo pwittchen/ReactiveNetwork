@@ -457,7 +457,7 @@ Static code analysis runs Checkstyle, FindBugs, PMD, Lint, ErrorProne and NullAw
 Static code analysis for the sample Kotlin app with detekt can be executed as follows:
 
 ```
-./gradlew detektCheck
+./gradlew detektCheck ktlintCheck
 ```
 
 Reports from analysis are generated in `library/build/reports/` directory.

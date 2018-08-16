@@ -6,7 +6,8 @@ ext {
   compileSdkVersion = 28
   buildToolsVersion = '28'
   gradleVersion = '4.4.1'
-  kotlinVersion = '1.2.51'
+  kotlinVersion = '1.2.60'
+  detektVersion = '1.0.0.RC6-1'
 }
 
 ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.0',
@@ -19,9 +20,10 @@ ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.0',
             mockitocore       : 'org.mockito:mockito-core:2.21.0',
             nullaway          : 'com.uber.nullaway:nullaway:0.5.3',
             errorprone        : 'com.google.errorprone:error_prone_core:2.3.1',
+            ktlintgradle      : 'gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:4.1.0',
             kotlinstdlib      : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             kotlingradleplugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
-            detekt            : "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.RC6-1"]
+            detekt            : "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"]
 
 buildscript {
   repositories {
