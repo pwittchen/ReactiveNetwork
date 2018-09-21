@@ -2,7 +2,7 @@
 
 ext {
   minSdkVersion = 9
-  minSdkVersionApps = 14
+  minSdkVersionApps = 23
   compileSdkVersion = 28
   buildToolsVersion = '28'
   gradleVersion = '4.4.1'
