@@ -299,6 +299,8 @@ Someties, while trying to connect to the remote server we may encounter the foll
 ClearText HTTP traffic not permitted
 ```
 
+Due to this fact, observing Internet feature won't work properly.
+
 It's related to [Network Security Configuration](https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted). Starting with Android 9.0 (API level 28), cleartext support is disabled by default.
 
 You have a few options to solve this issue.
