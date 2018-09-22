@@ -24,7 +24,8 @@ Contents
     - [Internet Observing Strategies](#internet-observing-strategies)
     - [Custom host](#custom-host)
   - [Chaining network and Internet connectivity streams](#chaining-network-and-internet-connectivity-streams)
-  - [Integration with other libraries](#integration-with-other-libraries)
+  - [ClearText traffic](#cleartext-traffic)
+- [Integration with other libraries](#integration-with-other-libraries)
     - [Integration with OkHttp](#integration-with-okhttp)
     - [Integration with Retrofit](#integration-with-retrofit)
   - [ProGuard configuration](#proguard-configuration)
@@ -289,6 +290,65 @@ ReactiveNetwork
     // isConnected can be true or false
 });
 ```
+
+### ClearText Traffic
+
+Someties, while trying to connect to the remote server we may encounter the following message:
+
+```
+ClearText HTTP traffic not permitted
+```
+
+It's related to [Network Security Configuration](https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted). Starting with Android 9.0 (API level 28), cleartext support is disabled by default.
+
+You have a few options to solve this issue.
+
+**Option #1**
+
+Create `res/xml/network_security_config.xml` file:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">Your URL(ex: 127.0.0.1)</domain>
+    </domain-config>
+</network-security-config>
+```
+
+Link it in your `AndroidManifest.xml` file:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest ...>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        ...
+        android:networkSecurityConfig="@xml/network_security_config"
+        ...>
+        ...
+    </application>
+</manifest>
+```
+
+**Option #2**
+
+Set `usesCleartextTraffic` parameter in `<application>` tag in `AndroidManifest.xml` file to `true`.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest ...>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        ...
+        android:usesCleartextTraffic="true"
+        ...>
+        ...
+    </application>
+</manifest>
+```
+
+For more details, check Android documentation linked above or this StackOverflow thread: https://stackoverflow.com/a/50834600/1150795.
 
 ### Integration with other libraries
 
