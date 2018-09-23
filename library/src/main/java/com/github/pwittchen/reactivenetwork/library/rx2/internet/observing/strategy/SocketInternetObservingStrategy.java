@@ -46,7 +46,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
 
   @Override public Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
-      final ErrorHandler errorHandler) {
+      final int httpResponse, final ErrorHandler errorHandler) {
     Preconditions.checkGreaterOrEqualToZero(initialIntervalInMs,
         "initialIntervalInMs is not a positive number");
     Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
@@ -63,7 +63,7 @@ public class SocketInternetObservingStrategy implements InternetObservingStrateg
   }
 
   @Override public Single<Boolean> checkInternetConnectivity(final String host, final int port,
-      final int timeoutInMs, final ErrorHandler errorHandler) {
+      final int timeoutInMs, final int httpResponse, final ErrorHandler errorHandler) {
     checkGeneralPreconditions(host, port, timeoutInMs, errorHandler);
 
     return Single.create(new SingleOnSubscribe<Boolean>() {

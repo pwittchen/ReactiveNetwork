@@ -172,7 +172,7 @@ Internet connectivity will be checked _as soon as possible_.
 Methods in this section should be used if they are really needed due to specific use cases.
 
 If you want to customize observing of the Internet connectivity, you can use `InternetObservingSettings` class and its builder.
-They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, error handler or whole observing strategy.
+They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, expected HTTP response code, error handler or whole observing strategy.
 
 ```java
 InternetObservingSettings settings = InternetObservingSettings
@@ -181,6 +181,7 @@ InternetObservingSettings settings = InternetObservingSettings
   .host(host)
   .port(port)
   .timeout(timeout)
+  .httpResponse(httpResponse)
   .errorHandler(testErrorHandler)
   .strategy(strategy)
   .build();
@@ -195,6 +196,8 @@ ReactiveNetwork
 ```
 
 These methods are created to allow the users to fully customize the library and give them more control.
+
+Please note, not all parameters are relevant for all strategies.
 
 For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/javadoc/RxJava2.x
 

@@ -46,6 +46,7 @@ import static com.google.common.truth.Truth.assertThat;
   private static final int TEST_VALID_TIMEOUT = 1000;
   private static final int TEST_VALID_INTERVAL = 1000;
   private static final int TEST_VALID_INITIAL_INTERVAL = 1000;
+  private static final int TEST_VALID_HTTP_RESPONSE = 204;
 
   @Test public void testReactiveNetworkObjectShouldNotBeNull() {
     // given
@@ -151,7 +152,8 @@ import static com.google.common.truth.Truth.assertThat;
 
     // when
     ReactiveNetwork.observeInternetConnectivity(strategy, TEST_VALID_INITIAL_INTERVAL,
-        TEST_VALID_INTERVAL, TEST_VALID_HOST, TEST_VALID_PORT, TEST_VALID_TIMEOUT, errorHandler);
+        TEST_VALID_INTERVAL, TEST_VALID_HOST, TEST_VALID_PORT, TEST_VALID_TIMEOUT,
+        TEST_VALID_HTTP_RESPONSE, errorHandler);
 
     // then an exception is thrown
   }
@@ -165,7 +167,7 @@ import static com.google.common.truth.Truth.assertThat;
     final Observable<Boolean> observable =
         ReactiveNetwork.observeInternetConnectivity(strategy, TEST_VALID_INITIAL_INTERVAL,
             TEST_VALID_INTERVAL, TEST_VALID_HOST, TEST_VALID_PORT, TEST_VALID_TIMEOUT,
-            errorHandler);
+            TEST_VALID_HTTP_RESPONSE, errorHandler);
 
     // then
     assertThat(observable).isNotNull();
@@ -178,7 +180,7 @@ import static com.google.common.truth.Truth.assertThat;
 
     // when
     ReactiveNetwork.checkInternetConnectivity(null, TEST_VALID_HOST, TEST_VALID_PORT,
-        TEST_VALID_TIMEOUT, errorHandler);
+        TEST_VALID_TIMEOUT, TEST_VALID_HTTP_RESPONSE, errorHandler);
 
     // then an exception is thrown
   }
@@ -191,7 +193,7 @@ import static com.google.common.truth.Truth.assertThat;
     // when
     final Single<Boolean> single =
         ReactiveNetwork.checkInternetConnectivity(strategy, TEST_VALID_HOST, TEST_VALID_PORT,
-            TEST_VALID_TIMEOUT, errorHandler);
+            TEST_VALID_TIMEOUT, TEST_VALID_HTTP_RESPONSE, errorHandler);
 
     // then
     assertThat(single).isNotNull();
@@ -232,6 +234,7 @@ import static com.google.common.truth.Truth.assertThat;
     final String host = "www.test.com";
     int port = 90;
     int timeout = 3;
+    int httpResponse = 200;
     ErrorHandler testErrorHandler = createTestErrorHandler();
     InternetObservingStrategy strategy = createTestInternetObservingStrategy();
 
@@ -242,6 +245,7 @@ import static com.google.common.truth.Truth.assertThat;
         .host(host)
         .port(port)
         .timeout(timeout)
+        .httpResponse(httpResponse)
         .errorHandler(testErrorHandler)
         .strategy(strategy)
         .build();
@@ -254,13 +258,13 @@ import static com.google.common.truth.Truth.assertThat;
   @NonNull private InternetObservingStrategy createTestInternetObservingStrategy() {
     return new InternetObservingStrategy() {
       @Override public Observable<Boolean> observeInternetConnectivity(int initialIntervalInMs,
-          int intervalInMs, String host, int port, int timeoutInMs,
+          int intervalInMs, String host, int port, int timeoutInMs, int httpResponse,
           ErrorHandler errorHandler) {
         return Observable.empty();
       }
 
       @Override public Single<Boolean> checkInternetConnectivity(String host, int port,
-          int timeoutInMs, ErrorHandler errorHandler) {
+          int timeoutInMs, int httpResponse, ErrorHandler errorHandler) {
         return Single.fromCallable(new Callable<Boolean>() {
           @Override public Boolean call() {
             return true;
