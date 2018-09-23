@@ -175,7 +175,7 @@ If you want to customize observing of the Internet connectivity, you can use `In
 They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, expected HTTP response code, error handler or whole observing strategy.
 
 ```java
-InternetObservingSettings settings = InternetObservingSettings
+InternetObservingSettings settings = InternetObservingSettings.builder()
   .initialInterval(initialInterval)
   .interval(interval)
   .host(host)
@@ -221,7 +221,7 @@ single
 As in the previous case, you can customize this feature with the `InternetObservingSettings` class and its builder.
 
 ```java
-InternetObservingSettings settings = InternetObservingSettings
+InternetObservingSettings settings = InternetObservingSettings.builder()
   .initialInterval(initialInterval)
   .interval(interval)
   .host(host)
@@ -263,7 +263,7 @@ If you want to ping custom host during checking Internet connectivity, it's reco
 You can do it as follows:
 
 ```java
-InternetObservingSettings settings = InternetObservingSettings
+InternetObservingSettings settings = InternetObservingSettings.builder()
   .host("www.yourhost.com")
   .strategy(new SocketInternetObservingStrategy())
   .build();

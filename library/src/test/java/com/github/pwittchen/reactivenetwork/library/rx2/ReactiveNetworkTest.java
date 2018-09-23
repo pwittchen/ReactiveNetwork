@@ -211,7 +211,7 @@ import static com.google.common.truth.Truth.assertThat;
     InternetObservingStrategy strategy = createTestInternetObservingStrategy();
 
     // when
-    InternetObservingSettings settings = InternetObservingSettings
+    InternetObservingSettings settings = InternetObservingSettings.builder()
         .initialInterval(initialInterval)
         .interval(interval)
         .host(host)
@@ -239,7 +239,7 @@ import static com.google.common.truth.Truth.assertThat;
     InternetObservingStrategy strategy = createTestInternetObservingStrategy();
 
     // when
-    InternetObservingSettings settings = InternetObservingSettings
+    InternetObservingSettings settings = InternetObservingSettings.builder()
         .initialInterval(initialInterval)
         .interval(interval)
         .host(host)

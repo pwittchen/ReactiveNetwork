@@ -67,7 +67,7 @@ public class InternetObservingSettingsTest {
     SocketInternetObservingStrategy strategy = new SocketInternetObservingStrategy();
 
     // when
-    InternetObservingSettings settings = InternetObservingSettings
+    InternetObservingSettings settings = InternetObservingSettings.builder()
         .initialInterval(initialInterval)
         .interval(interval)
         .host(host)

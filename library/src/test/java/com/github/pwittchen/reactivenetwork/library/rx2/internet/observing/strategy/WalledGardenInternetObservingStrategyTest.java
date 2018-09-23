@@ -20,6 +20,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -173,6 +174,7 @@ import static org.mockito.Mockito.when;
 
 
   // this test is flaky; it needs to be investigated
+  @Ignore("flaky test")
   @Test @SuppressWarnings("CheckReturnValue")
   public void shouldAdjustHostWhileCheckingConnectivity() {
     // given

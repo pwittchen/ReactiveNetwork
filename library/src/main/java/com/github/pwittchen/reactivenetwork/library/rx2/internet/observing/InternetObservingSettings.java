@@ -64,7 +64,11 @@ public final class InternetObservingSettings {
     this(builder());
   }
 
-  private static Builder builder() {
+  /**
+   * Creates builder object
+   * @return Builder
+   */
+  public static Builder builder() {
     return new Builder();
   }
 
@@ -76,30 +80,10 @@ public final class InternetObservingSettings {
   }
 
   /**
-   * sets initial ping interval in milliseconds
-   *
-   * @param initialInterval in milliseconds
-   * @return Builder
-   */
-  public static Builder initialInterval(final int initialInterval) {
-    return builder().initialInterval(initialInterval);
-  }
-
-  /**
    * @return ping interval in milliseconds
    */
   public int interval() {
     return interval;
-  }
-
-  /**
-   * sets ping interval in milliseconds
-   *
-   * @param interval in milliseconds
-   * @return Builder
-   */
-  public static Builder interval(final int interval) {
-    return builder().interval(interval);
   }
 
   /**
@@ -110,26 +94,10 @@ public final class InternetObservingSettings {
   }
 
   /**
-   * @return ping host
-   */
-  public static Builder host(final String host) {
-    return builder().host(host);
-  }
-
-  /**
    * @return ping port
    */
   public int port() {
     return port;
-  }
-
-  /**
-   * sets ping port
-   *
-   * @return Builder
-   */
-  public static Builder port(final int port) {
-    return builder().port(port);
   }
 
   /**
@@ -139,22 +107,8 @@ public final class InternetObservingSettings {
     return timeout;
   }
 
-  /**
-   * sets ping timeout in milliseconds
-   *
-   * @param timeout in milliseconds
-   * @return Builder
-   */
-  public static Builder timeout(final int timeout) {
-    return builder().timeout(timeout);
-  }
-
   public int httpResponse() {
     return httpResponse;
-  }
-
-  public static Builder httpResponse(final int expectedHttpResponse) {
-    return builder().httpResponse(expectedHttpResponse);
   }
 
   /**
@@ -165,29 +119,10 @@ public final class InternetObservingSettings {
   }
 
   /**
-   * sets error handler for pings and connections
-   *
-   * @return Builder
-   */
-  public static Builder errorHandler(final ErrorHandler errorHandler) {
-    return builder().errorHandler(errorHandler);
-  }
-
-  /**
    * @return internet observing strategy
    */
   public InternetObservingStrategy strategy() {
     return strategy;
-  }
-
-  /**
-   * sets internet observing strategy
-   *
-   * @param strategy for observing and internet connection
-   * @return Builder
-   */
-  public static Builder strategy(final InternetObservingStrategy strategy) {
-    return builder().strategy(strategy);
   }
 
   /**
@@ -206,41 +141,86 @@ public final class InternetObservingSettings {
     private Builder() {
     }
 
+    /**
+     * sets initial ping interval in milliseconds
+     *
+     * @param initialInterval in milliseconds
+     * @return Builder
+     */
     public Builder initialInterval(int initialInterval) {
       this.initialInterval = initialInterval;
       return this;
     }
 
+    /**
+     * sets ping interval in milliseconds
+     *
+     * @param interval in milliseconds
+     * @return Builder
+     */
     public Builder interval(int interval) {
       this.interval = interval;
       return this;
     }
 
+    /**
+     * sets ping host
+     *
+     * @return Builder
+     */
     public Builder host(String host) {
       this.host = host;
       return this;
     }
 
+    /**
+     * sets ping port
+     *
+     * @return Builder
+     */
     public Builder port(int port) {
       this.port = port;
       return this;
     }
 
+    /**
+     * sets ping timeout in milliseconds
+     *
+     * @param timeout in milliseconds
+     * @return Builder
+     */
     public Builder timeout(int timeout) {
       this.timeout = timeout;
       return this;
     }
 
+    /**
+     * sets HTTP response code indicating that connection is established
+     *
+     * @param httpResponse as integer
+     * @return Builder
+     */
     public Builder httpResponse(final int httpResponse) {
       this.httpResponse = httpResponse;
       return this;
     }
 
+    /**
+     * sets error handler for pings and connections
+     *
+     * @return Builder
+     */
     public Builder errorHandler(ErrorHandler errorHandler) {
       this.errorHandler = errorHandler;
       return this;
     }
 
+    /**
+     * sets internet observing strategy
+     *
+     * @param strategy for observing and internet connection
+     * @return Builder
+     */
     public Builder strategy(InternetObservingStrategy strategy) {
       this.strategy = strategy;
       return this;
