@@ -227,6 +227,7 @@ InternetObservingSettings settings = InternetObservingSettings.builder()
   .host(host)
   .port(port)
   .timeout(timeout)
+  .httpResponse(httpResponse)
   .errorHandler(testErrorHandler)
   .strategy(strategy)
   .build();
@@ -276,6 +277,8 @@ ReactiveNetwork
       // do something with isConnectedToHost
   });
 ```
+
+If you want to use `WalledGardenInternetObservingStrategy`, please update HTTP response code via `InternetObservingSettings`. E.g set it to `200` because default is `204`.
 
 The same operation can be done with `checkInternetConnectivity(strategy, host)` method, which returns `Single` instead of `Observable`.
 
