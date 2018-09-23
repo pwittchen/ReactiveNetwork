@@ -49,6 +49,7 @@ public class InternetObservingSettingsTest {
     assertThat(settings.host()).isEqualTo("http://clients3.google.com/generate_204");
     assertThat(settings.port()).isEqualTo(80);
     assertThat(settings.timeout()).isEqualTo(2000);
+    assertThat(settings.httpResponse()).isEqualTo(204);
     assertThat(settings.errorHandler()).isInstanceOf(DefaultErrorHandler.class);
     assertThat(settings.strategy()).isInstanceOf(WalledGardenInternetObservingStrategy.class);
   }
@@ -61,6 +62,7 @@ public class InternetObservingSettingsTest {
     final String host = "www.test.com";
     int port = 90;
     int timeout = 3;
+    int httpResponse = 200;
     ErrorHandler testErrorHandler = createTestErrorHandler();
     SocketInternetObservingStrategy strategy = new SocketInternetObservingStrategy();
 
@@ -71,6 +73,7 @@ public class InternetObservingSettingsTest {
         .host(host)
         .port(port)
         .timeout(timeout)
+        .httpResponse(httpResponse)
         .errorHandler(testErrorHandler)
         .strategy(strategy)
         .build();
@@ -81,6 +84,7 @@ public class InternetObservingSettingsTest {
     assertThat(settings.host()).isEqualTo(host);
     assertThat(settings.port()).isEqualTo(port);
     assertThat(settings.timeout()).isEqualTo(timeout);
+    assertThat(settings.httpResponse()).isEqualTo(httpResponse);
     assertThat(settings.errorHandler()).isNotNull();
     assertThat(settings.errorHandler()).isNotInstanceOf(DefaultErrorHandler.class);
     assertThat(settings.strategy()).isInstanceOf(SocketInternetObservingStrategy.class);

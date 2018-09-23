@@ -106,7 +106,7 @@ public class ReactiveNetwork {
     InternetObservingSettings settings = InternetObservingSettings.create();
     return observeInternetConnectivity(settings.strategy(), settings.initialInterval(),
         settings.interval(), settings.host(), settings.port(),
-        settings.timeout(), settings.errorHandler());
+        settings.timeout(), settings.httpResponse(), settings.errorHandler());
   }
 
   /**
@@ -121,7 +121,7 @@ public class ReactiveNetwork {
       InternetObservingSettings settings) {
     return observeInternetConnectivity(settings.strategy(), settings.initialInterval(),
         settings.interval(), settings.host(), settings.port(),
-        settings.timeout(), settings.errorHandler());
+        settings.timeout(), settings.httpResponse(), settings.errorHandler());
   }
 
   /**
@@ -134,6 +134,7 @@ public class ReactiveNetwork {
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
+   * @param httpResponse expected HTTP response code indicating that connection is established
    * @param errorHandler for handling errors during connectivity check
    * @return RxJava Observable with Boolean - true, when we have connection with host and false if
    * not
@@ -142,10 +143,10 @@ public class ReactiveNetwork {
   protected static Observable<Boolean> observeInternetConnectivity(
       final InternetObservingStrategy strategy, final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
-      final ErrorHandler errorHandler) {
+      final int httpResponse, final ErrorHandler errorHandler) {
     checkStrategyIsNotNull(strategy);
     return strategy.observeInternetConnectivity(initialIntervalInMs, intervalInMs, host, port,
-        timeoutInMs, errorHandler);
+        timeoutInMs, httpResponse, errorHandler);
   }
 
   /**
@@ -158,7 +159,7 @@ public class ReactiveNetwork {
   public static Single<Boolean> checkInternetConnectivity() {
     InternetObservingSettings settings = InternetObservingSettings.create();
     return checkInternetConnectivity(settings.strategy(), settings.host(), settings.port(),
-        settings.timeout(), settings.errorHandler());
+        settings.timeout(), settings.httpResponse(), settings.errorHandler());
   }
 
   /**
@@ -171,7 +172,7 @@ public class ReactiveNetwork {
   @RequiresPermission(Manifest.permission.INTERNET)
   public static Single<Boolean> checkInternetConnectivity(InternetObservingSettings settings) {
     return checkInternetConnectivity(settings.strategy(), settings.host(), settings.port(),
-        settings.timeout(), settings.errorHandler());
+        settings.timeout(), settings.httpResponse(), settings.errorHandler());
   }
 
   /**
@@ -181,6 +182,7 @@ public class ReactiveNetwork {
    * @param host for checking Internet connectivity
    * @param port for checking Internet connectivity
    * @param timeoutInMs for pinging remote host in milliseconds
+   * @param httpResponse expected HTTP response code indicating that connection is established
    * @param errorHandler for handling errors during connectivity check
    * @return RxJava Single with Boolean - true, when we have connection with host and false if
    * not
@@ -188,9 +190,10 @@ public class ReactiveNetwork {
   @RequiresPermission(Manifest.permission.INTERNET)
   protected static Single<Boolean> checkInternetConnectivity(
       final InternetObservingStrategy strategy,
-      final String host, final int port, final int timeoutInMs, final ErrorHandler errorHandler) {
+      final String host, final int port, final int timeoutInMs, final int httpResponse,
+      final ErrorHandler errorHandler) {
     checkStrategyIsNotNull(strategy);
-    return strategy.checkInternetConnectivity(host, port, timeoutInMs, errorHandler);
+    return strategy.checkInternetConnectivity(host, port, timeoutInMs, httpResponse, errorHandler);
   }
 
   private static void checkStrategyIsNotNull(InternetObservingStrategy strategy) {

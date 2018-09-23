@@ -48,30 +48,31 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
 
   @Override public Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
+      final int httpResponse,
       final ErrorHandler errorHandler) {
 
     Preconditions.checkGreaterOrEqualToZero(initialIntervalInMs,
         "initialIntervalInMs is not a positive number");
     Preconditions.checkGreaterThanZero(intervalInMs, "intervalInMs is not a positive number");
-    checkGeneralPreconditions(host, port, timeoutInMs, errorHandler);
+    checkGeneralPreconditions(host, port, timeoutInMs, httpResponse, errorHandler);
 
     final String adjustedHost = adjustHost(host);
 
     return Observable.interval(initialIntervalInMs, intervalInMs, TimeUnit.MILLISECONDS,
         Schedulers.io()).map(new Function<Long, Boolean>() {
-      @Override public Boolean apply(@NonNull Long tick) throws Exception {
-        return isConnected(adjustedHost, port, timeoutInMs, errorHandler);
+      @Override public Boolean apply(@NonNull Long tick) {
+        return isConnected(adjustedHost, port, timeoutInMs, httpResponse, errorHandler);
       }
     }).distinctUntilChanged();
   }
 
   @Override public Single<Boolean> checkInternetConnectivity(final String host, final int port,
-      final int timeoutInMs, final ErrorHandler errorHandler) {
-    checkGeneralPreconditions(host, port, timeoutInMs, errorHandler);
+      final int timeoutInMs, final int httpResponse, final ErrorHandler errorHandler) {
+    checkGeneralPreconditions(host, port, timeoutInMs, httpResponse, errorHandler);
 
     return Single.create(new SingleOnSubscribe<Boolean>() {
-      @Override public void subscribe(@NonNull SingleEmitter<Boolean> emitter) throws Exception {
-        emitter.onSuccess(isConnected(host, port, timeoutInMs, errorHandler));
+      @Override public void subscribe(@NonNull SingleEmitter<Boolean> emitter) {
+        emitter.onSuccess(isConnected(host, port, timeoutInMs, httpResponse, errorHandler));
       }
     });
   }
@@ -85,19 +86,21 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
   }
 
   private void checkGeneralPreconditions(final String host, final int port, final int timeoutInMs,
-      final ErrorHandler errorHandler) {
+      final int httpResponse, final ErrorHandler errorHandler) {
     Preconditions.checkNotNullOrEmpty(host, "host is null or empty");
     Preconditions.checkGreaterThanZero(port, "port is not a positive number");
     Preconditions.checkGreaterThanZero(timeoutInMs, "timeoutInMs is not a positive number");
     Preconditions.checkNotNull(errorHandler, "errorHandler is null");
+    Preconditions.checkNotNull(httpResponse, "httpResponse is null");
+    Preconditions.checkGreaterThanZero(httpResponse, "httpResponse is not a positive number");
   }
 
   protected Boolean isConnected(final String host, final int port, final int timeoutInMs,
-      final ErrorHandler errorHandler) {
+      final int httpResponse, final ErrorHandler errorHandler) {
     HttpURLConnection urlConnection = null;
     try {
       urlConnection = createHttpUrlConnection(host, port, timeoutInMs);
-      return urlConnection.getResponseCode() == HttpURLConnection.HTTP_NO_CONTENT;
+      return urlConnection.getResponseCode() == httpResponse;
     } catch (IOException e) {
       errorHandler.handleError(e, "Could not establish connection with WalledGardenStrategy");
       return Boolean.FALSE;

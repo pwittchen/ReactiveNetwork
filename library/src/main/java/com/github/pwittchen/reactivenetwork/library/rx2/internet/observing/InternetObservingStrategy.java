@@ -40,7 +40,7 @@ public interface InternetObservingStrategy {
    */
   Observable<Boolean> observeInternetConnectivity(final int initialIntervalInMs,
       final int intervalInMs, final String host, final int port, final int timeoutInMs,
-      final ErrorHandler errorHandler);
+      final int httpResponse, final ErrorHandler errorHandler);
 
   /**
    * Observes connectivity with the Internet by opening socket connection with remote host once
@@ -53,7 +53,7 @@ public interface InternetObservingStrategy {
    * not
    */
   Single<Boolean> checkInternetConnectivity(final String host, final int port,
-      final int timeoutInMs, final ErrorHandler errorHandler);
+      final int timeoutInMs, final int httpResponse, final ErrorHandler errorHandler);
 
   /**
    * Gets default remote ping host for a given Internet Observing Strategy

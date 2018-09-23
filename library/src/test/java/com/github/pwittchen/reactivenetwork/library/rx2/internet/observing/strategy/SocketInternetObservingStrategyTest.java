@@ -43,6 +43,7 @@ import static org.mockito.Mockito.when;
   private static final int INTERVAL_IN_MS = 2000;
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
+  private static final int HTTP_RESPONSE = 204;
   private static final String HOST_WITH_HTTP = "http://www.website.com";
   private static final String HOST_WITHOUT_HTTP = "www.website.com";
 
@@ -62,7 +63,7 @@ import static org.mockito.Mockito.when;
     // when
     final Observable<Boolean> observable =
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, getHost(),
-            PORT, TIMEOUT_IN_MS, errorHandler);
+            PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler);
 
     boolean isConnected = observable.blockingFirst();
 
@@ -77,7 +78,7 @@ import static org.mockito.Mockito.when;
     // when
     final Observable<Boolean> observable =
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, getHost(),
-            PORT, TIMEOUT_IN_MS, errorHandler);
+            PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler);
 
     boolean isConnected = observable.blockingFirst();
 
@@ -118,7 +119,8 @@ import static org.mockito.Mockito.when;
 
     // when
     final Single<Boolean> observable =
-        strategy.checkInternetConnectivity(getHost(), PORT, TIMEOUT_IN_MS, errorHandler);
+        strategy.checkInternetConnectivity(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
+            errorHandler);
 
     boolean isConnected = observable.blockingGet();
 
@@ -132,7 +134,8 @@ import static org.mockito.Mockito.when;
 
     // when
     final Single<Boolean> observable =
-        strategy.checkInternetConnectivity(getHost(), PORT, TIMEOUT_IN_MS, errorHandler);
+        strategy.checkInternetConnectivity(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
+            errorHandler);
 
     boolean isConnected = observable.blockingGet();
 
@@ -172,7 +175,7 @@ import static org.mockito.Mockito.when;
 
     // when
     strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, host, PORT,
-        TIMEOUT_IN_MS, errorHandler).blockingFirst();
+        TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler).blockingFirst();
 
     // then
     verify(strategy).adjustHost(host);

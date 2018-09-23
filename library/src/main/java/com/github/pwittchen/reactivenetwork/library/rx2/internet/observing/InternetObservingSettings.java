@@ -18,6 +18,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.WalledGardenInternetObservingStrategy;
+import java.net.HttpURLConnection;
 
 /**
  * Contains state of internet connectivity settings.
@@ -30,17 +31,19 @@ public final class InternetObservingSettings {
   private final String host;
   private final int port;
   private final int timeout;
+  private final int httpResponse;
   private final ErrorHandler errorHandler;
   private final InternetObservingStrategy strategy;
 
   private InternetObservingSettings(int initialInterval, int interval, String host, int port,
-      int timeout,
-      ErrorHandler errorHandler, InternetObservingStrategy strategy) {
+      int timeout, int httpResponse, ErrorHandler errorHandler,
+      InternetObservingStrategy strategy) {
     this.initialInterval = initialInterval;
     this.interval = interval;
     this.host = host;
     this.port = port;
     this.timeout = timeout;
+    this.httpResponse = httpResponse;
     this.errorHandler = errorHandler;
     this.strategy = strategy;
   }
@@ -54,7 +57,7 @@ public final class InternetObservingSettings {
 
   private InternetObservingSettings(Builder builder) {
     this(builder.initialInterval, builder.interval, builder.host, builder.port, builder.timeout,
-        builder.errorHandler, builder.strategy);
+        builder.httpResponse, builder.errorHandler, builder.strategy);
   }
 
   private InternetObservingSettings() {
@@ -146,6 +149,14 @@ public final class InternetObservingSettings {
     return builder().timeout(timeout);
   }
 
+  public int httpResponse() {
+    return httpResponse;
+  }
+
+  public static Builder httpResponse(final int expectedHttpResponse) {
+    return builder().httpResponse(expectedHttpResponse);
+  }
+
   /**
    * @return error handler for pings and connections
    */
@@ -188,6 +199,7 @@ public final class InternetObservingSettings {
     private String host = "http://clients3.google.com/generate_204";
     private int port = 80;
     private int timeout = 2000;
+    private int httpResponse = HttpURLConnection.HTTP_NO_CONTENT;
     private ErrorHandler errorHandler = new DefaultErrorHandler();
     private InternetObservingStrategy strategy = new WalledGardenInternetObservingStrategy();
 
@@ -216,6 +228,11 @@ public final class InternetObservingSettings {
 
     public Builder timeout(int timeout) {
       this.timeout = timeout;
+      return this;
+    }
+
+    public Builder httpResponse(final int httpResponse) {
+      this.httpResponse = httpResponse;
       return this;
     }
 
