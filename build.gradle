@@ -61,11 +61,19 @@ allprojects {
   }
 }
 
+def getRepositoryUsername() {
+  return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+}
+
+def getRepositoryPassword() {
+  return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+}
+
 nexusStaging {
   packageGroup = GROUP //optional if packageGroup == project.getGroup()
   stagingProfileId = "reactivenetwork-rx2" //when not defined will be got from server using "packageGroup"
-  username = NEXUS_USERNAME
-  password = NEXUS_PASSWORD
+  username = getRepositoryUsername()
+  password = getRepositoryPassword()
 }
 
 task clean(type: Delete) {
