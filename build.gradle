@@ -71,7 +71,7 @@ def getRepositoryPassword() {
 
 nexusStaging {
   packageGroup = GROUP //optional if packageGroup == project.getGroup()
-  stagingProfileId = "reactivenetwork-rx2" //when not defined will be got from server using "packageGroup"
+  stagingProfileId = "9add401d06ecc9" //when not defined will be got from server using "packageGroup"
   username = getRepositoryUsername()
   password = getRepositoryPassword()
 }
