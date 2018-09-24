@@ -12,9 +12,8 @@ In order to release new version of the library, we need to perform the following
 - commit and push the changes
 - run command: `./gradlew uploadArchives`
 - go to the https://oss.sonatype.org website
-- log in to Sonatype
-- go to "Staging Repositories" and sort by last "Updated" date and time
-- close and release artifact
+- log in to Sonatype, go to "Staging Repositories" and sort by last "Updated" date and time, close and release artifact
+- instead of step above, you can use the following command: `./gradlew closeAndReleaseRepository`
 - wait for the Maven Sync (up to 48 hours)
 - when sync is done, checkout to the `RxJava1.x` or `RxJava2.x` branch
 - update `CHANGELOG.md` file with new release version, current date and release notes
