@@ -1,6 +1,6 @@
 # ReactiveNetwork
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ReactiveNetwork-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/2290) 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ReactiveNetwork-brightgreen.svg?style=flat-square)](https://android-arsenal.com/details/1/2290) 
 
 view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [**RxJava2.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/)
 
@@ -8,8 +8,8 @@ ReactiveNetwork is an Android library listening **network connection state** and
 
 | Current Branch | Branch  | Artifact Id | Build Status  | Coverage | Maven Central |
 |:--------------:|:-------:|:-----------:|:-------------:|:--------:|:-------------:|
-| | [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=RxJava1.x)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat) |
-| :ballot_box_with_check: | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://travis-ci.org/pwittchen/ReactiveNetwork.svg?branch=RxJava2.x)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x/graph/badge.svg)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat) |
+| | [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork.svg?branch=RxJava1.x&style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava1.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat-square) |
+| :ballot_box_with_check: | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork.svg?branch=RxJava2.x&style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square) |
 
 Contents
 --------
@@ -24,7 +24,8 @@ Contents
     - [Internet Observing Strategies](#internet-observing-strategies)
     - [Custom host](#custom-host)
   - [Chaining network and Internet connectivity streams](#chaining-network-and-internet-connectivity-streams)
-  - [Integration with other libraries](#integration-with-other-libraries)
+  - [ClearText traffic](#cleartext-traffic)
+- [Integration with other libraries](#integration-with-other-libraries)
     - [Integration with OkHttp](#integration-with-okhttp)
     - [Integration with Retrofit](#integration-with-retrofit)
   - [ProGuard configuration](#proguard-configuration)
@@ -171,15 +172,16 @@ Internet connectivity will be checked _as soon as possible_.
 Methods in this section should be used if they are really needed due to specific use cases.
 
 If you want to customize observing of the Internet connectivity, you can use `InternetObservingSettings` class and its builder.
-They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, error handler or whole observing strategy.
+They allow to customize monitoring interval in milliseconds, host, port, timeout, initial monitoring interval, timeout, expected HTTP response code, error handler or whole observing strategy.
 
 ```java
-InternetObservingSettings settings = InternetObservingSettings
+InternetObservingSettings settings = InternetObservingSettings.builder()
   .initialInterval(initialInterval)
   .interval(interval)
   .host(host)
   .port(port)
   .timeout(timeout)
+  .httpResponse(httpResponse)
   .errorHandler(testErrorHandler)
   .strategy(strategy)
   .build();
@@ -194,6 +196,8 @@ ReactiveNetwork
 ```
 
 These methods are created to allow the users to fully customize the library and give them more control.
+
+Please note, not all parameters are relevant for all strategies.
 
 For more details check JavaDoc at: http://pwittchen.github.io/ReactiveNetwork/javadoc/RxJava2.x
 
@@ -217,12 +221,13 @@ single
 As in the previous case, you can customize this feature with the `InternetObservingSettings` class and its builder.
 
 ```java
-InternetObservingSettings settings = InternetObservingSettings
+InternetObservingSettings settings = InternetObservingSettings.builder()
   .initialInterval(initialInterval)
   .interval(interval)
   .host(host)
   .port(port)
   .timeout(timeout)
+  .httpResponse(httpResponse)
   .errorHandler(testErrorHandler)
   .strategy(strategy)
   .build();
@@ -259,7 +264,7 @@ If you want to ping custom host during checking Internet connectivity, it's reco
 You can do it as follows:
 
 ```java
-InternetObservingSettings settings = InternetObservingSettings
+InternetObservingSettings settings = InternetObservingSettings.builder()
   .host("www.yourhost.com")
   .strategy(new SocketInternetObservingStrategy())
   .build();
@@ -272,6 +277,8 @@ ReactiveNetwork
       // do something with isConnectedToHost
   });
 ```
+
+If you want to use `WalledGardenInternetObservingStrategy`, please update HTTP response code via `InternetObservingSettings`. E.g set it to `200` because default is `204`.
 
 The same operation can be done with `checkInternetConnectivity(strategy, host)` method, which returns `Single` instead of `Observable`.
 
@@ -289,6 +296,67 @@ ReactiveNetwork
     // isConnected can be true or false
 });
 ```
+
+### ClearText Traffic
+
+Someties, while trying to connect to the remote server we may encounter the following message:
+
+```
+ClearText HTTP traffic not permitted
+```
+
+Due to this fact, observing Internet feature won't work properly.
+
+It's related to [Network Security Configuration](https://developer.android.com/training/articles/security-config#CleartextTrafficPermitted). Starting with Android 9.0 (API level 28), cleartext support is disabled by default.
+
+You have a few options to solve this issue.
+
+**Option #1**
+
+Create `res/xml/network_security_config.xml` file:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">Your URL(ex: 127.0.0.1)</domain>
+    </domain-config>
+</network-security-config>
+```
+
+Link it in your `AndroidManifest.xml` file:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest ...>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        ...
+        android:networkSecurityConfig="@xml/network_security_config"
+        ...>
+        ...
+    </application>
+</manifest>
+```
+
+**Option #2**
+
+Set `usesCleartextTraffic` parameter in `<application>` tag in `AndroidManifest.xml` file to `true`.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest ...>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        ...
+        android:usesCleartextTraffic="true"
+        ...>
+        ...
+    </application>
+</manifest>
+```
+
+For more details, check Android documentation linked above or this StackOverflow thread: https://stackoverflow.com/a/50834600/1150795.
 
 ### Integration with other libraries
 
@@ -457,7 +525,7 @@ Static code analysis runs Checkstyle, FindBugs, PMD, Lint, ErrorProne and NullAw
 Static code analysis for the sample Kotlin app with detekt can be executed as follows:
 
 ```
-./gradlew detektCheck
+./gradlew detektCheck ktlintCheck
 ```
 
 Reports from analysis are generated in `library/build/reports/` directory.
@@ -583,7 +651,7 @@ References
 - [Android Documentation - Provide onboarding experiences for users' network choices](https://developer.android.com/develop/quality-guidelines/building-for-billions-data-cost.html#configurablenetwork-onboarding)
 - [Android Documentation - Managing Network Usage](https://developer.android.com/training/basics/network-ops/managing.html)
 - [RxJava](https://github.com/ReactiveX/RxJava)
-- [DroidCon Poland 2017 presentation slides - Is your app really connected?](https://speakerdeck.com/pwittchen/is-your-app-really-connected)
+- [DroidCon Poland 2017 presentation slides - Is your app really connected?](https://speakerdeck.com/pwittchen/is-your-app-really-connected-1)
 
 ### Mentions
 - [Android Weekly #166](http://androidweekly.net/issues/issue-166)
