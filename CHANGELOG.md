@@ -1,6 +1,18 @@
 CHANGELOG
 =========
 
+v. 3.0.0
+--------
+*?*
+
+- updated project dependencies
+- updated target SDK
+- simplified codecov.io configuration
+- documented usage of `usesClearTextTraffic` setting and added it to the sample apps
+- added possibility to configure HTTP response code via `InternetObservingSettings` (API-breaking changes - a few method signatures were changed)
+- updated builder in `InternetObservingSettings` - removed unused methods
+- added gradle-nexus-staging-plugin
+
 v. 2.1.0
 --------
 *5 Aug 2018*
