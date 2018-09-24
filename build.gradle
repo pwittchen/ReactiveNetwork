@@ -1,5 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+apply plugin: 'io.codearte.nexus-staging'
+
 ext {
   minSdkVersion = 9
   minSdkVersionApps = 23
@@ -39,8 +41,10 @@ buildscript {
     classpath('com.dicedmelon.gradle:jacoco-android:0.1.2') {
       exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
+
     classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.13'
     classpath 'net.ltgt.gradle:gradle-apt-plugin:0.15'
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.11.0"
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
   }
@@ -55,6 +59,11 @@ allprojects {
       url 'https://plugins.gradle.org/m2/'
     }
   }
+}
+
+nexusStaging {
+  packageGroup = "com.github.pwittchen" //optional if packageGroup == project.getGroup()
+  stagingProfileId = "reactivenetwork-rx2" //when not defined will be got from server using "packageGroup"
 }
 
 task clean(type: Delete) {
