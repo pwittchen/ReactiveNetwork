@@ -62,8 +62,10 @@ allprojects {
 }
 
 nexusStaging {
-  packageGroup = "com.github.pwittchen" //optional if packageGroup == project.getGroup()
+  packageGroup = GROUP //optional if packageGroup == project.getGroup()
   stagingProfileId = "reactivenetwork-rx2" //when not defined will be got from server using "packageGroup"
+  username = NEXUS_USERNAME
+  password = NEXUS_PASSWORD
 }
 
 task clean(type: Delete) {
