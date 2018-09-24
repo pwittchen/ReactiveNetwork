@@ -3,7 +3,7 @@ CHANGELOG
 
 v. 3.0.0
 --------
-*?*
+*24 Sep 2018*
 
 - updated project dependencies
 - updated target SDK
