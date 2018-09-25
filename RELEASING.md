@@ -14,6 +14,7 @@ In order to release new version of the library, we need to perform the following
 - go to the https://oss.sonatype.org website
 - log in to Sonatype, go to "Staging Repositories" and sort by last "Updated" date and time, close and release artifact
 - instead of manual step above, you can use the following command: `./gradlew closeAndReleaseRepository`
+- if you're missing `stagingProfileId`, then call `./gradlew getStagingProfile` and update this value inside `nexusStaging` section in the top-level `build.gradle` file
 - wait for the Maven Sync (up to 48 hours)
 - when sync is done, checkout to the `RxJava1.x` or `RxJava2.x` branch
 - update `CHANGELOG.md` file with new release version, current date and release notes
