@@ -534,6 +534,7 @@ Who is using this library?
 --------------------------
 - [SkyScanner Android app](https://play.google.com/store/apps/details?id=net.skyscanner.android.main)
 - [Slack Android app](https://play.google.com/store/apps/details?id=com.Slack)
+- [NextBike](https://play.google.com/store/apps/details?id=de.nextbike)
 - [PAT Track - realtime Tracker for the public transit in Pittsburgh, PA](https://play.google.com/store/apps/details?id=rectangledbmi.com.pittsburghrealtimetracker)
 - [Eero - Home WiFi System](https://play.google.com/store/apps/details?id=com.eero.android)
 - [ACN Android Framework](https://github.com/ugurcany/ACN-Android-Framework)
