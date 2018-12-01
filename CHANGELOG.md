@@ -3,7 +3,7 @@ CHANGELOG
 
 v. 3.0.1
 --------
-*?*
+*1 Dec 2018*
 
 - Fixed unserialized access to subject on Marshmallow - https://github.com/pwittchen/ReactiveNetwork/commit/91b676e726071b2d77b1e26a35dbcafa0fac7b32 by @aperfilyev
 
