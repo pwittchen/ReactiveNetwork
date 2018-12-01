@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 **Smartphone (please complete the following information):**
  - Device: [e.g. Google Pixel 2]
  - OS: [e.g. Android 9]
- - Library Version [e.g. 3.0.0]
+ - Library Version: [e.g. 3.0.0]
 
 **Additional context**
 Add any other context about the problem here.
