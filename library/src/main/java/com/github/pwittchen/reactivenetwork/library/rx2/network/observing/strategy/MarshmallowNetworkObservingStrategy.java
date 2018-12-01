@@ -33,6 +33,7 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.LOG_TAG;
 
@@ -48,12 +49,13 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
 
   @SuppressWarnings("NullAway") // it has to be initialized in the Observable due to Context
   private ConnectivityManager.NetworkCallback networkCallback;
-  private PublishSubject<Connectivity> connectivitySubject = PublishSubject.create();
-  private BroadcastReceiver idleReceiver;
+  private final Subject<Connectivity> connectivitySubject;
+  private final BroadcastReceiver idleReceiver;
 
   @SuppressWarnings("NullAway") // networkCallback cannot be initialized here
   public MarshmallowNetworkObservingStrategy() {
     this.idleReceiver = createIdleBroadcastReceiver();
+    this.connectivitySubject = PublishSubject.<Connectivity>create().toSerialized();
   }
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
