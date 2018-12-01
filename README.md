@@ -652,7 +652,7 @@ References
 - [Android Documentation - Provide onboarding experiences for users' network choices](https://developer.android.com/develop/quality-guidelines/building-for-billions-data-cost.html#configurablenetwork-onboarding)
 - [Android Documentation - Managing Network Usage](https://developer.android.com/training/basics/network-ops/managing.html)
 - [DroidCon Poland 2017 presentation slides - Is your app really connected?](https://speakerdeck.com/pwittchen/is-your-app-really-connected-1)
-- [Mobilization 2018 video recording - Is your app really connected?]
+- [Mobilization 2018 video recording - Is your app really connected?](https://www.youtube.com/watch?v=LDZjQ1dXgU4)
 - [RxJava](https://github.com/ReactiveX/RxJava)
 
 ### Mentions
