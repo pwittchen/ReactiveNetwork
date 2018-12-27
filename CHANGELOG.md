@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+v. 3.0.2
+--------
+*?*
+- bumped project dependencies: https://github.com/pwittchen/ReactiveNetwork/commit/d486f80459c2d52f8012af0c707528ebc972b4a2
+
 v. 3.0.1
 --------
 *1 Dec 2018*
