@@ -662,6 +662,7 @@ References
 - [Android Arsenal #2290](https://android-arsenal.com/details/1/2290)
 - [GitHub Trending, 14th of Aug 2015](https://twitter.com/TrendingGithub/status/632117206801891328)
 - [TL DEV TECH - Best Android Libraries in 2017](http://www.tldevtech.com/best-android-libraries-2017/)
+- [TL DEV TECH - 30+ Best Android Libraries (2018)](https://www.tldevtech.com/best-android-libraries/)
 
 License
 -------
