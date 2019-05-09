@@ -545,6 +545,7 @@ Who is using this library?
 - [Actinium - V2Ray client for Android](https://github.com/V2Ray-Android/Actinium)
 - [Project Bass - Android app](http://projectbass.org/)
 - [Movie Lovers](https://play.google.com/store/apps/details?id=com.mediaclient.movielovers.mobile)
+- [Waves Wallet](https://play.google.com/store/apps/details?id=com.wavesplatform.wallet)
 - and more...
 
 Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail to piotr@wittchen.io
