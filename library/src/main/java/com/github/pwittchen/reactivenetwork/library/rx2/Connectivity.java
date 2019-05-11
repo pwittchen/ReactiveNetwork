@@ -18,7 +18,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.

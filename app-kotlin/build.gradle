@@ -53,7 +53,8 @@ ktlint {
 dependencies {
   implementation project(':library')
   implementation deps.kotlinstdlib
-  implementation deps.appcompatv7
+  implementation deps.annotation
+  implementation deps.appcompat
 }
 
 buildscript {

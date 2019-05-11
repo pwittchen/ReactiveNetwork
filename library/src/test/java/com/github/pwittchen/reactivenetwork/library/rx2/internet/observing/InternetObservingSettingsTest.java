@@ -15,7 +15,7 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.DefaultErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy;
