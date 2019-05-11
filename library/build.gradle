@@ -52,7 +52,7 @@ jacocoAndroidUnitTestReport {
 dependencies {
   api deps.rxjava2
   api deps.rxandroid2
-  implementation deps.supportannotations
+  implementation deps.annotation
 
   testImplementation deps.junit
   testImplementation deps.truth

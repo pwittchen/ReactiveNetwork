@@ -17,7 +17,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.Manifest;
 import android.content.Context;
-import android.support.annotation.RequiresPermission;
+import androidx.annotation.RequiresPermission;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
