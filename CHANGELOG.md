@@ -3,7 +3,7 @@ CHANGELOG
 
 v. 3.0.3
 --------
-*?*
+*13 May 2019*
 - migrated: `com.android.support:support-annotations:28.0.0` -> `androidx.annotation:annotation:1.0.2` - PR #332
 - migrated `com.android.support:appcompat-v7:28.0.0` -> `androidx.appcompat:appcompat:1.0.2` - PR #332
 - updated Kotlin to `1.3.31` - PR #332
