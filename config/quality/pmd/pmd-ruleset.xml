@@ -30,4 +30,9 @@
         <exclude name="VariableNamingConventions" />
         <exclude name="ShortClassName" />
     </rule>
+    <rule ref="category/java/codestyle.xml/ClassNamingConventions">
+        <properties>
+            <property name="utilityClassPattern" value="([A-Z][a-zA-Z0-9]+(Utils?|Helper|Predicate))|Preconditions" />
+        </properties>
+    </rule>
 </ruleset>

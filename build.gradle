@@ -37,8 +37,8 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.2.1'
-    classpath('com.dicedmelon.gradle:jacoco-android:0.1.2') {
+    classpath 'com.android.tools.build:gradle:3.4.0'
+    classpath('com.dicedmelon.gradle:jacoco-android:0.1.4') {
       exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
 
@@ -74,12 +74,4 @@ nexusStaging {
   stagingProfileId = "9add401d06ecc9" //when not defined will be got from server using "packageGroup"
   username = getRepositoryUsername()
   password = getRepositoryPassword()
-}
-
-task clean(type: Delete) {
-  delete rootProject.buildDir
-}
-
-task wrapper(type: Wrapper) {
-  gradleVersion = rootProject.ext.gradleVersion
 }
