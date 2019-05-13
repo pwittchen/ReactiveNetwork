@@ -479,7 +479,7 @@ You can depend on the library through Maven:
 <dependency>
     <groupId>com.github.pwittchen</groupId>
     <artifactId>reactivenetwork-rx2</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
 </dependency>
 ```
 
@@ -487,7 +487,7 @@ or through Gradle:
 
 ```groovy
 dependencies {
-  implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.2'
+  implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.3'
 }
 ```
 
@@ -536,7 +536,7 @@ Who is using this library?
 - [Slack Android app](https://play.google.com/store/apps/details?id=com.Slack)
 - [NextBike](https://play.google.com/store/apps/details?id=de.nextbike)
 - [PAT Track - realtime Tracker for the public transit in Pittsburgh, PA](https://play.google.com/store/apps/details?id=rectangledbmi.com.pittsburghrealtimetracker)
-- [Eero - Home WiFi System](https://play.google.com/store/apps/details?id=com.eero.android)
+- [Eero - Home WiFi System (acquired by Amazon)](https://play.google.com/store/apps/details?id=com.eero.android)
 - [ACN Android Framework](https://github.com/ugurcany/ACN-Android-Framework)
 - [Spatial Connect Android SDK](https://github.com/boundlessgeo/spatialconnect-android-sdk)
 - [Qiscus SDK for Android](https://github.com/qiscus/qiscus-sdk-android)
@@ -544,6 +544,8 @@ Who is using this library?
 - [Tachiyomi](https://github.com/inorichi/tachiyomi)
 - [Actinium - V2Ray client for Android](https://github.com/V2Ray-Android/Actinium)
 - [Project Bass - Android app](http://projectbass.org/)
+- [Movie Lovers](https://play.google.com/store/apps/details?id=com.mediaclient.movielovers.mobile)
+- [Waves Wallet](https://play.google.com/store/apps/details?id=com.wavesplatform.wallet)
 - and more...
 
 Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail to piotr@wittchen.io
@@ -645,6 +647,7 @@ Contributors
 - [Manu Sridharan](https://github.com/msridhar)
 - [Alexander Perfilyev](https://github.com/aperfilyev)
 - [Vishesh Vadhera](https://github.com/VisheshVadhera)
+- [@ychescale9](https://github.com/ychescale9)
 
 References
 ----------
@@ -662,6 +665,7 @@ References
 - [Android Arsenal #2290](https://android-arsenal.com/details/1/2290)
 - [GitHub Trending, 14th of Aug 2015](https://twitter.com/TrendingGithub/status/632117206801891328)
 - [TL DEV TECH - Best Android Libraries in 2017](http://www.tldevtech.com/best-android-libraries-2017/)
+- [TL DEV TECH - 30+ Best Android Libraries (2018)](https://www.tldevtech.com/best-android-libraries/)
 
 License
 -------
