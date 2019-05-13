@@ -1,1 +1,1 @@
-./gradlew uploadArchives closeAndReleaseRepository
+./gradlew clean build test uploadArchives closeAndReleaseRepository
