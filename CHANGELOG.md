@@ -9,7 +9,7 @@ v. 3.0.3
 - updated Kotlin to `1.3.31` - PR #332
 - updated RxJava to `2.2.8` - PR #332
 - updated RxAndroid `2.1.1` - PR #332
-- added `release.sh` script to make release process more automated - cea88f33a226401fb1dde751382926a31df3b276
+- added `release.sh` script to make release process more automated
 
 v. 3.0.2
 --------
