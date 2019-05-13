@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+v. 3.0.3
+--------
+*?*
+- migrated: `com.android.support:support-annotations:28.0.0` -> `androidx.annotation:annotation:1.0.2` - PR #332
+- migrated `com.android.support:appcompat-v7:28.0.0` -> `androidx.appcompat:appcompat:1.0.2` - PR #332
+- updated Kotlin to `1.3.31` - PR #332
+- updated RxJava to `2.2.8` - PR #332
+- updated RxAndroid `2.1.1` - PR #332
+- added `release.sh` script to make release process more automated - cea88f33a226401fb1dde751382926a31df3b276
+
 v. 3.0.2
 --------
 *27 Dec 2018*
