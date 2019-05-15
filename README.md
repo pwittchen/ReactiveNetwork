@@ -297,6 +297,8 @@ ReactiveNetwork
 });
 ```
 
+In case we're getting too many events related to the network changes or we want to discard previous observables (there's only one in the code snippet above) after subscribing them, we can use `switchMapSingle` operator instead of `flatMapSingle` in order to get the updates from the latest observable only. In this case, it will be observable created by `checkInternetConnectivity` method.
+
 ### ClearText Traffic
 
 Someties, while trying to connect to the remote server we may encounter the following message:
