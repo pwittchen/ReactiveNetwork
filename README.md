@@ -481,7 +481,7 @@ You can depend on the library through Maven:
 <dependency>
     <groupId>com.github.pwittchen</groupId>
     <artifactId>reactivenetwork-rx2</artifactId>
-    <version>3.0.3</version>
+    <version>x.y.z</version>
 </dependency>
 ```
 
@@ -489,11 +489,13 @@ or through Gradle:
 
 ```groovy
 dependencies {
-  implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.3'
+  implementation 'com.github.pwittchen:reactivenetwork-rx2:x.y.z'
 }
 ```
 
-**Note**: If you are using Gradle version lower than 3.0, replace `implementation` with `compile`
+**Note #1**: Please, replace `x.y.z` with the latest version, which is ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square) |
+
+**Note #2**: If you are using Gradle version lower than 3.0, replace `implementation` with `compile`
 
 Tests
 -----
