@@ -493,7 +493,7 @@ dependencies {
 }
 ```
 
-**Note #1**: Please, replace `x.y.z` with the latest version, which is ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square) |
+**Note #1**: Please, replace `x.y.z` with the **latest version number**, which is ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square)
 
 **Note #2**: If you are using Gradle version lower than 3.0, replace `implementation` with `compile`
 
