@@ -11,8 +11,7 @@ In order to release new version of the library, we need to perform the following
 - commit and push the changes
 - run command: `./release.sh`
 - wait for the Maven Sync (up to 48 hours)
-- when sync is done, checkout to the `RxJava1.x` or `RxJava2.x` branch
+- when sync is done, checkout to the `RxJava2.x` branch
 - update `CHANGELOG.md` file with new release version, current date and release notes
-- bump library version in "Download" section in `README.md` file
-- update website with docs by running `./update_docs.sh` script
+- update website with docs by running `./update_docs.sh` script and push the changes
 - create new tagged GitHub release with name the same as `VERSION_NAME` from `gradle.properties` and release notes
