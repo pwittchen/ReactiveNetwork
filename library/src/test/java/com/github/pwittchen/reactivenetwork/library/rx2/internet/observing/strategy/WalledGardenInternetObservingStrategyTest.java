@@ -20,7 +20,6 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,11 +28,13 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Config(manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
 @SuppressWarnings("NullAway") public class WalledGardenInternetObservingStrategyTest {
 
@@ -42,12 +43,12 @@ import static org.mockito.Mockito.when;
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
   private static final int HTTP_RESPONSE = 204;
-  private static final String HOST_WITH_HTTP = "http://www.website.com";
-  private static final String HOST_WITHOUT_HTTP = "www.website.com";
+  private static final String HOST_WITH_HTTPS = "https://www.website.com";
+  private static final String HOST_WITHOUT_HTTPS = "www.website.com";
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private WalledGardenInternetObservingStrategy strategy;
   @Mock private ErrorHandler errorHandler;
+  @Spy private WalledGardenInternetObservingStrategy strategy;
 
   private String getHost() {
     return strategy.getDefaultPingHost();
@@ -55,13 +56,14 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldBeConnectedToTheInternet() {
     // given
+    final ErrorHandler errorHandlerStub = createErrorHandlerStub();
     when(strategy.isConnected(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
-        errorHandler)).thenReturn(true);
+        errorHandlerStub)).thenReturn(true);
 
     // when
     final Observable<Boolean> observable =
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, getHost(),
-            PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler);
+            PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandlerStub);
 
     boolean isConnected = observable.blockingFirst();
 
@@ -71,13 +73,14 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldNotBeConnectedToTheInternet() {
     // given
+    final ErrorHandler errorHandlerStub = createErrorHandlerStub();
     when(strategy.isConnected(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
-        errorHandler)).thenReturn(false);
+        errorHandlerStub)).thenReturn(false);
 
     // when
     final Observable<Boolean> observable =
         strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, getHost(),
-            PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler);
+            PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandlerStub);
 
     boolean isConnected = observable.blockingFirst();
 
@@ -87,13 +90,14 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldBeConnectedToTheInternetViaSingle() {
     // given
+    final ErrorHandler errorHandlerStub = createErrorHandlerStub();
     when(strategy.isConnected(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
-        errorHandler)).thenReturn(true);
+        errorHandlerStub)).thenReturn(true);
 
     // when
     final Single<Boolean> observable =
         strategy.checkInternetConnectivity(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
-            errorHandler);
+            errorHandlerStub);
 
     boolean isConnected = observable.blockingGet();
 
@@ -103,13 +107,14 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldNotBeConnectedToTheInternetViaSingle() {
     // given
+    final ErrorHandler errorHandlerStub = createErrorHandlerStub();
     when(strategy.isConnected(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
-        errorHandler)).thenReturn(false);
+        errorHandlerStub)).thenReturn(false);
 
     // when
     final Single<Boolean> observable =
         strategy.checkInternetConnectivity(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
-            errorHandler);
+            errorHandlerStub);
 
     boolean isConnected = observable.blockingGet();
 
@@ -150,43 +155,49 @@ import static org.mockito.Mockito.when;
 
   @Test public void shouldNotTransformHttpHost() {
     // when
-    String transformedHost = strategy.adjustHost(HOST_WITH_HTTP);
+    String transformedHost = strategy.adjustHost(HOST_WITH_HTTPS);
 
     // then
-    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTP);
+    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTPS);
   }
 
   @Test public void shouldNotTransformHttpsHost() {
     // when
-    String transformedHost = strategy.adjustHost(HOST_WITH_HTTP);
+    String transformedHost = strategy.adjustHost(HOST_WITH_HTTPS);
 
     // then
-    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTP);
+    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTPS);
   }
 
-  @Test public void shouldAddHttpProtocolToHost() {
+  @Test public void shouldAddHttpsProtocolToHost() {
     // when
-    String transformedHost = strategy.adjustHost(HOST_WITHOUT_HTTP);
+    String transformedHost = strategy.adjustHost(HOST_WITHOUT_HTTPS);
 
     // then
-    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTP);
+    assertThat(transformedHost).isEqualTo(HOST_WITH_HTTPS);
   }
 
-
-  // this test is flaky; it needs to be investigated
-  @Ignore("flaky test")
   @Test @SuppressWarnings("CheckReturnValue")
   public void shouldAdjustHostWhileCheckingConnectivity() {
     // given
+    final ErrorHandler errorHandlerStub = createErrorHandlerStub();
     final String host = getHost();
-    when(strategy.isConnected(host, PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler)).thenReturn(
+    when(strategy.isConnected(host, PORT, TIMEOUT_IN_MS, HTTP_RESPONSE,
+        errorHandlerStub)).thenReturn(
         true);
 
     // when
     strategy.observeInternetConnectivity(INITIAL_INTERVAL_IN_MS, INTERVAL_IN_MS, host, PORT,
-        TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler).blockingFirst();
+        TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandlerStub).blockingFirst();
 
     // then
     verify(strategy).adjustHost(host);
+  }
+
+  private ErrorHandler createErrorHandlerStub() {
+    return new ErrorHandler() {
+      @Override public void handleError(Exception exception, String message) {
+      }
+    };
   }
 }

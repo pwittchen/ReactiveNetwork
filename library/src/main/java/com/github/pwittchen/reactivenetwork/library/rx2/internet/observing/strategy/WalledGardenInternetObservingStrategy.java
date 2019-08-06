@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  * if a device is connected to the Internet or not.
  */
 public class WalledGardenInternetObservingStrategy implements InternetObservingStrategy {
-  private static final String DEFAULT_HOST = "http://clients3.google.com/generate_204";
+  private static final String DEFAULT_HOST = "https://clients3.google.com/generate_204";
   private static final String HTTP_PROTOCOL = "http://";
   private static final String HTTPS_PROTOCOL = "https://";
 
@@ -79,7 +79,7 @@ public class WalledGardenInternetObservingStrategy implements InternetObservingS
 
   protected String adjustHost(final String host) {
     if (!host.startsWith(HTTP_PROTOCOL) && !host.startsWith(HTTPS_PROTOCOL)) {
-      return HTTP_PROTOCOL.concat(host);
+      return HTTPS_PROTOCOL.concat(host);
     }
 
     return host;
