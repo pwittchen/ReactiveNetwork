@@ -18,6 +18,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.stra
 import com.github.pwittchen.reactivenetwork.library.rx2.Preconditions;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
+import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * Socket strategy for monitoring connectivity with the Internet.
  * It monitors Internet connectivity via opening socket connection with the remote host.
  */
-public class SocketInternetObservingStrategy implements InternetObservingStrategy {
+@Open public class SocketInternetObservingStrategy implements InternetObservingStrategy {
   private static final String EMPTY_STRING = "";
   private static final String DEFAULT_HOST = "www.google.com";
   private static final String HTTP_PROTOCOL = "http://";

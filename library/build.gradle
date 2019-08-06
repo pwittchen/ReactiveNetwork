@@ -61,7 +61,10 @@ dependencies {
 
   annotationProcessor deps.nullaway
 
+  compileOnly deps.nopen
+
   errorprone deps.errorprone
+  errorprone deps.nopenchecker
 }
 
 tasks.withType(JavaCompile) {

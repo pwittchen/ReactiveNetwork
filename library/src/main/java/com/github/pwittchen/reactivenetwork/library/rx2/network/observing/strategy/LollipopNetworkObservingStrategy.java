@@ -24,6 +24,7 @@ import android.net.NetworkRequest;
 import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
+import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -35,7 +36,8 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
  * Network observing strategy for devices with Android Lollipop (API 21) or higher.
  * Uses Network Callback API.
  */
-@TargetApi(21) public class LollipopNetworkObservingStrategy implements NetworkObservingStrategy {
+@Open @TargetApi(21) public class LollipopNetworkObservingStrategy
+    implements NetworkObservingStrategy {
   @SuppressWarnings("NullAway") // it has to be initialized in the Observable due to Context
   private NetworkCallback networkCallback;
 

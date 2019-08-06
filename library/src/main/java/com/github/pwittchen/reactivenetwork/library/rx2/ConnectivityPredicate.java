@@ -24,7 +24,7 @@ import io.reactivex.functions.Predicate;
  * ConnectivityPredicate is a class containing predefined methods, which can be used for filtering
  * reactive streams of network connectivity
  */
-public class ConnectivityPredicate {
+public final class ConnectivityPredicate {
 
   private ConnectivityPredicate() {
   }

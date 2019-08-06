@@ -18,6 +18,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.stra
 import com.github.pwittchen.reactivenetwork.library.rx2.Preconditions;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.error.ErrorHandler;
+import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
@@ -37,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  * are generated. Instead HTTP 200 (OK), we got HTTP 204 (NO CONTENT), but it still can tell us
  * if a device is connected to the Internet or not.
  */
-public class WalledGardenInternetObservingStrategy implements InternetObservingStrategy {
+@Open public class WalledGardenInternetObservingStrategy implements InternetObservingStrategy {
   private static final String DEFAULT_HOST = "https://clients3.google.com/generate_204";
   private static final String HTTP_PROTOCOL = "http://";
   private static final String HTTPS_PROTOCOL = "https://";

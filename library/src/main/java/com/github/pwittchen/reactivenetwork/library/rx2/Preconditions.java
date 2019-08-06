@@ -17,7 +17,7 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.os.Build;
 
-public class Preconditions {
+public final class Preconditions {
   /**
    * Validation method, which checks if an object is null
    *
