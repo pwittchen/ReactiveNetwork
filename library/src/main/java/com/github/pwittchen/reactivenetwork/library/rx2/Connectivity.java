@@ -26,7 +26,7 @@ import androidx.annotation.RequiresApi;
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.
  */
 @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-public class Connectivity {
+public final class Connectivity {
   static final int UNKNOWN_TYPE = -1;
   static final int UNKNOWN_SUB_TYPE = -1;
   private NetworkInfo.State state; // NOPMD
@@ -282,7 +282,7 @@ public class Connectivity {
         + '}';
   }
 
-  public static class Builder {
+  public final static class Builder {
 
     // disabling PMD for builder class attributes
     // because we want to have the same method names as names of the attributes for builder

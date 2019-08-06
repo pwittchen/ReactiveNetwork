@@ -30,6 +30,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
+import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -46,7 +47,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
  * Network observing strategy for devices with Android Marshmallow (API 23) or higher.
  * Uses Network Callback API and handles Doze mode.
  */
-@TargetApi(23) public class MarshmallowNetworkObservingStrategy
+@Open @TargetApi(23) public class MarshmallowNetworkObservingStrategy
     implements NetworkObservingStrategy {
   protected static final String ERROR_MSG_NETWORK_CALLBACK =
       "could not unregister network callback";

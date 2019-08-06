@@ -24,6 +24,7 @@ import android.os.Looper;
 import android.util.Log;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
+import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -39,7 +40,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
  * Network observing strategy for Android devices before Lollipop (API 20 or lower).
  * Uses Broadcast Receiver.
  */
-public class PreLollipopNetworkObservingStrategy implements NetworkObservingStrategy {
+@Open public class PreLollipopNetworkObservingStrategy implements NetworkObservingStrategy {
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final IntentFilter filter = new IntentFilter();

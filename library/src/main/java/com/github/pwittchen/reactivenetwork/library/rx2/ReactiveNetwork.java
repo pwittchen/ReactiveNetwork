@@ -25,6 +25,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.Networ
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.MarshmallowNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
+import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -33,7 +34,7 @@ import io.reactivex.Single;
  * listening network connection state and change of the WiFi signal strength
  * with RxJava Observables. It can be easily used with RxAndroid.
  */
-public class ReactiveNetwork {
+@Open public class ReactiveNetwork {
   public final static String LOG_TAG = "ReactiveNetwork";
 
   protected ReactiveNetwork() {
