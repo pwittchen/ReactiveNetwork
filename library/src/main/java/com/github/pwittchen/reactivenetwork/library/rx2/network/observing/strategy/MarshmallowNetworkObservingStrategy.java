@@ -23,17 +23,22 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.PowerManager;
-import androidx.annotation.NonNull;
 import android.util.Log;
+import androidx.annotation.NonNull;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
+import org.reactivestreams.Publisher;
 
 import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.LOG_TAG;
 
@@ -51,6 +56,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
   private ConnectivityManager.NetworkCallback networkCallback;
   private final Subject<Connectivity> connectivitySubject;
   private final BroadcastReceiver idleReceiver;
+  private Connectivity lastConnectivity = Connectivity.create();
 
   @SuppressWarnings("NullAway") // networkCallback cannot be initialized here
   public MarshmallowNetworkObservingStrategy() {
@@ -77,7 +83,31 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
         tryToUnregisterCallback(manager);
         tryToUnregisterReceiver(context);
       }
+    }).doAfterNext(new Consumer<Connectivity>() {
+      @Override
+      public void accept(final Connectivity connectivity) {
+        lastConnectivity = connectivity;
+      }
+    }).flatMap(new Function<Connectivity, Publisher<Connectivity>>() {
+      @Override
+      public Publisher<Connectivity> apply(final Connectivity connectivity) {
+        return propagateAnyConnectedState(lastConnectivity, connectivity);
+      }
     }).startWith(Connectivity.create(context)).distinctUntilChanged().toObservable();
+  }
+
+  protected Publisher<Connectivity> propagateAnyConnectedState(final Connectivity last,
+      final Connectivity current) {
+    final boolean typeChanged = last.type() != current.type();
+    final boolean wasConnected = last.state() == NetworkInfo.State.CONNECTED;
+    final boolean isDisconnected = current.state() == NetworkInfo.State.DISCONNECTED;
+    final boolean isNotIdle = current.detailedState() != NetworkInfo.DetailedState.IDLE;
+
+    if (typeChanged && wasConnected && isDisconnected && isNotIdle) {
+      return Flowable.fromArray(current, last);
+    } else {
+      return Flowable.fromArray(current);
+    }
   }
 
   protected void registerIdleReceiver(final Context context) {
