@@ -28,6 +28,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,6 +37,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.reactivestreams.Publisher;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
@@ -265,5 +267,137 @@ import static org.mockito.Mockito.when;
 
     // then
     verify(strategy).onError(MarshmallowNetworkObservingStrategy.ERROR_MSG_RECEIVER, exception);
+  }
+
+  @Test public void shouldPropagateCurrentAndLastConnectivityWhenSwitchingFromWifiToMobile() {
+    final int lastType = ConnectivityManager.TYPE_WIFI;
+    final int currentType = ConnectivityManager.TYPE_MOBILE;
+
+    assertThatConnectivityIsPropagatedDuringChange(lastType, currentType);
+  }
+
+  @Test public void shouldPropagateCurrentAndLastConnectivityWhenSwitchingFromMobileToWifi() {
+    final int lastType = ConnectivityManager.TYPE_MOBILE;
+    final int currentType = ConnectivityManager.TYPE_WIFI;
+
+    assertThatConnectivityIsPropagatedDuringChange(lastType, currentType);
+  }
+
+  private void assertThatConnectivityIsPropagatedDuringChange(
+      final int lastType, final int currentType) {
+    // given
+    final Connectivity last = new Connectivity.Builder()
+        .type(lastType)
+        .state(NetworkInfo.State.CONNECTED)
+        .build();
+
+    final Connectivity current = new Connectivity.Builder()
+        .type(currentType)
+        .state(NetworkInfo.State.DISCONNECTED)
+        .detailedState(NetworkInfo.DetailedState.CONNECTED)
+        .build();
+
+    // when
+    final Publisher<Connectivity> publisher = strategy.propagateAnyConnectedState(last, current);
+
+    // then
+    final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+    publisher.subscribe(testSubscriber);
+    testSubscriber.assertValueCount(2);
+    testSubscriber.assertValues(current, last);
+    testSubscriber.assertValueAt(0, current);
+    testSubscriber.assertValueAt(1, last);
+  }
+
+  @Test public void shouldNotPropagateLastConnectivityEventWhenTypeIsNotChanged() {
+    // given
+    final Connectivity last = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_WIFI)
+        .state(NetworkInfo.State.CONNECTED)
+        .build();
+
+    final Connectivity current = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_WIFI)
+        .state(NetworkInfo.State.DISCONNECTED)
+        .detailedState(NetworkInfo.DetailedState.CONNECTED)
+        .build();
+
+    // when
+    final Publisher<Connectivity> publisher = strategy.propagateAnyConnectedState(last, current);
+
+    // then
+    final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+    publisher.subscribe(testSubscriber);
+    testSubscriber.assertValueCount(1);
+    testSubscriber.assertValues(current);
+  }
+
+  @Test public void shouldNotPropagateLastConnectivityWhenWasNotConnected() {
+    // given
+    final Connectivity last = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_WIFI)
+        .state(NetworkInfo.State.DISCONNECTED)
+        .build();
+
+    final Connectivity current = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_MOBILE)
+        .state(NetworkInfo.State.CONNECTED)
+        .detailedState(NetworkInfo.DetailedState.CONNECTED)
+        .build();
+
+    // when
+    final Publisher<Connectivity> publisher = strategy.propagateAnyConnectedState(last, current);
+
+    // then
+    final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+    publisher.subscribe(testSubscriber);
+    testSubscriber.assertValueCount(1);
+    testSubscriber.assertValues(current);
+  }
+
+  @Test public void shouldNotPropagateLastConnectivityWhenIsConnected() {
+    // given
+    final Connectivity last = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_WIFI)
+        .state(NetworkInfo.State.CONNECTED)
+        .build();
+
+    final Connectivity current = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_MOBILE)
+        .state(NetworkInfo.State.CONNECTED)
+        .detailedState(NetworkInfo.DetailedState.CONNECTED)
+        .build();
+
+    // when
+    final Publisher<Connectivity> publisher = strategy.propagateAnyConnectedState(last, current);
+
+    // then
+    final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+    publisher.subscribe(testSubscriber);
+    testSubscriber.assertValueCount(1);
+    testSubscriber.assertValues(current);
+  }
+
+  @Test public void shouldNotPropagateLastConnectivityWhenIsIdle() {
+    // given
+    final Connectivity last = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_WIFI)
+        .state(NetworkInfo.State.CONNECTED)
+        .build();
+
+    final Connectivity current = new Connectivity.Builder()
+        .type(ConnectivityManager.TYPE_MOBILE)
+        .state(NetworkInfo.State.DISCONNECTED)
+        .detailedState(NetworkInfo.DetailedState.IDLE)
+        .build();
+
+    // when
+    final Publisher<Connectivity> publisher = strategy.propagateAnyConnectedState(last, current);
+
+    // then
+    final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+    publisher.subscribe(testSubscriber);
+    testSubscriber.assertValueCount(1);
+    testSubscriber.assertValues(current);
   }
 }

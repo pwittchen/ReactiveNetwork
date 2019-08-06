@@ -18,11 +18,14 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 /**
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.
  */
+@RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
 public class Connectivity {
   static final int UNKNOWN_TYPE = -1;
   static final int UNKNOWN_SUB_TYPE = -1;
