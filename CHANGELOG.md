@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+v. 3.0.4
+--------
+*?*
+- fixed bug #330 - State CONNECTED sometimes is not returned when wifi is turned off while having mobile internet connection (Android 9)
+- fixed bug #307 - Mobile data connection is not active
+- switched default protocol from `http` to `https` in `WalledGardenInternetObservingStrategy` - solves #323
+- added nopen for static code analysis - solves #322
+- bumped project dependencies
+- updated docs
+
 v. 3.0.3
 --------
 *13 May 2019*
