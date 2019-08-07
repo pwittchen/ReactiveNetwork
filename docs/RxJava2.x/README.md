@@ -8,8 +8,8 @@ ReactiveNetwork is an Android library listening **network connection state** and
 
 | Current Branch | Branch  | Artifact Id | Build Status  | Coverage | Maven Central |
 |:--------------:|:-------:|:-----------:|:-------------:|:--------:|:-------------:|
-| | [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork.svg?branch=RxJava1.x&style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava1.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat-square) |
-| :ballot_box_with_check: | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork.svg?branch=RxJava2.x&style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square) |
+| | [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork/RxJava1.x.svg?style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava1.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat-square) |
+| :ballot_box_with_check: | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square) |
 
 Contents
 --------
@@ -297,6 +297,8 @@ ReactiveNetwork
 });
 ```
 
+In case we're getting too many events related to the network changes or we want to discard previous observables (there's only one in the code snippet above) after subscribing them, we can use `switchMapSingle` operator instead of `flatMapSingle` in order to get the updates from the latest observable only. In this case, it will be observable created by `checkInternetConnectivity` method.
+
 ### ClearText Traffic
 
 Someties, while trying to connect to the remote server we may encounter the following message:
@@ -479,7 +481,7 @@ You can depend on the library through Maven:
 <dependency>
     <groupId>com.github.pwittchen</groupId>
     <artifactId>reactivenetwork-rx2</artifactId>
-    <version>3.0.3</version>
+    <version>x.y.z</version>
 </dependency>
 ```
 
@@ -487,11 +489,13 @@ or through Gradle:
 
 ```groovy
 dependencies {
-  implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.3'
+  implementation 'com.github.pwittchen:reactivenetwork-rx2:x.y.z'
 }
 ```
 
-**Note**: If you are using Gradle version lower than 3.0, replace `implementation` with `compile`
+**Note #1**: Please, replace `x.y.z` with the **latest version number**, which is ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square)
+
+**Note #2**: If you are using Gradle version lower than 3.0, replace `implementation` with `compile`
 
 Tests
 -----
