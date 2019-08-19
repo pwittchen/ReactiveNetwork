@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Walled Garden Strategy for monitoring connectivity with the Internet.
@@ -100,7 +101,11 @@ import java.util.concurrent.TimeUnit;
       final int httpResponse, final ErrorHandler errorHandler) {
     HttpURLConnection urlConnection = null;
     try {
-      urlConnection = createHttpUrlConnection(host, port, timeoutInMs);
+      if (host.startsWith(HTTPS_PROTOCOL)) {
+        urlConnection = createHttpsUrlConnection(host, port, timeoutInMs);
+      } else {
+        urlConnection = createHttpUrlConnection(host, port, timeoutInMs);
+      }
       return urlConnection.getResponseCode() == httpResponse;
     } catch (IOException e) {
       errorHandler.handleError(e, "Could not establish connection with WalledGardenStrategy");
@@ -117,6 +122,18 @@ import java.util.concurrent.TimeUnit;
     URL initialUrl = new URL(host);
     URL url = new URL(initialUrl.getProtocol(), initialUrl.getHost(), port, initialUrl.getFile());
     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+    urlConnection.setConnectTimeout(timeoutInMs);
+    urlConnection.setReadTimeout(timeoutInMs);
+    urlConnection.setInstanceFollowRedirects(false);
+    urlConnection.setUseCaches(false);
+    return urlConnection;
+  }
+
+  protected HttpsURLConnection createHttpsUrlConnection(final String host, final int port,
+      final int timeoutInMs) throws IOException {
+    URL initialUrl = new URL(host);
+    URL url = new URL(initialUrl.getProtocol(), initialUrl.getHost(), port, initialUrl.getFile());
+    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
     urlConnection.setConnectTimeout(timeoutInMs);
     urlConnection.setReadTimeout(timeoutInMs);
     urlConnection.setInstanceFollowRedirects(false);

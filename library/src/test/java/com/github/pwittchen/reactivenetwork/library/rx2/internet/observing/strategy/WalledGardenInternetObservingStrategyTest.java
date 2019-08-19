@@ -43,6 +43,7 @@ import static org.mockito.Mockito.when;
   private static final int PORT = 80;
   private static final int TIMEOUT_IN_MS = 30;
   private static final int HTTP_RESPONSE = 204;
+  private static final String HOST_WITH_HTTP = "http://www.website.com";
   private static final String HOST_WITH_HTTPS = "https://www.website.com";
   private static final String HOST_WITHOUT_HTTPS = "www.website.com";
 
@@ -139,11 +140,43 @@ import static org.mockito.Mockito.when;
     assertThat(connection.getUseCaches()).isFalse();
   }
 
-  @Test public void shouldHandleAnExceptionWhileCreatingUrlConnection() throws IOException {
+  @Test public void shouldHandleAnExceptionWhileCreatingHttpUrlConnection() throws IOException {
     // given
     final String errorMsg = "Could not establish connection with WalledGardenStrategy";
     final IOException givenException = new IOException(errorMsg);
-    when(strategy.createHttpUrlConnection(getHost(), PORT, TIMEOUT_IN_MS)).thenThrow(
+    when(strategy.createHttpUrlConnection(HOST_WITH_HTTP, PORT, TIMEOUT_IN_MS)).thenThrow(
+        givenException);
+
+    // when
+    strategy.isConnected(HOST_WITH_HTTP, PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler);
+
+    // then
+    verify(errorHandler).handleError(givenException, errorMsg);
+  }
+
+  @Test public void shouldCreateHttpsUrlConnection() throws IOException {
+    // given
+    final String parsedDefaultHost = "clients3.google.com";
+
+    // when
+    HttpURLConnection connection =
+        strategy.createHttpsUrlConnection(getHost(), PORT, TIMEOUT_IN_MS);
+
+    // then
+    assertThat(connection).isNotNull();
+    assertThat(connection.getURL().getHost()).isEqualTo(parsedDefaultHost);
+    assertThat(connection.getURL().getPort()).isEqualTo(PORT);
+    assertThat(connection.getConnectTimeout()).isEqualTo(TIMEOUT_IN_MS);
+    assertThat(connection.getReadTimeout()).isEqualTo(TIMEOUT_IN_MS);
+    assertThat(connection.getInstanceFollowRedirects()).isFalse();
+    assertThat(connection.getUseCaches()).isFalse();
+  }
+
+  @Test public void shouldHandleAnExceptionWhileCreatingHttpsUrlConnection() throws IOException {
+    // given
+    final String errorMsg = "Could not establish connection with WalledGardenStrategy";
+    final IOException givenException = new IOException(errorMsg);
+    when(strategy.createHttpsUrlConnection(getHost(), PORT, TIMEOUT_IN_MS)).thenThrow(
         givenException);
 
     // when
