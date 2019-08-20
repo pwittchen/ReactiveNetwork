@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+v. 3.0.5
+--------
+*?*
+
+- added new method for creating `HttpsUrlConnection` (`HttpsURLConnection createHttpsUrlConnection(final String host, final int port, final int timeoutInMs)`) in `WalledGardenInternetObservingStrategy`, appropriate method is chosen automatically basing on the protocol (`http` or `https`) - solves #323
+
 v. 3.0.4
 --------
 *7 Aug 2019*
