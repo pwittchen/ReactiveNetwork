@@ -15,7 +15,7 @@ ext {
 ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.12',
             rxandroid2        : 'io.reactivex.rxjava2:rxandroid:2.1.1',
             annotation        : 'androidx.annotation:annotation:1.1.0',
-            appcompat         : 'androidx.appcompat:appcompat:1.0.2',
+            appcompat         : 'androidx.appcompat:appcompat:1.1.0',
             junit             : 'junit:junit:4.12',
             truth             : 'com.google.truth:truth:1.0',
             robolectric       : 'org.robolectric:robolectric:4.3',
