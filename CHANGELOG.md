@@ -65,7 +65,7 @@ v. 2.0.0
 *20 Jul 2018*
 
 - bumped project dependencies -> RxJava: https://github.com/pwittchen/ReactiveNetwork/commit/1d1a301a72d0128548ccf4b9b2cef24c07d38118, others: https://github.com/pwittchen/ReactiveNetwork/commit/597dc03c1c18fb73849c7b0bc4a52d46524bd02b
-- refactored `Connectivity` class to better builder pattern to improve code consistency (breaking API of the `Connectivity` class) - PR #283 
+- refactored `Connectivity` class to better builder pattern to improve code consistency (breaking API of the `Connectivity` class) - PR #283
 - improved unit tests coverage - PR #287
 
 v. 1.0.0
@@ -74,7 +74,7 @@ v. 1.0.0
 
 - fixed docs in https://github.com/pwittchen/ReactiveNetwork/commit/76ab2b23210207d83250da5d8fd0cd6e275e3f08 after reporting problem in #276 (returning false-positive connectivity results in one edge-case)
 - updated project dependencies - PR #269, commit 02449af2f38ac463e1aa8824beee46ea823fd83b
-- refactored `ReactiveNetwork` class with Builder pattern - PR #279 
+- refactored `ReactiveNetwork` class with Builder pattern - PR #279
 - removed the following methods from the `ReactiveNetwork` class:
 
 ```java
@@ -110,7 +110,7 @@ v. 0.12.2
 *11 Nov 2017*
 
 - updated API of `MarshmallowNetworkObservingStrategy`
-  - made `void registerIdleReceiver(context)` `protected` 
+  - made `void registerIdleReceiver(context)` `protected`
   - made `boolean isIdleMode(context)` `protected`
   - made `tryToUnregisterCallback(ConnectivityManager)` `protected`
   - made `tryToUnregisterReceiver(context)` `protected`
@@ -144,12 +144,12 @@ v. 0.12.0
 *30 Aug 2017*
 
 - Fixed NPE occuring when `ConnectivityManager` is `null` in `ReactiveNetwork.observeNetworkConnectivity()` method - issue #209
-- Added new methods to the API for checking Internet connectivity - issue #205 
+- Added new methods to the API for checking Internet connectivity - issue #205
   - `Observable<Boolean> observeInternetConnectivity(strategy, host)`
   - `Single<Boolean> checkInternetConnectivity(strategy, host)`
-- Added to documentation comment about monitoring Internet connectivity with custom host - issue #204 
+- Added to documentation comment about monitoring Internet connectivity with custom host - issue #204
 - Classes which implement InternetObservingStrategy handle custom hosts with and without `http://` or `https://` prefix gracefully - issue #206
-- organized packages with unit tests 
+- organized packages with unit tests
 - made the library more hermetic
 - changed visibility of `SocketInternetObservingStrategy#isConnected(String host, int port, int timeoutInMs, ErrorHandler handler)` method from `public` to `protected`
 - changed visibility of `SocketInternetObservingStrategy#isConnected(Socket socket, String host, int port, int timeoutInMs, ErrorHandler errorHandler)` method from `public` to `protected`
@@ -163,9 +163,9 @@ v. 0.11.0
 
 - added `WalledGardenInternetObservingStrategy` - fixes #116
 - made `WalledGardenInternetObservingStrategy` a default strategy for checking Internet connectivity
-- added documentation for NetworkObservingStrategy - solves #197 
+- added documentation for NetworkObservingStrategy - solves #197
 - added documentation for InternetObservingStrategy - solves #198
-- fixed package name in `AndroidManifest.xml` file - solves #195 
+- fixed package name in `AndroidManifest.xml` file - solves #195
 - bumped RxJava2 version to 2.1.2
 - bumped Kotlin version to 1.1.3-2
 - bumped Gradle Android Tools version to 2.3.3
@@ -181,8 +181,8 @@ v. 0.10.0
 - created Code of Conduct
 - updated unit tests
 - updated Kotlin version in sample apps
-- added retrolambda to the sample Java app - issue #163 
-- fixed behavior of network observing in disconnected state - issue #159 
+- added retrolambda to the sample Java app - issue #163
+- fixed behavior of network observing in disconnected state - issue #159
 - added the following methods to `ReactiveNetwork` class:
   - `Single<Boolean> checkInternetConnectivity()`
   - `Single<Boolean> checkInternetConnectivity(InternetObservingStrategy strategy)`
@@ -195,7 +195,7 @@ v. 0.9.1
 --------
 *30 Apr 2017*
 
-- updated `ConnectivityPredicate` and replaced `io.reactivex.functions.Function` with `io.reactivex.functions.Predicate` to make it compatible with RxJava2 filtering methods #168 
+- updated `ConnectivityPredicate` and replaced `io.reactivex.functions.Function` with `io.reactivex.functions.Predicate` to make it compatible with RxJava2 filtering methods #168
 - bumped RxJava2.x version to 2.1.0
 
 v. 0.9.0
@@ -249,9 +249,9 @@ v. 0.6.0
 --------
 *20 Oct 2016*
 
-- fixed bug with the crash during unregister receiver for Pre-Lollipop devices #87 
+- fixed bug with the crash during unregister receiver for Pre-Lollipop devices #87
 - extended `NetworkObservingStrategy` with `void onError(String message, Exception exception)` method, which allows handling errors in network observing strategies
-- closed the socket in the Internet connection check #91 
+- closed the socket in the Internet connection check #91
 - added `SocketErrorHandler` with a default implementation in `DefaultSocketErrorHandler` class, which allows handling errors during closing socket connection
 - delegated observing Internet connectivity functionality to separate class hidden behind `InternetObservingStrategy` interface
 - added an `InternetObservingStrategy` interface with the default implementation in `DefaultInternetObservingStrategy` class, which allows to customize Internet observing strategy
