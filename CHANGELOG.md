@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+v. 0.13.0
+---------
+*?*
+- replacing default protocol HTTP with HTTPS in WalledGardenInternetObservingStrategy - PR #376, issue #323
+
 v. 0.12.4
 --------
 *24 Jun 2018*
@@ -27,9 +32,9 @@ v. 0.12.0
 - Fixed NPE occuring when `ConnectivityManager` is `null` in `ReactiveNetwork.observeNetworkConnectivity()` method - issue #209
 - Added new method to the API for checking Internet connectivity - issue #205
   - `Observable<Boolean> observeInternetConnectivity(strategy, host)`
-- Added to documentation comment about monitoring Internet connectivity with custom host - issue #204 
+- Added to documentation comment about monitoring Internet connectivity with custom host - issue #204
 - Classes which implement InternetObservingStrategy handle custom hosts with and without `http://` or `https://` prefix gracefully - issue #206
-- organized packages with unit tests 
+- organized packages with unit tests
 - made the library more hermetic
 - changed visibility of `SocketInternetObservingStrategy#isConnected(String host, int port, int timeoutInMs, ErrorHandler handler)` method from `public` to `protected`
 - changed visibility of `SocketInternetObservingStrategy#isConnected(Socket socket, String host, int port, int timeoutInMs, ErrorHandler errorHandler)` method from `public` to `protected`
@@ -43,7 +48,7 @@ v. 0.11.0
 
 - added `WalledGardenInternetObservingStrategy` - fixes #116
 - made `WalledGardenInternetObservingStrategy` a default strategy for checking Internet connectivity
-- added documentation for NetworkObservingStrategy - solves #197 
+- added documentation for NetworkObservingStrategy - solves #197
 - added documentation for InternetObservingStrategy - solves #198
 - bumped Kotlin version to 1.1.3-2
 - bumped Gradle Android Tools version to 2.3.3
@@ -57,8 +62,8 @@ v. 0.10.0
 - bumped test dependencies
 - created Code of Conduct
 - updated Kotlin version in sample apps
-- added retrolambda to the sample Java app - issue #163 
-- fixed behavior of network observing in disconnected state - issue #159 
+- added retrolambda to the sample Java app - issue #163
+- fixed behavior of network observing in disconnected state - issue #159
 
 v. 0.9.1
 --------
@@ -117,9 +122,9 @@ v. 0.6.0
 --------
 *20 Oct 2016*
 
-- fixed bug with the crash during unregister receiver for Pre-Lollipop devices #87 
+- fixed bug with the crash during unregister receiver for Pre-Lollipop devices #87
 - extended `NetworkObservingStrategy` with `void onError(String message, Exception exception)` method, which allows handling errors in network observing strategies
-- closed the socket in the Internet connection check #91 
+- closed the socket in the Internet connection check #91
 - added `SocketErrorHandler` with a default implementation in `DefaultSocketErrorHandler` class, which allows handling errors during closing socket connection
 - delegated observing Internet connectivity functionality to separate class hidden behind `InternetObservingStrategy` interface
 - added an `InternetObservingStrategy` interface with the default implementation in `DefaultInternetObservingStrategy` class, which allows to customize Internet observing strategy
