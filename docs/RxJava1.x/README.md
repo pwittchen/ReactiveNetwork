@@ -222,7 +222,7 @@ You can depend on the library through Maven:
 <dependency>
     <groupId>com.github.pwittchen</groupId>
     <artifactId>reactivenetwork</artifactId>
-    <version>0.12.4</version>
+    <version>x.y.z</version>
 </dependency>
 ```
 
@@ -230,9 +230,11 @@ or through Gradle:
 
 ```groovy
 dependencies {
-  compile 'com.github.pwittchen:reactivenetwork:0.12.4'
+  compile 'com.github.pwittchen:reactivenetwork:x.y.z'
 }
 ```
+
+Replace `x.y.z` with the latest version: ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat-square)
 
 Tests
 -----
