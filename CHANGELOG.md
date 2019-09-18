@@ -3,7 +3,7 @@ CHANGELOG
 
 v. 0.13.0
 ---------
-*?*
+*18 Sep 2019*
 - replacing default protocol HTTP with HTTPS in WalledGardenInternetObservingStrategy - PR #376, issue #323
 
 v. 0.12.4
