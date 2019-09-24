@@ -1,6 +1,6 @@
 # ReactiveNetwork
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ReactiveNetwork-brightgreen.svg?style=flat-square)](https://android-arsenal.com/details/1/2290) 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ReactiveNetwork-brightgreen.svg?style=flat-square)](https://android-arsenal.com/details/1/2290)
 
 view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [**RxJava2.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/)
 
@@ -45,6 +45,7 @@ Contents
 - [Contributors](#contributors)
 - [References](#references)
   - [Mentions](#mentions)
+- [Supporters](#supporters)
 - [License](#license)
 
 Usage
@@ -557,7 +558,7 @@ Are you using this library in your app and want to be listed here? Send me a Pul
 Getting help
 ------------
 
-Do you need help related to using or configuring this library? 
+Do you need help related to using or configuring this library?
 
 You can do the following things:
 - [Ask the question on StackOverflow](http://stackoverflow.com/questions/ask?tags=reactivenetwork)
@@ -670,6 +671,13 @@ References
 - [GitHub Trending, 14th of Aug 2015](https://twitter.com/TrendingGithub/status/632117206801891328)
 - [TL DEV TECH - Best Android Libraries in 2017](http://www.tldevtech.com/best-android-libraries-2017/)
 - [TL DEV TECH - 30+ Best Android Libraries (2018)](https://www.tldevtech.com/best-android-libraries/)
+
+Supporters
+----------
+
+Thanks for JetBrains for sponsoring IntelliJ IDEA license for open-source development
+
+![jetbrains logos](jetbrains_logo.png)
 
 License
 -------
