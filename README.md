@@ -675,9 +675,9 @@ References
 Supporters
 ----------
 
-Thanks for JetBrains for sponsoring IntelliJ IDEA license for open-source development
+Thanks for [JetBrains](https://www.jetbrains.com/?from=ReactiveNetwork) for sponsoring IntelliJ IDEA license for open-source development
 
-![jetbrains logos](jetbrains_logo.png)
+[![jetbrains logos](jetbrains_logo.png)](https://www.jetbrains.com/?from=ReactiveNetwork)
 
 License
 -------
