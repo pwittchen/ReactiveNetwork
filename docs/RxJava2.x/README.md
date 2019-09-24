@@ -677,7 +677,7 @@ Supporters
 
 Thanks for [JetBrains](https://www.jetbrains.com/?from=ReactiveNetwork) for sponsoring IntelliJ IDEA license for open-source development
 
-[![jetbrains logos](jetbrains_logo.png)](https://www.jetbrains.com/?from=ReactiveNetwork)
+[![jetbrains logos](https://raw.githubusercontent.com/pwittchen/ReactiveNetwork/RxJava2.x/jetbrains_logo.png)](https://www.jetbrains.com/?from=ReactiveNetwork)
 
 License
 -------
