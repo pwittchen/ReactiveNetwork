@@ -537,6 +537,8 @@ Reports from analysis are generated in `library/build/reports/` directory.
 
 Who is using this library?
 --------------------------
+
+These apps are using (or used) ReactiveNetwork library:
 - [SkyScanner Android app](https://play.google.com/store/apps/details?id=net.skyscanner.android.main)
 - [Slack Android app](https://play.google.com/store/apps/details?id=com.Slack)
 - [NextBike](https://play.google.com/store/apps/details?id=de.nextbike)
@@ -551,6 +553,7 @@ Who is using this library?
 - [Project Bass - Android app](http://projectbass.org/)
 - [Movie Lovers](https://play.google.com/store/apps/details?id=com.mediaclient.movielovers.mobile)
 - [Waves Wallet](https://play.google.com/store/apps/details?id=com.wavesplatform.wallet)
+- [Fieldsight](https://github.com/fieldsight/fieldsight-mobile)
 - and more...
 
 Are you using this library in your app and want to be listed here? Send me a Pull Request or an e-mail to piotr@wittchen.io
