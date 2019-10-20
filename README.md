@@ -537,6 +537,8 @@ Reports from analysis are generated in `library/build/reports/` directory.
 
 Who is using this library?
 --------------------------
+
+These apps are using (or used) ReactiveNetwork library:
 - [SkyScanner Android app](https://play.google.com/store/apps/details?id=net.skyscanner.android.main)
 - [Slack Android app](https://play.google.com/store/apps/details?id=com.Slack)
 - [NextBike](https://play.google.com/store/apps/details?id=de.nextbike)
