@@ -77,7 +77,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
             .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
             .build();
 
-    manager.registerNetworkCallback(request, networkCallback);
+    manager.requestNetwork(request, networkCallback);
 
     return connectivitySubject.toFlowable(BackpressureStrategy.LATEST).doOnCancel(new Action() {
       @Override public void run() {
