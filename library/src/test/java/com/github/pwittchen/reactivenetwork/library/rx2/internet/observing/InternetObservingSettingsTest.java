@@ -46,7 +46,7 @@ public class InternetObservingSettingsTest {
     // then
     assertThat(settings.initialInterval()).isEqualTo(0);
     assertThat(settings.interval()).isEqualTo(2000);
-    assertThat(settings.host()).isEqualTo("http://clients3.google.com/generate_204");
+    assertThat(settings.host()).isEqualTo("https://clients3.google.com/generate_204");
     assertThat(settings.port()).isEqualTo(80);
     assertThat(settings.timeout()).isEqualTo(2000);
     assertThat(settings.httpResponse()).isEqualTo(204);
