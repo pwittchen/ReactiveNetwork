@@ -131,7 +131,7 @@ public final class InternetObservingSettings {
   public final static class Builder {
     private int initialInterval = 0;
     private int interval = 2000;
-    private String host = "http://clients3.google.com/generate_204";
+    private String host = "https://clients3.google.com/generate_204";
     private int port = 80;
     private int timeout = 2000;
     private int httpResponse = HttpURLConnection.HTTP_NO_CONTENT;
