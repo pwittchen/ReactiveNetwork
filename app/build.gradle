@@ -5,6 +5,7 @@ android {
   buildToolsVersion rootProject.ext.buildToolsVersion
 
   defaultConfig {
+    multiDexEnabled true
     applicationId "com.github.pwittchen.reactivenetwork.app"
     minSdkVersion rootProject.ext.minSdkVersionApps
     targetSdkVersion rootProject.ext.compileSdkVersion

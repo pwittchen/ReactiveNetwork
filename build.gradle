@@ -24,7 +24,6 @@ ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.18',
             errorprone        : 'com.google.errorprone:error_prone_core:2.3.4',
             nopen             : 'com.jakewharton.nopen:nopen-annotations:1.0.1',
             nopenchecker      : 'com.jakewharton.nopen:nopen-checker:1.0.1',
-            ktlintgradle      : 'gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:4.1.0',
             kotlinstdlib      : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
             kotlingradleplugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
             detekt            : "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"]
@@ -39,8 +38,8 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.5.3'
-    classpath('com.dicedmelon.gradle:jacoco-android:0.1.4') {
+    classpath 'com.android.tools.build:gradle:3.6.1'
+    classpath('com.hiya:jacoco-android:0.2') {
       exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
 

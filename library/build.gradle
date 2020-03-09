@@ -1,16 +1,21 @@
 apply plugin: 'com.android.library'
 apply plugin: 'jacoco'
-apply plugin: 'jacoco-android'
+apply plugin: 'com.hiya.jacoco-android'
 apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'net.ltgt.apt'
 apply from: '../config/quality.gradle'
 apply from: '../maven_push.gradle'
+
+jacoco {
+  toolVersion = "0.8.4"
+}
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
   buildToolsVersion rootProject.ext.buildToolsVersion
 
   defaultConfig {
+    multiDexEnabled true
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.compileSdkVersion
     versionCode 1
@@ -41,34 +46,44 @@ android {
       }
     }
   }
-}
 
-jacocoAndroidUnitTestReport {
-  csv.enabled false
-  html.enabled true
-  xml.enabled true
-}
+  jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
+  }
 
-dependencies {
-  api deps.rxjava2
-  api deps.rxandroid2
-  implementation deps.annotation
+  dependencies {
+    api deps.rxjava2
+    api deps.rxandroid2
+    implementation deps.annotation
 
-  testImplementation deps.junit
-  testImplementation deps.truth
-  testImplementation deps.robolectric
-  testImplementation deps.mockitocore
+    testImplementation deps.junit
+    testImplementation deps.truth
+    testImplementation deps.robolectric
+    testImplementation deps.mockitocore
 
-  annotationProcessor deps.nullaway
+    annotationProcessor deps.nullaway
 
-  compileOnly deps.nopen
+    compileOnly deps.nopen
 
-  errorprone deps.errorprone
-  errorprone deps.nopenchecker
-}
+    errorprone deps.errorprone
+    errorprone deps.nopenchecker
+  }
 
-tasks.withType(JavaCompile) {
-  if (!name.toLowerCase().contains("test")) {
-    options.compilerArgs += ["-Xep:NullAway:ERROR", "-XepOpt:NullAway:AnnotatedPackages=com.github.pwittchen.reactivenetwork"]
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  tasks.withType(JavaCompile) {
+    if (!name.toLowerCase().contains("test")) {
+      options.compilerArgs +=
+          ["-Xep:NullAway:ERROR", "-XepOpt:NullAway:AnnotatedPackages=com.github.pwittchen.reactivenetwork"]
+    }
+  }
+
+  tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
   }
 }

@@ -521,17 +521,11 @@ Code style used in the project is called `SquareAndroid` from Java Code Styles r
 Static code analysis
 --------------------
 
-Static code analysis runs Checkstyle, FindBugs, PMD, Lint, ErrorProne and NullAway. It can be executed with command:
+Static code analysis runs Checkstyle, PMD, Lint, ErrorProne and NullAway. It can be executed with command:
 
  ```
  ./gradlew check
  ```
-
-Static code analysis for the sample Kotlin app with detekt can be executed as follows:
-
-```
-./gradlew detektCheck ktlintCheck
-```
 
 Reports from analysis are generated in `library/build/reports/` directory.
 
