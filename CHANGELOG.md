@@ -3,7 +3,7 @@ CHANGELOG
 
 v. 3.0.7
 --------
-*? Mar 2020*
+*12 Mar 2020*
 - updated project dependencies
 - fixed bug #379 (changed default host protocol to https in `InternetObservingSettings)
 
