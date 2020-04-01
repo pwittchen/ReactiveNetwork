@@ -47,6 +47,8 @@ android {
     }
   }
 
+  testOptions.unitTests.includeAndroidResources = true
+
   jacocoAndroidUnitTestReport {
     csv.enabled false
     html.enabled true
