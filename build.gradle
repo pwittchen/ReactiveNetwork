@@ -3,7 +3,7 @@
 apply plugin: 'io.codearte.nexus-staging'
 
 ext {
-  minSdkVersion = 9
+  minSdkVersion = 14
   minSdkVersionApps = 23
   compileSdkVersion = 28
   buildToolsVersion = '28.0.3'
