@@ -160,7 +160,7 @@ import static org.mockito.Mockito.when;
 
     // when
     HttpURLConnection connection =
-        strategy.createHttpsUrlConnection(getHost(), PORT, TIMEOUT_IN_MS);
+        strategy.createHttpsUrlConnection("https://clients3.google.com", PORT, TIMEOUT_IN_MS);
 
     // then
     assertThat(connection).isNotNull();
@@ -176,7 +176,7 @@ import static org.mockito.Mockito.when;
     // given
     final String errorMsg = "Could not establish connection with WalledGardenStrategy";
     final IOException givenException = new IOException(errorMsg);
-    when(strategy.createHttpsUrlConnection(getHost(), PORT, TIMEOUT_IN_MS)).thenThrow(
+    when(strategy.createHttpUrlConnection(getHost(), PORT, TIMEOUT_IN_MS)).thenThrow(
         givenException);
 
     // when
