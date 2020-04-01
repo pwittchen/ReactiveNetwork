@@ -176,11 +176,12 @@ import static org.mockito.Mockito.when;
     // given
     final String errorMsg = "Could not establish connection with WalledGardenStrategy";
     final IOException givenException = new IOException(errorMsg);
-    when(strategy.createHttpUrlConnection(getHost(), PORT, TIMEOUT_IN_MS)).thenThrow(
+    final String host = "https://clients3.google.com";
+    when(strategy.createHttpsUrlConnection(host, PORT, TIMEOUT_IN_MS)).thenThrow(
         givenException);
 
     // when
-    strategy.isConnected(getHost(), PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler);
+    strategy.isConnected(host, PORT, TIMEOUT_IN_MS, HTTP_RESPONSE, errorHandler);
 
     // then
     verify(errorHandler).handleError(givenException, errorMsg);
