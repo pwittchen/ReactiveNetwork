@@ -1,9 +1,18 @@
 CHANGELOG
 =========
 
+v. 3.0.8
+--------
+*02 Apr 2020*
+
+- updated project dependencies
+- update gradle version
+- fixed bug #422 and #415 (changed port for default host for checking internet connectivity from https to http)
+
 v. 3.0.7
 --------
 *12 Mar 2020*
+
 - updated project dependencies
 - fixed bug #379 (changed default host protocol to https in `InternetObservingSettings)
 
