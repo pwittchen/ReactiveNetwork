@@ -2,14 +2,15 @@
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ReactiveNetwork-brightgreen.svg?style=flat-square)](https://android-arsenal.com/details/1/2290)
 
-view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [**RxJava2.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/)
+view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [RxJava2.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/), [**RxJava3.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava3.x/)
 
 ReactiveNetwork is an Android library listening **network connection state** and **Internet connectivity** with RxJava Observables. It's a successor of [Network Events](https://github.com/pwittchen/NetworkEvents) library rewritten with Reactive Programming approach. Library supports both new and legacy network monitoring strategies. Min sdk version = 9.
 
 | Current Branch | Branch  | Artifact Id | Build Status  | Coverage | Maven Central |
 |:--------------:|:-------:|:-----------:|:-------------:|:--------:|:-------------:|
 | | [`RxJava1.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava1.x) | `reactivenetwork` | [![Build Status for RxJava1.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork/RxJava1.x.svg?style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava1.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava1.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork.svg?style=flat-square) |
-| :ballot_box_with_check: | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square) |
+| | [`RxJava2.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava2.x) | `reactivenetwork-rx2` | [![Build Status for RxJava2.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava2.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava2.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx2.svg?style=flat-square) |
+| :ballot_box_with_check: | [`RxJava3.x`](https://github.com/pwittchen/ReactiveNetwork/tree/RxJava3.x) | `reactivenetwork-rx3` | [![Build Status for RxJava3.x](https://img.shields.io/travis/pwittchen/ReactiveNetwork/RxJava3.x.svg?style=flat-square)](https://travis-ci.org/pwittchen/ReactiveNetwork) | [![codecov](https://img.shields.io/codecov/c/github/pwittchen/ReactiveNetwork/RxJava3.x.svg?style=flat-square&label=coverage)](https://codecov.io/gh/pwittchen/ReactiveNetwork/branch/RxJava3.x) | ![Maven Central](https://img.shields.io/maven-central/v/com.github.pwittchen/reactivenetwork-rx3.svg?style=flat-square) |
 
 Contents
 --------
@@ -481,7 +482,7 @@ You can depend on the library through Maven:
 ```xml
 <dependency>
     <groupId>com.github.pwittchen</groupId>
-    <artifactId>reactivenetwork-rx2</artifactId>
+    <artifactId>reactivenetwork-rx3</artifactId>
     <version>x.y.z</version>
 </dependency>
 ```
@@ -600,11 +601,11 @@ Then commit and push your changes to `gh-pages` branch.
 Documentation
 --------------------------
 
-view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [**RxJava2.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/)
+view website with documentation: [RxJava1.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava1.x/), [RxJava2.x](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava2.x/), [**RxJava3.x**](http://pwittchen.github.io/ReactiveNetwork/docs/RxJava3.x/)
 
 It can be generated as follows:
 
-Copy the latest `README.md` file from `RxJava1.x` or `RxJava2.x` branch. Then checkout to `gh-pages` branch and put it into appropriate directory inside `docs/` directory.
+Copy the latest `README.md` file from `RxJava1.x`, `RxJava2.x` or `RxJava3.x` branch. Then checkout to `gh-pages` branch and put it into appropriate directory inside `docs/` directory.
 
 You can do it as follows via bash script:
 
@@ -633,7 +634,7 @@ Next, we can just save changes, commit and push them to remote repository.
 Releasing
 ---------
 
-See [RELEASING.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava2.x/RELEASING.md) file.
+See [RELEASING.md](https://github.com/pwittchen/ReactiveNetwork/blob/RxJava3.x/RELEASING.md) file.
 
 Contributors
 ------------
@@ -650,6 +651,7 @@ Contributors
 - [Alexander Perfilyev](https://github.com/aperfilyev)
 - [Vishesh Vadhera](https://github.com/VisheshVadhera)
 - [@ychescale9](https://github.com/ychescale9)
+- [Alessio Moiso](https://github.com/MrAsterisco)
 
 References
 ----------

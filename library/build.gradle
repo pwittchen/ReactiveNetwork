@@ -61,8 +61,8 @@ android {
   }
 
   dependencies {
-    api deps.rxjava2
-    api deps.rxandroid2
+    api deps.rxjava3
+    api deps.rxandroid3
     implementation deps.annotation
 
     testImplementation deps.junit

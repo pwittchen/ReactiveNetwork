@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+v. 4.0.0
+--------
+*01 Jun 2020*
+
+- **migrated library to RxJava3.x** on RxJava3.x branch and released it as `reactivenetwork-rx3` artifact
+- the `onError` method in `NetworkObservingStrategy` now requires a `Throwable` instead of an `Exception`.
+- updated project dependencies
+- update gradle version
+
 v. 3.0.8
 --------
 *02 Apr 2020*
