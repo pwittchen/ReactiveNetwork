@@ -6,14 +6,14 @@ ext {
   minSdkVersion = 14
   minSdkVersionApps = 23
   compileSdkVersion = 28
-  buildToolsVersion = '28.0.3'
-  gradleVersion = '4.6'
+  buildToolsVersion = '29.0.2'
+  gradleVersion = '6.3'
   kotlinVersion = '1.3.72'
   detektVersion = '1.0.0.RC6-1'
 }
 
-ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.19',
-            rxandroid2        : 'io.reactivex.rxjava2:rxandroid:2.1.1',
+ext.deps = [rxjava3           : 'io.reactivex.rxjava3:rxjava:3.0.4',
+            rxandroid3        : 'io.reactivex.rxjava3:rxandroid:3.0.0',
             annotation        : 'androidx.annotation:annotation:1.1.0',
             appcompat         : 'androidx.appcompat:appcompat:1.1.0',
             junit             : 'junit:junit:4.13',
@@ -38,7 +38,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.6.3'
+    classpath 'com.android.tools.build:gradle:4.0.0'
     classpath('com.hiya:jacoco-android:0.2') {
       exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }

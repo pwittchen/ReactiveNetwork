@@ -146,25 +146,25 @@ exceptions:
   TooGenericExceptionCaught:
     active: true
     exceptions:
-     - ArrayIndexOutOfBoundsException
-     - Error
-     - Exception
-     - IllegalMonitorStateException
-     - NullPointerException
-     - IndexOutOfBoundsException
-     - RuntimeException
-     - Throwable
+      - ArrayIndexOutOfBoundsException
+      - Error
+      - Exception
+      - IllegalMonitorStateException
+      - NullPointerException
+      - IndexOutOfBoundsException
+      - RuntimeException
+      - Throwable
   ExceptionRaisedInUnexpectedLocation:
     active: false
     methodNames: 'toString,hashCode,equals,finalize'
   TooGenericExceptionThrown:
     active: true
     exceptions:
-     - Error
-     - Exception
-     - NullPointerException
-     - Throwable
-     - RuntimeException
+      - Error
+      - Exception
+      - NullPointerException
+      - Throwable
+      - RuntimeException
   NotImplementedDeclaration:
     active: false
   PrintStackTrace:
