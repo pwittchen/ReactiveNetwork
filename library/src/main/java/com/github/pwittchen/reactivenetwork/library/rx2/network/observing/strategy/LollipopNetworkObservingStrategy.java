@@ -19,10 +19,16 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
+import android.net.LinkProperties;
 import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
+import com.github.pwittchen.reactivenetwork.library.rx2.info.NetworkState;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.Observable;
@@ -40,6 +46,7 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     implements NetworkObservingStrategy {
   @SuppressWarnings("NullAway") // it has to be initialized in the Observable due to Context
   private NetworkCallback networkCallback;
+  private NetworkState networkState = new NetworkState();
 
   @Override public Observable<Connectivity> observeNetworkConnectivity(final Context context) {
     final String service = Context.CONNECTIVITY_SERVICE;
@@ -73,12 +80,30 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
   private NetworkCallback createNetworkCallback(final ObservableEmitter<Connectivity> subscriber,
       final Context context) {
     return new ConnectivityManager.NetworkCallback() {
+      @Override
+      public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
+        networkState.setNetwork(network);
+        networkState.setNetworkCapabilities(networkCapabilities);
+        subscriber.onNext(Connectivity.create(context, networkState));
+      }
+
+      @Override
+      public void onLinkPropertiesChanged(@NonNull Network network, @NonNull LinkProperties linkProperties) {
+        networkState.setNetwork(network);
+        networkState.setLinkProperties(linkProperties);
+        subscriber.onNext(Connectivity.create(context, networkState));
+      }
+
       @Override public void onAvailable(Network network) {
-        subscriber.onNext(Connectivity.create(context));
+        networkState.setNetwork(network);
+        networkState.setConnected(true);
+        subscriber.onNext(Connectivity.create(context, networkState));
       }
 
       @Override public void onLost(Network network) {
-        subscriber.onNext(Connectivity.create(context));
+        networkState.setNetwork(network);
+        networkState.setConnected(false);
+        subscriber.onNext(Connectivity.create(context, networkState));
       }
     };
   }

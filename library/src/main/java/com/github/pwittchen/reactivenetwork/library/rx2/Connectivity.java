@@ -17,10 +17,14 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+
+import com.github.pwittchen.reactivenetwork.library.rx2.info.NetworkState;
 
 /**
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.
@@ -40,6 +44,8 @@ public final class Connectivity {
   private String subTypeName; // NOPMD
   private String reason; // NOPMD
   private String extraInfo; // NOPMD
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  private NetworkState networkState;
 
   public static Connectivity create() {
     return builder().build();
@@ -48,6 +54,12 @@ public final class Connectivity {
   public static Connectivity create(@NonNull Context context) {
     Preconditions.checkNotNull(context, "context == null");
     return create(context, getConnectivityManager(context));
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  public static Connectivity create(@NonNull Context context, NetworkState networkState) {
+    Preconditions.checkNotNull(context, "context == null");
+    return create(context, getConnectivityManager(context), networkState);
   }
 
   private static ConnectivityManager getConnectivityManager(Context context) {
@@ -66,6 +78,18 @@ public final class Connectivity {
     return (networkInfo == null) ? create() : create(networkInfo);
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  protected static Connectivity create(@NonNull Context context, ConnectivityManager manager, NetworkState networkState) {
+    Preconditions.checkNotNull(context, "context == null");
+
+    if (manager == null) {
+      return create();
+    }
+    networkState.setNetworkCapabilities(manager.getNetworkCapabilities(networkState.getNetwork()));
+    networkState.setLinkProperties(manager.getLinkProperties(networkState.getNetwork()));
+    return create(networkState);
+  }
+
   private static Connectivity create(NetworkInfo networkInfo) {
     return new Builder()
         .state(networkInfo.getState())
@@ -82,9 +106,20 @@ public final class Connectivity {
         .build();
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  private static Connectivity create(NetworkState networkState) {
+    return new Builder()
+            .networkState(networkState)
+            .build();
+  }
+
   private Connectivity(Builder builder) {
-    state = builder.state;
-    detailedState = builder.detailedState;
+    if(Preconditions.isAtLeastAndroidLollipop()) {
+      networkState = builder.networkState;
+    } else {
+      state = builder.state;
+      detailedState = builder.detailedState;
+    }
     type = builder.type;
     subType = builder.subType;
     available = builder.available;
@@ -190,6 +225,11 @@ public final class Connectivity {
 
   public static Builder extraInfo(String extraInfo) {
     return builder().extraInfo(extraInfo);
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  public NetworkState getNetworkState() {
+    return networkState;
   }
 
   @Override public boolean equals(Object o) {
@@ -298,14 +338,17 @@ public final class Connectivity {
     private String subTypeName = "NONE"; // NOPMD
     private String reason = ""; // NOPMD
     private String extraInfo = ""; // NOPMD
+    private NetworkState networkState = new NetworkState();
 
     public Builder state(NetworkInfo.State state) {
       this.state = state;
+      this.networkState.setConnected(state == NetworkInfo.State.CONNECTED);
       return this;
     }
 
     public Builder detailedState(NetworkInfo.DetailedState detailedState) {
       this.detailedState = detailedState;
+      this.networkState.setConnected(detailedState == NetworkInfo.DetailedState.CONNECTED);
       return this;
     }
 
@@ -351,6 +394,11 @@ public final class Connectivity {
 
     public Builder extraInfo(String extraInfo) {
       this.extraInfo = extraInfo;
+      return this;
+    }
+
+    public Builder networkState(NetworkState networkState) {
+      this.networkState = networkState;
       return this;
     }
 
