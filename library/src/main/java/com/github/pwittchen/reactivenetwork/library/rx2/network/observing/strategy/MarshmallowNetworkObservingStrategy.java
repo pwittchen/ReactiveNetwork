@@ -87,22 +87,29 @@ public class MarshmallowNetworkObservingStrategy implements NetworkObservingStra
 
     //todo: fix logic of the stream below for the network state
 
-    return connectivitySubject.toFlowable(BackpressureStrategy.LATEST).doOnCancel(new Action() {
-      @Override public void run() {
-        tryToUnregisterCallback(manager);
-        tryToUnregisterReceiver(context);
-      }
-    }).doAfterNext(new Consumer<Connectivity>() {
-      @Override
-      public void accept(final Connectivity connectivity) {
-        lastConnectivity = connectivity;
-      }
-    }).flatMap(new Function<Connectivity, Publisher<Connectivity>>() {
-      @Override
-      public Publisher<Connectivity> apply(final Connectivity connectivity) {
-        return propagateAnyConnectedState(lastConnectivity, connectivity);
-      }
-    }).startWith(Connectivity.create(context)).distinctUntilChanged().toObservable();
+    return connectivitySubject
+        .toFlowable(BackpressureStrategy.LATEST)
+        .doOnCancel(new Action() {
+          @Override public void run() {
+            tryToUnregisterCallback(manager);
+            tryToUnregisterReceiver(context);
+          }
+        })
+        .doAfterNext(new Consumer<Connectivity>() {
+          @Override
+          public void accept(final Connectivity connectivity) {
+            lastConnectivity = connectivity;
+          }
+        })
+        .flatMap(new Function<Connectivity, Publisher<Connectivity>>() {
+          @Override
+          public Publisher<Connectivity> apply(final Connectivity connectivity) {
+            return propagateAnyConnectedState(lastConnectivity, connectivity);
+          }
+        })
+        .startWith(Connectivity.create(context))
+        //.distinctUntilChanged()
+        .toObservable();
   }
 
   //todo: fix logic of this method for the network state
@@ -111,33 +118,42 @@ public class MarshmallowNetworkObservingStrategy implements NetworkObservingStra
       final Connectivity last,
       final Connectivity current
   ) {
-    final boolean hasNetworkState
-        = last.networkState() != null
-        && current.networkState() != null;
+    //final boolean hasNetworkState
+    //    = last.networkState() != null
+    //    && current.networkState() != null;
+    //
+    //final boolean typeChanged = last.type() != current.type();
+    //
+    //boolean wasConnected;
+    //boolean isDisconnected;
+    //boolean isNotIdle;
+    //
+    //if (hasNetworkState) {
+    //  // handling new NetworkState API
+    //  wasConnected = last.networkState().isConnected();
+    //  isDisconnected = !current.networkState().isConnected();
+    //  isNotIdle = true;
+    //} else {
+    //  // handling legacy, deprecated NetworkInfo API
+    //  wasConnected = last.state() == NetworkInfo.State.CONNECTED;
+    //  isDisconnected = current.state() == NetworkInfo.State.DISCONNECTED;
+    //  isNotIdle = current.detailedState() != NetworkInfo.DetailedState.IDLE;
+    //}
+    //
+    //if (typeChanged && wasConnected && isDisconnected && isNotIdle) {
+    //  return Flowable.fromArray(current, last);
+    //} else {
+    //  return Flowable.fromArray(current);
+    //}
 
-    final boolean typeChanged = last.type() != current.type();
+    //todo: Use value below to verify if at least one connection is active.
+    // Consider storing it in a hashmap with current state and then use it for the future logic.
+    // We may receive onLost event for one type of network, while another one is connected,
+    // what may produce false-positive that network is lost. In such case, we need to produce
+    // onAvailable event for the remaining connected network(s).
+    //current.networkState().getNetwork().getNetworkHandle();
 
-    boolean wasConnected;
-    boolean isDisconnected;
-    boolean isNotIdle;
-
-    if (hasNetworkState) {
-      // handling new NetworkState API
-      wasConnected = last.networkState().isConnected();
-      isDisconnected = !current.networkState().isConnected();
-      isNotIdle = true;
-    } else {
-      // handling legacy, deprecated NetworkInfo API
-      wasConnected = last.state() == NetworkInfo.State.CONNECTED;
-      isDisconnected = current.state() == NetworkInfo.State.DISCONNECTED;
-      isNotIdle = current.detailedState() != NetworkInfo.DetailedState.IDLE;
-    }
-
-    if (typeChanged && wasConnected && isDisconnected && isNotIdle) {
-      return Flowable.fromArray(current, last);
-    } else {
-      return Flowable.fromArray(current);
-    }
+    return Flowable.fromArray(current);
   }
 
   protected void registerIdleReceiver(final Context context) {
@@ -219,7 +235,6 @@ public class MarshmallowNetworkObservingStrategy implements NetworkObservingStra
       }
 
       @Override public void onUnavailable() {
-        super.onUnavailable();
         networkState.setConnected(false);
         onNext(Connectivity.create(context, networkState));
       }
