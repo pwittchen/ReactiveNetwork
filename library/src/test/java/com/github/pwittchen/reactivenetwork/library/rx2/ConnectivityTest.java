@@ -23,16 +23,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@SuppressWarnings("NullAway") public class ConnectivityTest {
+@SuppressWarnings("NullAway")
+public class ConnectivityTest {
   private static final String TYPE_NAME_WIFI = "WIFI";
   private static final String TYPE_NAME_MOBILE = "MOBILE";
   private static final String TYPE_NAME_NONE = "NONE";
 
-  @Test public void shouldCreateConnectivity() {
+  @Test @Config(sdk = 19) public void shouldCreateConnectivity() {
     // when
     Connectivity connectivity = Connectivity.create();
 
@@ -66,7 +68,8 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(shouldBeEqualToGivenStatus).isTrue();
   }
 
-  @Test public void stateShouldBeEqualToOneOfGivenMultipleValues() throws Exception {
+  @Test @Config(sdk = 19)
+  public void stateShouldBeEqualToOneOfGivenMultipleValues() throws Exception {
     // given
     final Connectivity connectivity = Connectivity.state(NetworkInfo.State.CONNECTING)
         .type(ConnectivityManager.TYPE_WIFI)
@@ -174,7 +177,7 @@ import static com.google.common.truth.Truth.assertThat;
     // an exception is thrown
   }
 
-  @Test public void shouldReturnProperToStringValue() {
+  @Test @Config(sdk = 19) public void shouldReturnProperToStringValue() {
     // given
     final String expectedToString = "Connectivity{"
         + "state=DISCONNECTED, "
@@ -247,7 +250,8 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(outputTypes).isEqualTo(expectedOutputTypes);
   }
 
-  @Test public void shouldCreateConnectivityWithBuilder() {
+  @Test @Config(sdk = 19)
+  public void shouldCreateConnectivityWithBuilder() {
     // given
     NetworkInfo.State state = NetworkInfo.State.CONNECTED;
     NetworkInfo.DetailedState detailedState = NetworkInfo.DetailedState.CONNECTED;
@@ -321,7 +325,8 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(isAnotherConnectivityTheSame).isFalse();
   }
 
-  @Test public void shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() {
+  @Test @Config(sdk = 19)
+  public void shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() {
     // given
     final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
     final ConnectivityManager connectivityManager = null;

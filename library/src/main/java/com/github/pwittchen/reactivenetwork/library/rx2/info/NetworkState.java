@@ -3,16 +3,17 @@ package com.github.pwittchen.reactivenetwork.library.rx2.info;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import androidx.annotation.Nullable;
+import com.jakewharton.nopen.annotation.Open;
 
-/**
- * NetworkState data object
- */
+@Open
 public class NetworkState {
-    private boolean isConnected = false;
-    private Network network = null;
-    private NetworkCapabilities networkCapabilities = null;
-    private LinkProperties linkProperties = null;
+    @SuppressWarnings("PMD") private boolean isConnected = false;
+    @Nullable private Network network = null;
+    @Nullable private NetworkCapabilities networkCapabilities = null;
+    @Nullable private LinkProperties linkProperties = null;
 
+    @SuppressWarnings("PMD")
     public boolean isConnected() {
         return isConnected;
     }
@@ -21,27 +22,27 @@ public class NetworkState {
         isConnected = connected;
     }
 
-    public Network getNetwork() {
+    @Nullable public Network getNetwork() {
         return network;
     }
 
-    public void setNetwork(Network network) {
+    public void setNetwork(@Nullable Network network) {
         this.network = network;
     }
 
-    public NetworkCapabilities getNetworkCapabilities() {
+    @Nullable public NetworkCapabilities getNetworkCapabilities() {
         return networkCapabilities;
     }
 
-    public void setNetworkCapabilities(NetworkCapabilities networkCapabilities) {
+    public void setNetworkCapabilities(@Nullable NetworkCapabilities networkCapabilities) {
         this.networkCapabilities = networkCapabilities;
     }
 
-    public LinkProperties getLinkProperties() {
+    @Nullable public LinkProperties getLinkProperties() {
         return linkProperties;
     }
 
-    public void setLinkProperties(LinkProperties linkProperties) {
+    public void setLinkProperties(@Nullable LinkProperties linkProperties) {
         this.linkProperties = linkProperties;
     }
 }

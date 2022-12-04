@@ -17,7 +17,6 @@ package com.github.pwittchen.reactivenetwork.library.rx2;
 
 import android.app.Application;
 import android.content.Context;
-import android.net.NetworkInfo;
 import androidx.annotation.NonNull;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings;
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingStrategy;
@@ -34,13 +33,12 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowConnectivityManager;
 
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(shadows = ShadowConnectivityManager.class)
-@SuppressWarnings("NullAway") public class ReactiveNetworkTest {
+@SuppressWarnings("NullAway")
+public class ReactiveNetworkTest {
 
   private static final String TEST_VALID_HOST = "www.test.com";
   private static final int TEST_VALID_PORT = 80;
@@ -77,10 +75,6 @@ import static com.google.common.truth.Truth.assertThat;
   private void networkConnectivityObservableShouldNotBeNull() {
     // given
     final Application context = RuntimeEnvironment.getApplication();
-    //final ConnectivityManager connectivityManagerMock = (ConnectivityManager) context
-    //    .getSystemService(Context.CONNECTIVITY_SERVICE);
-    //
-    //shadowOf(connectivityManagerMock);
 
     // when
     Observable<Connectivity> observable;
@@ -115,7 +109,8 @@ import static com.google.common.truth.Truth.assertThat;
     assertThat(observable).isNotNull();
   }
 
-  @Test public void observeNetworkConnectivityShouldBeConnectedOnStartWhenNetworkIsAvailable() {
+  @Test
+  public void observeNetworkConnectivityShouldBeConnectedOnStartWhenNetworkIsAvailable() {
     // given
     final Application context = RuntimeEnvironment.getApplication();
 
@@ -123,7 +118,8 @@ import static com.google.common.truth.Truth.assertThat;
     Connectivity connectivity = ReactiveNetwork.observeNetworkConnectivity(context).blockingFirst();
 
     // then
-    assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
+    assertThat(connectivity.networkState()).isNotNull();
+    assertThat(connectivity.networkState().isConnected()).isTrue();
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -142,7 +138,7 @@ import static com.google.common.truth.Truth.assertThat;
   @Test(expected = IllegalArgumentException.class)
   public void observeNetworkConnectivityShouldThrowAnExceptionForNullStrategy() {
     // given
-    final Context context = RuntimeEnvironment.application;
+    final Context context = RuntimeEnvironment.getApplication();
     final NetworkObservingStrategy strategy = null;
 
     // when

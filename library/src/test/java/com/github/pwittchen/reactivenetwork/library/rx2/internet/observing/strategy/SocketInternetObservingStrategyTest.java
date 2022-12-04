@@ -37,7 +37,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@SuppressWarnings({ "PMD", "NullAway" }) public class SocketInternetObservingStrategyTest {
+@SuppressWarnings({ "PMD", "NullAway" })
+public class SocketInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
   private static final int INTERVAL_IN_MS = 2000;

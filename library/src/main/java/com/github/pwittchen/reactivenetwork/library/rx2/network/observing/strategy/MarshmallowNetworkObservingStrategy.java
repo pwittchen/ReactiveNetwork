@@ -49,18 +49,19 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
  * Network observing strategy for devices with Android Marshmallow (API 23) or higher.
  * Uses Network Callback API and handles Doze mode.
  */
-@Open @TargetApi(23) public class MarshmallowNetworkObservingStrategy
-    implements NetworkObservingStrategy {
+@Open
+@TargetApi(23)
+public class MarshmallowNetworkObservingStrategy implements NetworkObservingStrategy {
   protected static final String ERROR_MSG_NETWORK_CALLBACK =
       "could not unregister network callback";
   protected static final String ERROR_MSG_RECEIVER = "could not unregister receiver";
-
   @SuppressWarnings("NullAway") // it has to be initialized in the Observable due to Context
   private ConnectivityManager.NetworkCallback networkCallback;
   private final Subject<Connectivity> connectivitySubject;
   private final BroadcastReceiver idleReceiver;
   private Connectivity lastConnectivity = Connectivity.create();
-  private NetworkState networkState = new NetworkState();
+
+  @SuppressWarnings("FieldMayBeFinal") private NetworkState networkState = new NetworkState();
 
   @SuppressWarnings("NullAway") // networkCallback cannot be initialized here
   public MarshmallowNetworkObservingStrategy() {
@@ -76,11 +77,15 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     registerIdleReceiver(context);
 
     final NetworkRequest request =
-        new NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        new NetworkRequest
+            .Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
             .build();
 
     manager.registerNetworkCallback(request, networkCallback);
+
+    //todo: fix logic of the stream below for the network state
 
     return connectivitySubject.toFlowable(BackpressureStrategy.LATEST).doOnCancel(new Action() {
       @Override public void run() {
@@ -100,12 +105,33 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
     }).startWith(Connectivity.create(context)).distinctUntilChanged().toObservable();
   }
 
-  protected Publisher<Connectivity> propagateAnyConnectedState(final Connectivity last,
-      final Connectivity current) {
+  //todo: fix logic of this method for the network state
+  @SuppressWarnings("NullAway")
+  protected Publisher<Connectivity> propagateAnyConnectedState(
+      final Connectivity last,
+      final Connectivity current
+  ) {
+    final boolean hasNetworkState
+        = last.networkState() != null
+        && current.networkState() != null;
+
     final boolean typeChanged = last.type() != current.type();
-    final boolean wasConnected = last.state() == NetworkInfo.State.CONNECTED;
-    final boolean isDisconnected = current.state() == NetworkInfo.State.DISCONNECTED;
-    final boolean isNotIdle = current.detailedState() != NetworkInfo.DetailedState.IDLE;
+
+    boolean wasConnected;
+    boolean isDisconnected;
+    boolean isNotIdle;
+
+    if (hasNetworkState) {
+      // handling new NetworkState API
+      wasConnected = last.networkState().isConnected();
+      isDisconnected = !current.networkState().isConnected();
+      isNotIdle = true;
+    } else {
+      // handling legacy, deprecated NetworkInfo API
+      wasConnected = last.state() == NetworkInfo.State.CONNECTED;
+      isDisconnected = current.state() == NetworkInfo.State.DISCONNECTED;
+      isNotIdle = current.detailedState() != NetworkInfo.DetailedState.IDLE;
+    }
 
     if (typeChanged && wasConnected && isDisconnected && isNotIdle) {
       return Flowable.fromArray(current, last);
@@ -161,27 +187,39 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
   protected ConnectivityManager.NetworkCallback createNetworkCallback(final Context context) {
     return new ConnectivityManager.NetworkCallback() {
       @Override
-      public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
+      public void onCapabilitiesChanged(
+          @NonNull Network network,
+          @NonNull NetworkCapabilities networkCapabilities
+      ) {
         networkState.setNetwork(network);
         networkState.setNetworkCapabilities(networkCapabilities);
         onNext(Connectivity.create(context, networkState));
       }
 
       @Override
-      public void onLinkPropertiesChanged(@NonNull Network network, @NonNull LinkProperties linkProperties) {
+      public void onLinkPropertiesChanged(
+          @NonNull Network network,
+          @NonNull LinkProperties linkProperties
+      ) {
         networkState.setNetwork(network);
         networkState.setLinkProperties(linkProperties);
         onNext(Connectivity.create(context, networkState));
       }
 
-      @Override public void onAvailable(Network network) {
+      @Override public void onAvailable(@NonNull Network network) {
         networkState.setNetwork(network);
         networkState.setConnected(true);
         onNext(Connectivity.create(context, networkState));
       }
 
-      @Override public void onLost(Network network) {
+      @Override public void onLost(@NonNull Network network) {
         networkState.setNetwork(network);
+        networkState.setConnected(false);
+        onNext(Connectivity.create(context, networkState));
+      }
+
+      @Override public void onUnavailable() {
+        super.onUnavailable();
         networkState.setConnected(false);
         onNext(Connectivity.create(context, networkState));
       }

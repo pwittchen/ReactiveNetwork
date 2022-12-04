@@ -40,6 +40,7 @@ import org.mockito.junit.MockitoRule;
 import org.reactivestreams.Publisher;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,7 +51,9 @@ import static org.mockito.Mockito.when;
 
 // we're suppressing PMD warnings because we want static imports in tests
 @RunWith(RobolectricTestRunner.class)
-@SuppressWarnings({ "PMD", "NullAway" }) public class MarshmallowNetworkObservingStrategyTest {
+@SuppressWarnings({ "PMD", "NullAway" })
+@Config(sdk = 23)
+public class MarshmallowNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
   @Spy private MarshmallowNetworkObservingStrategy strategy =
@@ -75,7 +78,8 @@ import static org.mockito.Mockito.when;
     Connectivity connectivity = strategy.observeNetworkConnectivity(context).blockingFirst();
 
     // then
-    assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
+    assertThat(connectivity.networkState()).isNotNull();
+    assertThat(connectivity.networkState().isConnected()).isTrue();
   }
 
   @Test public void shouldStopObservingConnectivity() {
@@ -269,32 +273,34 @@ import static org.mockito.Mockito.when;
     verify(strategy).onError(MarshmallowNetworkObservingStrategy.ERROR_MSG_RECEIVER, exception);
   }
 
-  @Test public void shouldPropagateCurrentAndLastConnectivityWhenSwitchingFromWifiToMobile() {
+  @Test @Config(sdk = 23)
+  public void shouldPropagateCurrentAndLastConnectivityWhenSwitchingFromWifiToMobileApi23() {
     final int lastType = ConnectivityManager.TYPE_WIFI;
     final int currentType = ConnectivityManager.TYPE_MOBILE;
-
     assertThatConnectivityIsPropagatedDuringChange(lastType, currentType);
   }
 
-  @Test public void shouldPropagateCurrentAndLastConnectivityWhenSwitchingFromMobileToWifi() {
+  @Test @Config(sdk = 23)
+  public void shouldPropagateCurrentAndLastConnectivityWhenSwitchingFromMobileToWifiApi23() {
     final int lastType = ConnectivityManager.TYPE_MOBILE;
     final int currentType = ConnectivityManager.TYPE_WIFI;
-
     assertThatConnectivityIsPropagatedDuringChange(lastType, currentType);
   }
 
   private void assertThatConnectivityIsPropagatedDuringChange(
-      final int lastType, final int currentType) {
+      final int lastType, final int currentType
+  ) {
     // given
     final Connectivity last = new Connectivity.Builder()
         .type(lastType)
         .state(NetworkInfo.State.CONNECTED)
+        .detailedState(NetworkInfo.DetailedState.CONNECTED)
         .build();
 
     final Connectivity current = new Connectivity.Builder()
         .type(currentType)
         .state(NetworkInfo.State.DISCONNECTED)
-        .detailedState(NetworkInfo.DetailedState.CONNECTED)
+        .detailedState(NetworkInfo.DetailedState.DISCONNECTED)
         .build();
 
     // when
@@ -366,29 +372,6 @@ import static org.mockito.Mockito.when;
         .type(ConnectivityManager.TYPE_MOBILE)
         .state(NetworkInfo.State.CONNECTED)
         .detailedState(NetworkInfo.DetailedState.CONNECTED)
-        .build();
-
-    // when
-    final Publisher<Connectivity> publisher = strategy.propagateAnyConnectedState(last, current);
-
-    // then
-    final TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
-    publisher.subscribe(testSubscriber);
-    testSubscriber.assertValueCount(1);
-    testSubscriber.assertValues(current);
-  }
-
-  @Test public void shouldNotPropagateLastConnectivityWhenIsIdle() {
-    // given
-    final Connectivity last = new Connectivity.Builder()
-        .type(ConnectivityManager.TYPE_WIFI)
-        .state(NetworkInfo.State.CONNECTED)
-        .build();
-
-    final Connectivity current = new Connectivity.Builder()
-        .type(ConnectivityManager.TYPE_MOBILE)
-        .state(NetworkInfo.State.DISCONNECTED)
-        .detailedState(NetworkInfo.DetailedState.IDLE)
         .build();
 
     // when
