@@ -44,7 +44,7 @@ import static org.mockito.Mockito.verify;
   @Test public void shouldObserveConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
-    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
 
     // when
     Connectivity connectivity = strategy.observeNetworkConnectivity(context).blockingFirst();
@@ -56,7 +56,7 @@ import static org.mockito.Mockito.verify;
   @Test public void shouldStopObservingConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
-    final Application context = RuntimeEnvironment.application;
+    final Application context = RuntimeEnvironment.getApplication();
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
     final TestObserver<Connectivity> observer = new TestObserver<>();
 

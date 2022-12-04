@@ -5,20 +5,20 @@ apply plugin: 'io.codearte.nexus-staging'
 ext {
   minSdkVersion = 14
   minSdkVersionApps = 23
-  compileSdkVersion = 28
+  compileSdkVersion = 29
   buildToolsVersion = '28.0.3'
   gradleVersion = '4.6'
   kotlinVersion = '1.4.0'
   detektVersion = '1.0.0.RC6-1'
 }
 
-ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.19',
+ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.21',
             rxandroid2        : 'io.reactivex.rxjava2:rxandroid:2.1.1',
             annotation        : 'androidx.annotation:annotation:1.1.0',
             appcompat         : 'androidx.appcompat:appcompat:1.2.0',
             junit             : 'junit:junit:4.13',
             truth             : 'com.google.truth:truth:1.0.1',
-            robolectric       : 'org.robolectric:robolectric:4.3.1',
+            robolectric       : 'org.robolectric:robolectric:4.9',
             mockitocore       : 'org.mockito:mockito-core:3.5.2',
             nullaway          : 'com.uber.nullaway:nullaway:0.8.0',
             errorprone        : 'com.google.errorprone:error_prone_core:2.3.4',
@@ -31,14 +31,13 @@ ext.deps = [rxjava2           : 'io.reactivex.rxjava2:rxjava:2.2.19',
 buildscript {
   repositories {
     google()
-    jcenter()
     mavenCentral()
     maven {
       url 'https://plugins.gradle.org/m2/'
     }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.6.3'
+    classpath 'com.android.tools.build:gradle:3.6.4'
     classpath('com.hiya:jacoco-android:0.2') {
       exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
@@ -54,7 +53,6 @@ buildscript {
 allprojects {
   repositories {
     google()
-    jcenter()
     mavenCentral()
     maven {
       url 'https://plugins.gradle.org/m2/'

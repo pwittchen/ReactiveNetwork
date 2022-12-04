@@ -15,6 +15,7 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,7 +23,6 @@ import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,7 +33,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -50,17 +49,16 @@ import static org.mockito.Mockito.verify;
       new PreLollipopNetworkObservingStrategy();
   @Mock private BroadcastReceiver broadcastReceiver;
 
-  @Test @SuppressWarnings("CheckReturnValue") public void shouldObserveConnectivity() {
+  @SuppressLint("CheckResult") @Test @SuppressWarnings("CheckReturnValue")
+  public void shouldObserveConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
     final Context context = RuntimeEnvironment.application.getApplicationContext();
 
     // when
-    strategy.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
-      @Override public void accept(Connectivity connectivity) throws Exception {
-        // then
-        assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
-      }
+    strategy.observeNetworkConnectivity(context).subscribe(connectivity -> {
+      // then
+      assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
     });
   }
 
@@ -94,7 +92,7 @@ import static org.mockito.Mockito.verify;
   @Test public void shouldTryToUnregisterReceiver() {
     // given
     final PreLollipopNetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
-    final Application context = spy(RuntimeEnvironment.application);
+    final Application context = spy(RuntimeEnvironment.getApplication());
 
     // when
     strategy.tryToUnregisterReceiver(context, broadcastReceiver);
@@ -105,7 +103,7 @@ import static org.mockito.Mockito.verify;
 
   @Test public void shouldTryToUnregisterReceiverAfterDispose() {
     // given
-    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
     final TestObserver<Connectivity> observer = new TestObserver<>();
 
     // when

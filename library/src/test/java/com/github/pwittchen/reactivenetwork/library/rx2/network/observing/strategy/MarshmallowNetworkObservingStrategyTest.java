@@ -64,12 +64,12 @@ import static org.mockito.Mockito.when;
   @Spy private Context context;
 
   @Before public void setUp() {
-    context = RuntimeEnvironment.application.getApplicationContext();
+    context = RuntimeEnvironment.getApplication().getApplicationContext();
   }
 
   @Test public void shouldObserveConnectivity() {
     // given
-    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
 
     // when
     Connectivity connectivity = strategy.observeNetworkConnectivity(context).blockingFirst();

@@ -73,6 +73,7 @@ import static com.google.common.truth.Truth.assertThat;
         .typeName(TYPE_NAME_WIFI)
         .build();
 
+    //noinspection CStyleArrayDeclaration
     final NetworkInfo.State states[] =
         { NetworkInfo.State.CONNECTED, NetworkInfo.State.CONNECTING };
 
@@ -109,6 +110,7 @@ import static com.google.common.truth.Truth.assertThat;
         .build();
 
     // note that unknown type is added initially by the ConnectivityPredicate#hasType method
+    //noinspection CStyleArrayDeclaration
     final int givenTypes[] = { connectivity.type(), Connectivity.UNKNOWN_TYPE };
 
     // when
@@ -127,6 +129,7 @@ import static com.google.common.truth.Truth.assertThat;
         .build();
 
     // note that unknown type is added initially by the ConnectivityPredicate#hasType method
+    //noinspection CStyleArrayDeclaration
     final int givenTypes[] = {
         ConnectivityManager.TYPE_WIFI, ConnectivityManager.TYPE_MOBILE, Connectivity.UNKNOWN_TYPE
     };
@@ -147,6 +150,7 @@ import static com.google.common.truth.Truth.assertThat;
         .build();
 
     // note that unknown type is added initially by the ConnectivityPredicate#hasType method
+    //noinspection CStyleArrayDeclaration
     final int givenTypes[] = { ConnectivityManager.TYPE_MOBILE, Connectivity.UNKNOWN_TYPE };
 
     // when
@@ -163,6 +167,7 @@ import static com.google.common.truth.Truth.assertThat;
     final Context context = null;
 
     // when
+    //noinspection ConstantConditions
     Connectivity.create(context);
 
     // then
@@ -318,10 +323,11 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() {
     // given
-    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
     final ConnectivityManager connectivityManager = null;
 
     // when
+    @SuppressWarnings("ConstantConditions")
     Connectivity connectivity = Connectivity.create(context, connectivityManager);
 
     // then

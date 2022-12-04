@@ -49,6 +49,7 @@ android {
       jacoco {
         includeNoLocationClasses = true
       }
+      systemProperty 'robolectric.dependency.repo.url', 'https://repo1.maven.org/maven2'
     }
   }
 
@@ -65,6 +66,7 @@ android {
     api deps.rxandroid2
     implementation deps.annotation
 
+    testImplementation project(path: ':library')
     testImplementation deps.junit
     testImplementation deps.truth
     testImplementation deps.robolectric
@@ -92,5 +94,6 @@ android {
 
   tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
   }
 }
