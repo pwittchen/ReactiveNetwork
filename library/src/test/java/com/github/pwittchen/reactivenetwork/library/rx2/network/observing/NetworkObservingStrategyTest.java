@@ -15,17 +15,17 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2.network.observing;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.LollipopNetworkObservingStrategy;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy.PreLollipopNetworkObservingStrategy;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
@@ -47,17 +47,19 @@ import static com.google.common.truth.Truth.assertThat;
     assertThatIsConnected(strategy);
   }
 
-  @SuppressWarnings("CheckReturnValue")
+  @SuppressLint("CheckResult")
   private void assertThatIsConnected(NetworkObservingStrategy strategy) {
     // given
-    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
 
     //when
-    strategy.observeNetworkConnectivity(context).subscribe(new Consumer<Connectivity>() {
-      @Override public void accept(Connectivity connectivity) throws Exception {
-        // then
-        assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
-      }
-    });
+    Disposable disposable = strategy.observeNetworkConnectivity(context)
+        .subscribe(
+            (@SuppressLint("CheckResult") Connectivity connectivity) -> {
+              // then
+              assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
+            });
+
+    disposable.dispose();
   }
 }

@@ -29,16 +29,17 @@ import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strate
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowConnectivityManager;
 
 import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(shadows = ShadowConnectivityManager.class)
 @SuppressWarnings("NullAway") public class ReactiveNetworkTest {
 
   private static final String TEST_VALID_HOST = "www.test.com";
@@ -75,7 +76,11 @@ import static com.google.common.truth.Truth.assertThat;
 
   private void networkConnectivityObservableShouldNotBeNull() {
     // given
-    final Context context = RuntimeEnvironment.application;
+    final Application context = RuntimeEnvironment.getApplication();
+    //final ConnectivityManager connectivityManagerMock = (ConnectivityManager) context
+    //    .getSystemService(Context.CONNECTIVITY_SERVICE);
+    //
+    //shadowOf(connectivityManagerMock);
 
     // when
     Observable<Connectivity> observable;
@@ -87,7 +92,8 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void observeNetworkConnectivityWithStrategyShouldNotBeNull() {
     // given
-    final Context context = RuntimeEnvironment.application;
+    final Application context = RuntimeEnvironment.getApplication();
+
     NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
     // when
@@ -111,7 +117,7 @@ import static com.google.common.truth.Truth.assertThat;
 
   @Test public void observeNetworkConnectivityShouldBeConnectedOnStartWhenNetworkIsAvailable() {
     // given
-    final Application context = RuntimeEnvironment.application;
+    final Application context = RuntimeEnvironment.getApplication();
 
     // when
     Connectivity connectivity = ReactiveNetwork.observeNetworkConnectivity(context).blockingFirst();
@@ -127,6 +133,7 @@ import static com.google.common.truth.Truth.assertThat;
     final NetworkObservingStrategy strategy = new LollipopNetworkObservingStrategy();
 
     // when
+    //noinspection ConstantConditions
     ReactiveNetwork.observeNetworkConnectivity(context, strategy);
 
     // then an exception is thrown
@@ -151,6 +158,7 @@ import static com.google.common.truth.Truth.assertThat;
     final ErrorHandler errorHandler = new DefaultErrorHandler();
 
     // when
+    //noinspection ConstantConditions
     ReactiveNetwork.observeInternetConnectivity(strategy, TEST_VALID_INITIAL_INTERVAL,
         TEST_VALID_INTERVAL, TEST_VALID_HOST, TEST_VALID_PORT, TEST_VALID_TIMEOUT,
         TEST_VALID_HTTP_RESPONSE, errorHandler);
@@ -265,11 +273,7 @@ import static com.google.common.truth.Truth.assertThat;
 
       @Override public Single<Boolean> checkInternetConnectivity(String host, int port,
           int timeoutInMs, int httpResponse, ErrorHandler errorHandler) {
-        return Single.fromCallable(new Callable<Boolean>() {
-          @Override public Boolean call() {
-            return true;
-          }
-        });
+        return Single.fromCallable(() -> true);
       }
 
       @Override public String getDefaultPingHost() {
@@ -279,9 +283,7 @@ import static com.google.common.truth.Truth.assertThat;
   }
 
   @NonNull private ErrorHandler createTestErrorHandler() {
-    return new ErrorHandler() {
-      @Override public void handleError(Exception exception, String message) {
-      }
+    return (exception, message) -> {
     };
   }
 
