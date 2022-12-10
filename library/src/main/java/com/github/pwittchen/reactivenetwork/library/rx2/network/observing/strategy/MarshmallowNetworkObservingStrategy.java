@@ -24,26 +24,24 @@ import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.PowerManager;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.info.NetworkState;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import com.jakewharton.nopen.annotation.Open;
 import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
-import org.reactivestreams.Publisher;
-
+import java.util.HashMap;
+import java.util.Map;
 import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.LOG_TAG;
+
+//todo: move this code to the new QObservingStrategy and keep this unchanged (like in the RxJava2.x branch)
 
 /**
  * Network observing strategy for devices with Android Marshmallow (API 23) or higher.
@@ -52,16 +50,13 @@ import static com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork.L
 @Open
 @TargetApi(23)
 public class MarshmallowNetworkObservingStrategy implements NetworkObservingStrategy {
-  protected static final String ERROR_MSG_NETWORK_CALLBACK =
-      "could not unregister network callback";
+  protected static final String ERROR_MSG_NETWORK_CALLBACK = "could not unregister network callback";
   protected static final String ERROR_MSG_RECEIVER = "could not unregister receiver";
   @SuppressWarnings("NullAway") // it has to be initialized in the Observable due to Context
   private ConnectivityManager.NetworkCallback networkCallback;
   private final Subject<Connectivity> connectivitySubject;
   private final BroadcastReceiver idleReceiver;
-  private Connectivity lastConnectivity = Connectivity.create();
-
-  @SuppressWarnings("FieldMayBeFinal") private NetworkState networkState = new NetworkState();
+  private final Map<String, NetworkState> availableNetworks = new HashMap<>();
 
   @SuppressWarnings("NullAway") // networkCallback cannot be initialized here
   public MarshmallowNetworkObservingStrategy() {
@@ -85,75 +80,14 @@ public class MarshmallowNetworkObservingStrategy implements NetworkObservingStra
 
     manager.registerNetworkCallback(request, networkCallback);
 
-    //todo: fix logic of the stream below for the network state
-
     return connectivitySubject
         .toFlowable(BackpressureStrategy.LATEST)
-        .doOnCancel(new Action() {
-          @Override public void run() {
-            tryToUnregisterCallback(manager);
-            tryToUnregisterReceiver(context);
-          }
-        })
-        .doAfterNext(new Consumer<Connectivity>() {
-          @Override
-          public void accept(final Connectivity connectivity) {
-            lastConnectivity = connectivity;
-          }
-        })
-        .flatMap(new Function<Connectivity, Publisher<Connectivity>>() {
-          @Override
-          public Publisher<Connectivity> apply(final Connectivity connectivity) {
-            return propagateAnyConnectedState(lastConnectivity, connectivity);
-          }
+        .doOnCancel(() -> {
+          tryToUnregisterCallback(manager);
+          tryToUnregisterReceiver(context);
         })
         .startWith(Connectivity.create(context))
-        //.distinctUntilChanged()
         .toObservable();
-  }
-
-  //todo: fix logic of this method for the network state
-  @SuppressWarnings("NullAway")
-  protected Publisher<Connectivity> propagateAnyConnectedState(
-      final Connectivity last,
-      final Connectivity current
-  ) {
-    //final boolean hasNetworkState
-    //    = last.networkState() != null
-    //    && current.networkState() != null;
-    //
-    //final boolean typeChanged = last.type() != current.type();
-    //
-    //boolean wasConnected;
-    //boolean isDisconnected;
-    //boolean isNotIdle;
-    //
-    //if (hasNetworkState) {
-    //  // handling new NetworkState API
-    //  wasConnected = last.networkState().isConnected();
-    //  isDisconnected = !current.networkState().isConnected();
-    //  isNotIdle = true;
-    //} else {
-    //  // handling legacy, deprecated NetworkInfo API
-    //  wasConnected = last.state() == NetworkInfo.State.CONNECTED;
-    //  isDisconnected = current.state() == NetworkInfo.State.DISCONNECTED;
-    //  isNotIdle = current.detailedState() != NetworkInfo.DetailedState.IDLE;
-    //}
-    //
-    //if (typeChanged && wasConnected && isDisconnected && isNotIdle) {
-    //  return Flowable.fromArray(current, last);
-    //} else {
-    //  return Flowable.fromArray(current);
-    //}
-
-    //todo: Use value below to verify if at least one connection is active.
-    // Consider storing it in a hashmap with current state and then use it for the future logic.
-    // We may receive onLost event for one type of network, while another one is connected,
-    // what may produce false-positive that network is lost. In such case, we need to produce
-    // onAvailable event for the remaining connected network(s).
-    //current.networkState().getNetwork().getNetworkHandle();
-
-    return Flowable.fromArray(current);
   }
 
   protected void registerIdleReceiver(final Context context) {
@@ -207,8 +141,10 @@ public class MarshmallowNetworkObservingStrategy implements NetworkObservingStra
           @NonNull Network network,
           @NonNull NetworkCapabilities networkCapabilities
       ) {
+        final NetworkState networkState = getOrCreateState(network);
         networkState.setNetwork(network);
         networkState.setNetworkCapabilities(networkCapabilities);
+        saveState(network, networkState);
         onNext(Connectivity.create(context, networkState));
       }
 
@@ -217,26 +153,67 @@ public class MarshmallowNetworkObservingStrategy implements NetworkObservingStra
           @NonNull Network network,
           @NonNull LinkProperties linkProperties
       ) {
+        final NetworkState networkState = getOrCreateState(network);
         networkState.setNetwork(network);
         networkState.setLinkProperties(linkProperties);
+        saveState(network, networkState);
         onNext(Connectivity.create(context, networkState));
       }
 
       @Override public void onAvailable(@NonNull Network network) {
+        final NetworkState networkState = getOrCreateState(network);
         networkState.setNetwork(network);
         networkState.setConnected(true);
+        saveState(network, networkState);
         onNext(Connectivity.create(context, networkState));
       }
 
       @Override public void onLost(@NonNull Network network) {
-        networkState.setNetwork(network);
-        networkState.setConnected(false);
-        onNext(Connectivity.create(context, networkState));
+        removeState(network);
+        onNext(Connectivity.create(context, createDisconnectedState()));
+
+        final NetworkState lastAvailableState = getLastAvailableStateIfExists();
+        if (lastAvailableState != null) {
+          onNext(Connectivity.create(context, lastAvailableState));
+        }
       }
 
       @Override public void onUnavailable() {
+        onNext(Connectivity.create(context, createDisconnectedState()));
+      }
+
+      @NonNull private NetworkState getOrCreateState(@NonNull final Network network) {
+        NetworkState networkState = availableNetworks.get(network.toString());
+        if (networkState == null) {
+          networkState = new NetworkState();
+        }
+        return networkState;
+      }
+
+      @NonNull private NetworkState createDisconnectedState() {
+        final NetworkState networkState = new NetworkState();
+        networkState.setNetwork(null);
         networkState.setConnected(false);
-        onNext(Connectivity.create(context, networkState));
+        networkState.setLinkProperties(null);
+        networkState.setNetworkCapabilities(null);
+        return networkState;
+      }
+
+      @Nullable private NetworkState getLastAvailableStateIfExists() {
+        if (!availableNetworks.isEmpty()) {
+          for (Map.Entry<String, NetworkState> entry : availableNetworks.entrySet()) {
+            return entry.getValue();
+          }
+        }
+        return null;
+      }
+
+      private void saveState(@NonNull Network network, NetworkState networkState) {
+        availableNetworks.put(network.toString(), networkState);
+      }
+
+      private void removeState(@NonNull Network network) {
+        availableNetworks.remove(network.toString());
       }
     };
   }
