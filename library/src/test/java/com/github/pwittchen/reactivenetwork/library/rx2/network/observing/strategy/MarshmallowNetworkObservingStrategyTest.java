@@ -54,11 +54,8 @@ import static org.mockito.Mockito.when;
 @SuppressWarnings({ "PMD", "NullAway" })
 @Config(sdk = 23)
 public class MarshmallowNetworkObservingStrategyTest {
-
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private MarshmallowNetworkObservingStrategy strategy =
-      new MarshmallowNetworkObservingStrategy();
-
+  @Spy private MarshmallowNetworkObservingStrategy strategy = new MarshmallowNetworkObservingStrategy();
   @Mock private PowerManager powerManager;
   @Mock private ConnectivityManager connectivityManager;
   @Mock private Context contextMock;
@@ -249,15 +246,15 @@ public class MarshmallowNetworkObservingStrategyTest {
     // given
     strategy.observeNetworkConnectivity(context);
     final IllegalArgumentException exception = new IllegalArgumentException();
-    doThrow(exception).when(connectivityManager)
-        .unregisterNetworkCallback(any(ConnectivityManager.NetworkCallback.class));
+    doThrow(exception).when(connectivityManager).unregisterNetworkCallback(
+        any(ConnectivityManager.NetworkCallback.class)
+    );
 
     // when
     strategy.tryToUnregisterCallback(connectivityManager);
 
     // then
-    verify(strategy).onError(MarshmallowNetworkObservingStrategy.ERROR_MSG_NETWORK_CALLBACK,
-        exception);
+    verify(strategy).onError(MarshmallowNetworkObservingStrategy.ERROR_MSG_NETWORK_CALLBACK, exception);
   }
 
   @Test public void shouldHandleErrorWhileTryingToUnregisterReceiver() {
