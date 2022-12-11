@@ -15,11 +15,9 @@
  */
 package com.github.pwittchen.reactivenetwork.library.rx2.network.observing.strategy;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.net.NetworkInfo;
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity;
 import com.github.pwittchen.reactivenetwork.library.rx2.network.observing.NetworkObservingStrategy;
 import io.reactivex.Observable;
@@ -33,6 +31,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
+
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -42,30 +42,19 @@ import static org.mockito.Mockito.verify;
 
 // We are suppressing PMD here because we want static imports in unit tests
 @RunWith(RobolectricTestRunner.class)
-@SuppressWarnings({ "PMD", "NullAway" }) public class PreLollipopNetworkObservingStrategyTest {
+@Config(sdk = 19)
+@SuppressWarnings({ "PMD", "NullAway" })
+public class PreLollipopNetworkObservingStrategyTest {
 
   @Rule public MockitoRule rule = MockitoJUnit.rule();
-  @Spy private PreLollipopNetworkObservingStrategy strategy =
-      new PreLollipopNetworkObservingStrategy();
+  @Spy private PreLollipopNetworkObservingStrategy strategy
+      = new PreLollipopNetworkObservingStrategy();
   @Mock private BroadcastReceiver broadcastReceiver;
-
-  @SuppressLint("CheckResult") @Test @SuppressWarnings("CheckReturnValue")
-  public void shouldObserveConnectivity() {
-    // given
-    final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
-    final Context context = RuntimeEnvironment.application.getApplicationContext();
-
-    // when
-    strategy.observeNetworkConnectivity(context).subscribe(connectivity -> {
-      // then
-      assertThat(connectivity.state()).isEqualTo(NetworkInfo.State.CONNECTED);
-    });
-  }
 
   @Test public void shouldStopObservingConnectivity() {
     // given
     final NetworkObservingStrategy strategy = new PreLollipopNetworkObservingStrategy();
-    final Context context = RuntimeEnvironment.application.getApplicationContext();
+    final Context context = RuntimeEnvironment.getApplication().getApplicationContext();
     final Observable<Connectivity> observable = strategy.observeNetworkConnectivity(context);
     final TestObserver<Connectivity> observer = new TestObserver<>();
 

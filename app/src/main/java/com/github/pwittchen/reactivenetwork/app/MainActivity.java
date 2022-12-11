@@ -16,11 +16,15 @@
 package com.github.pwittchen.reactivenetwork.app;
 
 import android.app.Activity;
-import android.net.NetworkInfo;
+import android.net.NetworkCapabilities;
+import android.net.TransportInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import androidx.annotation.RequiresApi;
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork;
+import com.github.pwittchen.reactivenetwork.library.rx2.info.NetworkState;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -39,7 +43,10 @@ public class MainActivity extends Activity {
     tvInternetStatus = (TextView) findViewById(R.id.internet_status);
   }
 
-  @Override protected void onResume() {
+  @SuppressWarnings("ConstantConditions")
+  @RequiresApi(api = Build.VERSION_CODES.Q)
+  @Override
+  protected void onResume() {
     super.onResume();
 
     networkDisposable = ReactiveNetwork.observeNetworkConnectivity(getApplicationContext())
@@ -47,9 +54,14 @@ public class MainActivity extends Activity {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(connectivity -> {
           Log.d(TAG, connectivity.toString());
-          final NetworkInfo.State state = connectivity.state();
-          final String name = connectivity.typeName();
-          tvConnectivityStatus.setText(String.format("state: %s, typeName: %s", state, name));
+
+          NetworkState state = connectivity.networkState();
+          NetworkCapabilities capabilities = connectivity.networkState().getNetworkCapabilities();
+          boolean isConnected = state.isConnected();
+
+          tvConnectivityStatus.setText(String.format(
+              "connected: %s, capabilities: %s", isConnected, capabilities
+          ));
         });
 
     internetDisposable = ReactiveNetwork.observeInternetConnectivity()

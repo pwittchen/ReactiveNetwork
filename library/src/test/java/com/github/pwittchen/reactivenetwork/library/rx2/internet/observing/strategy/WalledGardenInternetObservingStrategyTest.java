@@ -36,7 +36,8 @@ import static org.mockito.Mockito.when;
 
 @Config(manifest = Config.NONE)
 @RunWith(RobolectricTestRunner.class)
-@SuppressWarnings("NullAway") public class WalledGardenInternetObservingStrategyTest {
+@SuppressWarnings("NullAway")
+public class WalledGardenInternetObservingStrategyTest {
 
   private static final int INITIAL_INTERVAL_IN_MS = 0;
   private static final int INTERVAL_IN_MS = 2000;
